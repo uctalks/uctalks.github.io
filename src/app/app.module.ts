@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ThemesComponent } from './themes/themes.component';
 
+import { TopicsService } from './services/topics-service/topics.service';
 import { Auth } from './auth.service';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { Auth } from './auth.service';
     HttpModule
   ],
   providers: [
+    TopicsService,
     AUTH_PROVIDERS,
     Auth
   ],
