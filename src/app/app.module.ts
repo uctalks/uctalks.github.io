@@ -3,9 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ThemesComponent } from './themes/themes.component';
+
+import { Auth } from './auth.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,10 @@ import { ThemesComponent } from './themes/themes.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [
+    AUTH_PROVIDERS,
+    Auth
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
