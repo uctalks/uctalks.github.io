@@ -7,7 +7,20 @@
     </ul>
     <ul class="header__right">
       <li class="header__right-el">
-        <a class="header__right-el-link" href="#">Login</a>
+        <a 
+          class="header__right-el-link" 
+          *ngIf="!auth.authenticated()" 
+          href="#" 
+          (click)="auth.login()">
+          Login via GL account
+        </a>
+        <a 
+          class="header__right-el-link" 
+          *ngIf="auth.authenticated()" 
+          href="#" 
+          (click)="auth.logout()">
+          Logout
+        </a>
       </li>
     </ul>
   </header>
