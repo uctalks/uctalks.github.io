@@ -7,13 +7,15 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
+import { ThemesComponent } from './themes/themes.component';
 
 import { Auth } from './auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    ThemesComponent
   ],
   imports: [
     BrowserModule,
