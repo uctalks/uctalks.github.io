@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ThemesComponent } from './themes/themes.component';
 
+import { TopicsService } from './services/topics-service/topics.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,7 @@ import { ThemesComponent } from './themes/themes.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [TopicsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
