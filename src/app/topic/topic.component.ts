@@ -10,12 +10,15 @@ export class TopicComponent implements OnInit {
   points: number = 0;
 
   voteUp() {
-    this.points += 1;
+    this.points++;
     return false;
   }
 
   voteDown() {
-    this.points -= 1;
+    if (this.points !== 0) {
+      this.points--;
+    }
+
     return false;
   }
 
