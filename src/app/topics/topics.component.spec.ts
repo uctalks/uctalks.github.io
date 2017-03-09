@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ThemesComponent } from './themes.component';
+import { ThemesComponent } from './topics.component';
 
 describe('ThemesComponent', () => {
   let component: ThemesComponent;
