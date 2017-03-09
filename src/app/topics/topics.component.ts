@@ -2,21 +2,21 @@ import { Component, OnInit } from "@angular/core";
 import { TopicsService } from "../services/topics-service/topics.service";
 
 @Component({
-    selector: 'app-themes',
-    templateUrl: './themes.component.html',
-    styleUrls: [ './themes.component.scss' ],
+    selector: 'app-topics',
+    templateUrl: './topics.component.html',
+    styleUrls: [ './topics.component.scss' ],
 })
-export class ThemesComponent implements OnInit {
-    themes: Object[];
+export class TopicsComponent implements OnInit {
+    topics: Object[];
 
     constructor( public topicsService: TopicsService ) {
-        this.themes = [];
+        this.topics = [];
         console.log(topicsService.getTopics());
         topicsService.getTopics()
             .subscribe(
                 response => {
-                    this.themes = response;
-                    console.log(this.themes);
+                    this.topics = response;
+                    console.log(this.topics);
                 },
                 error => console.log(error),
                 () => console.log('done')
