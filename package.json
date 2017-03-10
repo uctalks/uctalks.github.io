@@ -26,11 +26,12 @@
     "angular2-jwt": "^0.1.28",
     "auth0-lock": "^10.12.2",
     "core-js": "^2.4.1",
+    "global": "^4.3.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.7.6"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.0-beta.32.3",
+    "@angular/cli": "^1.0.0-rc.1",
     "@angular/compiler-cli": "^2.4.0",
     "@angularclass/hmr": "^1.2.2",
     "@types/auth0": "^2.4.0",

@@ -20,7 +20,7 @@ export class Auth {
     });
 
     // @TODO add some notifications like flash messages...
-    this.lock.on('authorization_error', error => alert(error.error_description));
+    this.lock.on('authorization_error', error => alert('Please login in your GlobalLogic Google account in the browser'));
   }
 
   public login() {
