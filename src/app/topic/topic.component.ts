@@ -17,7 +17,7 @@ export class TopicComponent implements OnInit {
 
     this.myVote++;
     this.points++;
-
+    
     return false;
   }
 
@@ -30,7 +30,7 @@ export class TopicComponent implements OnInit {
       this.myVote--;
       this.points--;
     }
-
+    
     return false;
   }
 
