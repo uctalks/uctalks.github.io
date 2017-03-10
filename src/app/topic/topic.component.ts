@@ -8,14 +8,29 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TopicComponent implements OnInit {
   @Input() topic: Object[];
   points: number = 0;
+  myVote: number = 0;
 
   voteUp() {
-    this.points += 1;
+    if (this.myVote === 1) {
+      return;
+    }
+
+    this.myVote++;
+    this.points++;
+    
     return false;
   }
 
   voteDown() {
-    this.points -= 1;
+    if (this.myVote === -1) {
+      return;
+    }
+
+    if (this.points) {
+      this.myVote--;
+      this.points--;
+    }
+    
     return false;
   }
 
