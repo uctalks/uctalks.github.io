@@ -33,6 +33,7 @@
   "devDependencies": {
     "@angular/cli": "^1.0.0-rc.1",
     "@angular/compiler-cli": "^2.4.0",
+    "@angular/language-service": "^2.4.9",
     "@angularclass/hmr": "^1.2.2",
     "@types/auth0": "^2.4.0",
     "@types/auth0-js": "^8.1.1",
