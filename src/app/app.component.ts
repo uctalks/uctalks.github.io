@@ -9,5 +9,5 @@ import { Auth } from './auth.service';
 export class AppComponent {
   title = 'ucTalks';
 
-  constructor(private auth: Auth) {}
+  constructor(public auth: Auth) {}
 }
