@@ -13,6 +13,8 @@ import { TopicComponent } from './topic/topic.component';
 import { TopicsService } from './services/topics-service/topics.service';
 import { Auth } from './auth.service';
 
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp( new AuthConfig({}), http, options);
 }
@@ -27,7 +29,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    SimpleNotificationsModule.forRoot()
   ],
   providers: [
     TopicsService,

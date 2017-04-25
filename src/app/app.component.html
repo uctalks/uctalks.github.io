@@ -1,5 +1,5 @@
 <app-header></app-header>
 
-<h1 *ngIf="auth.authenticated()">Hello {{auth.username}}</h1>
-
 <app-topics></app-topics>
+
+<simple-notifications [options]="notificationOptions"></simple-notifications>
