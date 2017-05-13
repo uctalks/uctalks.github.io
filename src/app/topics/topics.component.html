@@ -1,4 +1,5 @@
 <div class="container">
+	<app-topic-popup (onTopicAdd)= addTopic($event)></app-topic-popup>
 	<app-topic
 		*ngFor="let topic of topics"
 		[topic]="topic">
