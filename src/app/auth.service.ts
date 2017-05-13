@@ -5,7 +5,7 @@ import Auth0Lock from 'auth0-lock';
 @Injectable()
 export class Auth {
   // Configure Auth0
-  lock = new Auth0Lock('oFfXrxqSipz8nGcK2d6tX8ZBltoBWic7', 'stativka.eu.auth0.com', {});
+  lock = new Auth0Lock('6gVfecNxZVuNcAE4VHJZoLy3UZIsuk4Q', 'stativka.eu.auth0.com', {});
 
   constructor() {
     // Add callback for lock `authenticated` event
@@ -31,7 +31,7 @@ export class Auth {
   public authenticated() {
     // Check if there's an unexpired JWT
     // This searches for an item in localStorage with key == 'id_token'
-    return tokenNotExpired();
+    return tokenNotExpired('id_token');
   }
 
   public logout() {
