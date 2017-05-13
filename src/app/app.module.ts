@@ -12,7 +12,7 @@ import {TopicComponent} from './topic/topic.component';
 import {TopicPopupComponent} from './topic-popup/topic-popup.component';
 
 import {TopicsService} from './services/topics-service/topics.service';
-import {Auth} from './auth.service';
+import {Auth} from './services/auth-service/auth.service';
 
 import {SimpleNotificationsModule} from 'angular2-notifications';
 

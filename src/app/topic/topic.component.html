@@ -7,7 +7,7 @@
     {{topic.name}}
   </div>
 
-  <div class="topic__votes">
+  <div *ngIf="auth.authenticated" class="topic__votes">
     vote
     <span (click)="voteUp()"
                class="topic__votes-up">
