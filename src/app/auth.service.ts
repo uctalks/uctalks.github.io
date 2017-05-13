@@ -6,7 +6,7 @@ import { NotificationsService } from 'angular2-notifications';
 @Injectable()
 export class Auth {
   // Configure Auth0
-  lock = new Auth0Lock('oFfXrxqSipz8nGcK2d6tX8ZBltoBWic7', 'stativka.eu.auth0.com', {});
+  lock = new Auth0Lock('6gVfecNxZVuNcAE4VHJZoLy3UZIsuk4Q', 'stativka.eu.auth0.com', {});
 
   constructor(private notificationsService: NotificationsService) {
     // Add callback for lock `authenticated` event

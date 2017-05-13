@@ -15,5 +15,4 @@ export class AppComponent {
   };
 
   constructor(public auth: Auth) { }
-
 }
