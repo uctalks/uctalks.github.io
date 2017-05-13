@@ -7,7 +7,12 @@ import { Auth } from './auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ucTalks';
+  public notificationOptions = {
+    position: ['bottom', 'right'],
+    timeOut: 3000,
+    lastOnBottom: true,
+    showProgressBar: false
+  };
 
-  constructor(private auth: Auth) {}
+  constructor(public auth: Auth) { }
 }
