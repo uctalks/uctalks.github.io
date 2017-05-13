@@ -1,29 +1,31 @@
-import { Component, OnInit } from "@angular/core";
-import { TopicsService } from "../services/topics-service/topics.service";
+import {Component, OnInit} from '@angular/core';
+import {TopicsService} from '../services/topics-service/topics.service';
+import Topic from '../topic/topic.interface';
 
 @Component({
-    selector: 'app-topics',
-    templateUrl: './topics.component.html',
-    styleUrls: [ './topics.component.scss' ],
+  selector: 'app-topics',
+  templateUrl: './topics.component.html',
+  styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent implements OnInit {
-    topics: Object[];
+  topics: Topic[];
 
-    constructor( public topicsService: TopicsService ) {
-        this.topics = [];
-        console.log(topicsService.getTopics());
-        topicsService.getTopics()
-            .subscribe(
-                response => {
-                    this.topics = response;
-                    console.log(this.topics);
-                },
-                error => console.log(error),
-                () => console.log('done')
-            );
-    }
+  constructor(public topicsService: TopicsService) {
+  }
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+    this.topicsService.getTopics()
+      .subscribe(
+        topics => {
+          this.topics = topics;
+        },
+        error => console.log(error),
+        () => console.log('done')
+      );
+  }
 
+  addTopic(newTopic: Topic) {
+    this.topicsService.addTopic(newTopic)
+      .subscribe(addedTopic => this.topics.push(addedTopic));
+  }
 }
