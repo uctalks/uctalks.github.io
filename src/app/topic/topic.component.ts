@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import Topic from './topic.interface';
 
 @Component({
   selector: 'app-topic',
@@ -6,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./topic.component.scss']
 })
 export class TopicComponent implements OnInit {
-  @Input() topic: Object[];
+  @Input() topic: Topic;
   points: number = 0;
   myVote: number = 0;
 
