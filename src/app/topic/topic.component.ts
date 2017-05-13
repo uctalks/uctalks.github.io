@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Auth } from '../services/auth-service/auth.service';
 import Topic from './topic.interface';
 
 @Component({
@@ -8,8 +9,13 @@ import Topic from './topic.interface';
 })
 export class TopicComponent implements OnInit {
   @Input() topic: Topic;
-  points: number = 0;
-  myVote: number = 0;
+  points = 0;
+  myVote = 0;
+
+  constructor(public auth: Auth) { }
+
+  ngOnInit() {
+  }
 
   voteUp() {
     if (this.myVote === 1) {
@@ -18,7 +24,7 @@ export class TopicComponent implements OnInit {
 
     this.myVote++;
     this.points++;
-    
+
     return false;
   }
 
@@ -31,13 +37,7 @@ export class TopicComponent implements OnInit {
       this.myVote--;
       this.points--;
     }
-    
+
     return false;
   }
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

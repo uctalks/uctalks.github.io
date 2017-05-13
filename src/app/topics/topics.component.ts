@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TopicsService} from '../services/topics-service/topics.service';
+import {Auth} from '../services/auth-service/auth.service';
 import Topic from '../topic/topic.interface';
 
 @Component({
@@ -10,7 +11,7 @@ import Topic from '../topic/topic.interface';
 export class TopicsComponent implements OnInit {
   topics: Topic[];
 
-  constructor(public topicsService: TopicsService) {
+  constructor(public topicsService: TopicsService, public auth: Auth) {
   }
 
   ngOnInit() {
