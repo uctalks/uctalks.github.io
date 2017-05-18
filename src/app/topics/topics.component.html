@@ -1,7 +1,7 @@
 <main class="container">
 	<app-topic-popup *ngIf="auth.authenticated" (onTopicAdd)= addTopic($event)></app-topic-popup>
 
-	<ng2-md-datatable selectable>
+	<ng2-md-datatable selectable (selectionChange)="onSelectionChange($event)" (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>
 			<ng2-md-datatable-column sortableValue="points" numeric>Points</ng2-md-datatable-column>
 			<ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>

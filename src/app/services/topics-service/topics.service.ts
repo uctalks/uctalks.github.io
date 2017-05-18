@@ -12,7 +12,7 @@ export class TopicsService {
   constructor(private http: Http) {
   }
 
-  getTopics() {
+  getTopics(): Observable<Topic[]> {
     return this.http.get('https://uctalks.herokuapp.com/topics')
       .map(res => res.json());
   }
