@@ -5,16 +5,9 @@ import { SpinnerService } from './services/spinner-service/spinner.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public notificationOptions = {
-    position: ['bottom', 'right'],
-    timeOut: 3000,
-    lastOnBottom: true,
-    showProgressBar: false
-  };
-
   public spinnerIsVisible = true;
 
   constructor(public auth: Auth, public spinner: SpinnerService) { }
