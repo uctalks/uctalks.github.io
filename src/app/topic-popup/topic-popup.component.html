@@ -13,7 +13,7 @@
       </div>
       <div class="topic-popup-content__body">
         <form (ngSubmit)="addTopic()">
-          <input name="topic" [(ngModel)]="newTopic.name" class="topic-popup-content__body-title" type="text">
+          <input name="topic" [(ngModel)]="newTopicProps.name" class="topic-popup-content__body-title" type="text">
           <br/>
           <button class="topic-popup-content__body-btn" type="submit">Submit</button>
         </form>
