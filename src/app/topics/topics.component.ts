@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
+import {MdSnackBar} from '@angular/material';
 import {TopicsService} from '../services/topics-service/topics.service';
 import {Auth} from '../services/auth-service/auth.service';
 import {SpinnerService} from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import {MdSnackBar} from '@angular/material';
+import VoteDirection from './vote-direction.type';
 
 @Component({
   selector: 'app-topics',
@@ -29,6 +30,7 @@ export class TopicsComponent implements OnInit {
         },
         error => {
           this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
           console.error(error);
         },
         () => this.spinner.toggleVisible(false),
@@ -46,30 +48,32 @@ export class TopicsComponent implements OnInit {
         },
         error => {
           this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
           console.error(error);
         },
         () => this.spinner.toggleVisible(false),
       );
   }
 
-  // @TODO refactor voting mechanism
-  vote(direction: string, id: string) {
+  vote(direction: VoteDirection, id: string) {
     this.spinner.toggleVisible(true);
 
-    const points = this.topics.find(topic => topic._id === id).points + direction === 'up' ? 1 : -1;
-
-    this.topicsService.updateTopicById(id, { points })
+    this.topicsService.updateTopicPointsById(id, direction)
       .subscribe(
         updatedTopic => {
-          this.topics = this.topics.map(topic => {
-            if (topic._id === updatedTopic.id) {
-              topic.points = updatedTopic.points;
-            }
-            return topic;
-          });
+          this.topics = this.topics
+            .map(topic => {
+              if (topic._id === updatedTopic._id) {
+                topic.points = updatedTopic.points;
+
+                this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
+              }
+              return topic;
+            });
         },
         error => {
           this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
           console.error(error);
         },
         () => this.spinner.toggleVisible(false),
