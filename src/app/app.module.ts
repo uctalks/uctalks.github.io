@@ -12,6 +12,7 @@ import {TopicPopupComponent} from './topic-popup/topic-popup.component';
 
 import {TopicsService} from './services/topics-service/topics.service';
 import {Auth} from './services/auth-service/auth.service';
+import {SpinnerService} from './services/spinner-service/spinner.service';
 
 import {SimpleNotificationsModule} from 'angular2-notifications';
 
@@ -21,6 +22,7 @@ import {
   MdButtonModule,
   MdToolbarModule,
   MdTooltipModule,
+  MdProgressBarModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -48,6 +50,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdToolbarModule,
     MdTooltipModule,
     MdDataTableModule,
+    MdProgressBarModule,
   ],
   providers: [
     TopicsService,
@@ -56,7 +59,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
     },
-    Auth
+    Auth,
+    SpinnerService,
   ],
   bootstrap: [AppComponent]
 })

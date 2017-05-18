@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TopicsService} from '../services/topics-service/topics.service';
 import {Auth} from '../services/auth-service/auth.service';
+import {SpinnerService} from '../services/spinner-service/spinner.service';
 import Topic from './topic.interface';
 
 @Component({
@@ -11,7 +12,7 @@ import Topic from './topic.interface';
 export class TopicsComponent implements OnInit {
   topics: Topic[];
 
-  constructor(public topicsService: TopicsService, public auth: Auth) {
+  constructor(public topicsService: TopicsService, public auth: Auth, public spinner: SpinnerService) {
   }
 
   ngOnInit() {
@@ -19,6 +20,7 @@ export class TopicsComponent implements OnInit {
       .subscribe(
         topics => {
           this.topics = topics;
+          this.spinner.toggleVisible(false);
         },
         error => console.log(error),
         () => console.log('done')
