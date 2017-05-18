@@ -4,6 +4,7 @@ import {Auth} from '../services/auth-service/auth.service';
 import {SpinnerService} from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-topics',
@@ -13,18 +14,24 @@ import Topic from './topic.interface';
 export class TopicsComponent implements OnInit {
   topics: Topic[];
 
-  constructor(public topicsService: TopicsService, public auth: Auth, public spinner: SpinnerService) {
-  }
+  constructor(
+    private topicsService: TopicsService,
+    public auth: Auth,
+    private spinner: SpinnerService,
+    private snackBar: MdSnackBar,
+  ) {}
 
   ngOnInit() {
     this.topicsService.getTopics()
       .subscribe(
         topics => {
           this.topics = topics;
-          this.spinner.toggleVisible(false);
         },
-        error => console.log(error),
-        () => console.log('done')
+        error => {
+          this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
       );
   }
 
@@ -32,10 +39,17 @@ export class TopicsComponent implements OnInit {
     this.spinner.toggleVisible(true);
 
     this.topicsService.addTopic(newTopicProps)
-      .subscribe(addedTopic => {
-        this.topics.push(addedTopic);
-        this.spinner.toggleVisible(false);
-      });
+      .subscribe(
+        addedTopic => {
+          this.topics.push(addedTopic);
+          this.snackBar.open('New topic saved', 'close', { duration: 3000 });
+        },
+        error => {
+          this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
+      );
   }
 
   // @TODO refactor voting mechanism
@@ -45,15 +59,20 @@ export class TopicsComponent implements OnInit {
     const points = this.topics.find(topic => topic._id === id).points + direction === 'up' ? 1 : -1;
 
     this.topicsService.updateTopicById(id, { points })
-      .subscribe(updatedTopic => {
-        this.topics = this.topics.map(topic => {
-          if (topic._id === updatedTopic.id) {
-            topic.points = updatedTopic.points;
-          }
-          return topic;
-        });
-
-        this.spinner.toggleVisible(false);
-      });
+      .subscribe(
+        updatedTopic => {
+          this.topics = this.topics.map(topic => {
+            if (topic._id === updatedTopic.id) {
+              topic.points = updatedTopic.points;
+            }
+            return topic;
+          });
+        },
+        error => {
+          this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
+      );
   }
 }
