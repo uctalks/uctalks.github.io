@@ -8,13 +8,23 @@ import {AuthConfig, AuthHttp} from 'angular2-jwt';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {TopicsComponent} from './topics/topics.component';
-import {TopicComponent} from './topic/topic.component';
 import {TopicPopupComponent} from './topic-popup/topic-popup.component';
 
 import {TopicsService} from './services/topics-service/topics.service';
 import {Auth} from './services/auth-service/auth.service';
 
 import {SimpleNotificationsModule} from 'angular2-notifications';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  MdMenuModule,
+  MdButtonModule,
+  MdToolbarModule,
+  MdTooltipModule,
+} from '@angular/material';
+import 'hammerjs';
+
+import { MdDataTableModule } from 'ng2-md-datatable';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({}), http, options);
@@ -25,14 +35,19 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AppComponent,
     HeaderComponent,
     TopicsComponent,
-    TopicComponent,
     TopicPopupComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    BrowserAnimationsModule,
+    MdMenuModule,
+    MdButtonModule,
+    MdToolbarModule,
+    MdTooltipModule,
+    MdDataTableModule,
   ],
   providers: [
     TopicsService,

@@ -1,11 +1,19 @@
-body {
-	margin: 0;
-	padding: 0;
-}
+@import '~@angular/material/theming';
+@import '~ng2-md-datatable/datatable-theme';
 
-ul,li,a {
-	text-decoration: none;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+@include mat-core();
+
+$uc-talks-primary: mat-palette($mat-indigo);
+$uc-talks-accent:  mat-palette($mat-orange);
+$uc-talks-warn:    mat-palette($mat-red);
+
+$uc-talks-theme: mat-light-theme($uc-talks-primary, $uc-talks-accent, $uc-talks-warn);
+
+@include angular-material-theme($uc-talks-theme);
+
+@include mat-datatable-theme($uc-talks-theme);
+
+body {
+  font-family: sans-serif;
+  margin: 0;
 }

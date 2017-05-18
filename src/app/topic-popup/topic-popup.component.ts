@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Output} from "@angular/core";
-import Topic from "../topic/topic.interface";
+import {Component, EventEmitter, Output} from '@angular/core';
+import Topic from '../topics/topic.interface';
 
 @Component({
   selector: 'app-topic-popup',

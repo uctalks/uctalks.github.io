@@ -1,5 +1,7 @@
 <div class="topic-wrapper">
-  <button class="topic-btn" (click)="onModal($event)">Add topic</button>
+  <button class="topic-btn topic-btn_add" (click)="onModal($event)" md-fab mdTooltip="Add new topic" mdTooltipPosition="above">
+    <md-icon>+</md-icon>
+  </button>
 
   <div *ngIf="showModal" class="topic-popup">
 

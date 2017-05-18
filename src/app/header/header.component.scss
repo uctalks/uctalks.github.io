@@ -1,23 +1,5 @@
-.container {
-	width: 980px;
-	margin: 0 auto;
-}
-
 .header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: darkslategrey;
-	height: 50px;
-	padding: 0 10px;
-}
-
-.header-left-el-link,
-.header__right-el-link {
-	color: darkgrey;
-}
-
-.header-left-el-link:hover,
-.header__right-el-link:hover {
-	color: lightgrey;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }

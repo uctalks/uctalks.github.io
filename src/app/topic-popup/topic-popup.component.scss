@@ -3,7 +3,17 @@
   justify-content: center;
 }
 
-.topic-btn,
+.topic-btn {
+  font-size: 38px;
+  cursor: pointer;
+}
+
+.topic-btn_add {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+
 .topic-popup-content__body-btn {
   margin: 5px 0;
   padding: 5px;
@@ -11,7 +21,6 @@
   background-color: darkslategrey;
   color: white;
   cursor: pointer;
-
 }
 
 .topic-popup {
