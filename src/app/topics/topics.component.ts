@@ -28,12 +28,19 @@ export class TopicsComponent implements OnInit {
   }
 
   addTopic(newTopic: Topic) {
+    this.spinner.toggleVisible(true);
+
     this.topicsService.addTopic(newTopic)
-      .subscribe(addedTopic => this.topics.push(addedTopic));
+      .subscribe(addedTopic => {
+        this.topics.push(addedTopic);
+        this.spinner.toggleVisible(false);
+      });
   }
 
   // @TODO refactor voting mechanism
   vote(direction: string, id: string) {
+    this.spinner.toggleVisible(true);
+
     const points = this.topics.find(topic => topic._id === id).points + direction === 'up' ? 1 : -1;
 
     this.topicsService.updateTopicById(id, { points })
@@ -43,7 +50,9 @@ export class TopicsComponent implements OnInit {
             topic.points = updatedTopic.points;
           }
           return topic;
-        })
+        });
+
+        this.spinner.toggleVisible(false);
       });
   }
 }
