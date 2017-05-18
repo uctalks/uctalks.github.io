@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TopicsService} from '../services/topics-service/topics.service';
 import {Auth} from '../services/auth-service/auth.service';
-import Topic from '../topic/topic.interface';
+import {SpinnerService} from '../services/spinner-service/spinner.service';
+import Topic from './topic.interface';
 
 @Component({
   selector: 'app-topics',
@@ -11,7 +12,7 @@ import Topic from '../topic/topic.interface';
 export class TopicsComponent implements OnInit {
   topics: Topic[];
 
-  constructor(public topicsService: TopicsService, public auth: Auth) {
+  constructor(public topicsService: TopicsService, public auth: Auth, public spinner: SpinnerService) {
   }
 
   ngOnInit() {
@@ -19,6 +20,7 @@ export class TopicsComponent implements OnInit {
       .subscribe(
         topics => {
           this.topics = topics;
+          this.spinner.toggleVisible(false);
         },
         error => console.log(error),
         () => console.log('done')
@@ -26,7 +28,31 @@ export class TopicsComponent implements OnInit {
   }
 
   addTopic(newTopic: Topic) {
+    this.spinner.toggleVisible(true);
+
     this.topicsService.addTopic(newTopic)
-      .subscribe(addedTopic => this.topics.push(addedTopic));
+      .subscribe(addedTopic => {
+        this.topics.push(addedTopic);
+        this.spinner.toggleVisible(false);
+      });
+  }
+
+  // @TODO refactor voting mechanism
+  vote(direction: string, id: string) {
+    this.spinner.toggleVisible(true);
+
+    const points = this.topics.find(topic => topic._id === id).points + direction === 'up' ? 1 : -1;
+
+    this.topicsService.updateTopicById(id, { points })
+      .subscribe(updatedTopic => {
+        this.topics = this.topics.map(topic => {
+          if (topic._id === updatedTopic.id) {
+            topic.points = updatedTopic.points;
+          }
+          return topic;
+        });
+
+        this.spinner.toggleVisible(false);
+      });
   }
 }

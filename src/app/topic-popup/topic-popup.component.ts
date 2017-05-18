@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Output} from "@angular/core";
-import Topic from "../topic/topic.interface";
+import {Component, EventEmitter, Output} from '@angular/core';
+import NewTopicProps from '../topics/new-topic-props.interface';
 
 @Component({
   selector: 'app-topic-popup',
@@ -7,8 +7,8 @@ import Topic from "../topic/topic.interface";
   styleUrls: ['./topic-popup.component.scss']
 })
 export class TopicPopupComponent {
-  @Output() onTopicAdd: EventEmitter<Topic> = new EventEmitter();
-  newTopic: Topic = {name: ''};
+  @Output() onTopicAdd: EventEmitter<NewTopicProps> = new EventEmitter();
+  newTopicProps: NewTopicProps = { name: '' };
   showModal = false;
 
   onModal() {
@@ -20,7 +20,7 @@ export class TopicPopupComponent {
   }
 
   addTopic() {
-    this.onTopicAdd.emit(this.newTopic);
+    this.onTopicAdd.emit(this.newTopicProps);
     this.closeModal();
   }
 }

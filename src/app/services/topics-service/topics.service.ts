@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-import Topic from '../../topic/topic.interface';
+import Topic from '../../topics/topic.interface';
 
 @Injectable()
 export class TopicsService {
@@ -15,8 +15,12 @@ export class TopicsService {
   }
 
   addTopic(newTopic: Topic) {
-    console.log('2');
-    return this.http.post('https://uctalks.herokuapp.com/topics', {newTopicProps: newTopic},)
+    return this.http.post('https://uctalks.herokuapp.com/topics', {newTopicProps: newTopic})
+      .map(res => res.json());
+  }
+
+  updateTopicById(id: string, updatedTopicProps: Object) {
+    return this.http.put(`https://uctalks.herokuapp.com/topics/${id}`, { updatedTopicProps })
       .map(res => res.json());
   }
 }

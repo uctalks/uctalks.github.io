@@ -1,5 +1,7 @@
 <div class="topic-wrapper">
-  <button class="topic-btn" (click)="onModal($event)">Add topic</button>
+  <button class="topic-btn topic-btn_add" (click)="onModal($event)" md-fab mdTooltip="Add new topic" mdTooltipPosition="above">
+    <md-icon>+</md-icon>
+  </button>
 
   <div *ngIf="showModal" class="topic-popup">
 
@@ -11,7 +13,7 @@
       </div>
       <div class="topic-popup-content__body">
         <form (ngSubmit)="addTopic()">
-          <input name="topic" [(ngModel)]="newTopic.name" class="topic-popup-content__body-title" type="text">
+          <input name="topic" [(ngModel)]="newTopicProps.name" class="topic-popup-content__body-title" type="text">
           <br/>
           <button class="topic-popup-content__body-btn" type="submit">Submit</button>
         </form>

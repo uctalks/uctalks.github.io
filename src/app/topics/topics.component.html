@@ -1,8 +1,23 @@
-<div class="container">
+<main class="container">
 	<app-topic-popup *ngIf="auth.authenticated" (onTopicAdd)= addTopic($event)></app-topic-popup>
-	<app-topic
-		*ngFor="let topic of topics"
-		[topic]="topic">
-	</app-topic>
-</div>
 
+	<ng2-md-datatable selectable>
+		<ng2-md-datatable-header>
+			<ng2-md-datatable-column sortableValue="points" numeric>Points</ng2-md-datatable-column>
+			<ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
+			<ng2-md-datatable-column *ngIf="auth.authenticated">Vote</ng2-md-datatable-column>
+		</ng2-md-datatable-header>
+
+		<tbody>
+			<ng2-md-datatable-row *ngFor="let topic of topics" [selectableValue]="topic.name">
+				<td class="numeric">{{topic.points}}</td>
+				<td>{{topic.name}}</td>
+				<td *ngIf="auth.authenticated" class="topic__votes">
+					vote
+					<span (click)="vote('up', topic._id)" class="topic__votes-up">&uarr;</span>
+					<span (click)="vote('down', topic._id)" class="topic__votes-down">&darr;</span>
+				</td>
+			</ng2-md-datatable-row>
+		</tbody>
+	</ng2-md-datatable>
+</main>
