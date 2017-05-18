@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TopicsService} from '../services/topics-service/topics.service';
 import {Auth} from '../services/auth-service/auth.service';
 import {SpinnerService} from '../services/spinner-service/spinner.service';
+import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
 
 @Component({
@@ -27,10 +28,10 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  addTopic(newTopic: Topic) {
+  addTopic(newTopicProps: NewTopicProps) {
     this.spinner.toggleVisible(true);
 
-    this.topicsService.addTopic(newTopic)
+    this.topicsService.addTopic(newTopicProps)
       .subscribe(addedTopic => {
         this.topics.push(addedTopic);
         this.spinner.toggleVisible(false);
