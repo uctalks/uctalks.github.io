@@ -16,6 +16,7 @@ enum SortOrders { None, Ascending, Descending }
 })
 export class TopicsComponent implements OnInit {
   public topics: Topic[];
+  public minDate: Date = new Date();
 
   static sortTopics(topics: Topic[], sortField: 'name' | 'likes', sortOrder: SortOrders): Topic[] {
     switch (sortOrder) {
@@ -57,7 +58,6 @@ export class TopicsComponent implements OnInit {
     private topicsService: TopicsService,
     public auth: Auth,
     private spinner: SpinnerService,
-    public minDate: Date,
     private snackBar: MdSnackBar,
   ) {}
 
