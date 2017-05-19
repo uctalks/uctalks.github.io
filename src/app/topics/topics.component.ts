@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import {MdDialog, MdSnackBar} from '@angular/material';
 import { TopicsService } from '../services/topics-service/topics.service';
 import { Auth } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
 import LikeDirection from './like-direction.type';
+import {TopicPopupComponent} from '../topic-popup/topic-popup.component';
 
 enum SortOrders { None, Ascending, Descending }
 
@@ -59,6 +60,7 @@ export class TopicsComponent implements OnInit {
     public auth: Auth,
     private spinner: SpinnerService,
     private snackBar: MdSnackBar,
+    private dialog: MdDialog,
   ) {}
 
   ngOnInit() {
@@ -126,5 +128,9 @@ export class TopicsComponent implements OnInit {
 
   onSortChange(val) {
     this.topics = TopicsComponent.sortTopics(this.topics, val.sortBy, val.sortType);
+  }
+
+  public openDialog() {
+    this.dialog.open(TopicPopupComponent);
   }
 }

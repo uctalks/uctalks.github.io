@@ -1,5 +1,7 @@
 <main class="container">
-	<app-topic-popup *ngIf="auth.authenticated" (onTopicAdd)= addTopic($event)></app-topic-popup>
+  <button class="topic-add-button" (click)="openDialog()" md-fab mdTooltip="Add new topic" mdTooltipPosition="above">
+    <md-icon>+</md-icon>
+  </button>
 
 	<ng2-md-datatable selectable (selectionChange)="onSelectionChange($event)" (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>

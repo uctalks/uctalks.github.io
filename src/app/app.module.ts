@@ -23,6 +23,7 @@ import {
   MdTooltipModule,
   MdProgressBarModule,
   MdSnackBarModule,
+  MdDialogModule,
   MdDatepickerModule,
   MdNativeDateModule,
 } from '@angular/material';
@@ -41,6 +42,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TopicsComponent,
     TopicPopupComponent,
   ],
+  entryComponents: [
+    TopicPopupComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -56,6 +60,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdDatepickerModule,
     MdNativeDateModule,
     MdInputModule,
+    MdDialogModule,
   ],
   providers: [
     TopicsService,
