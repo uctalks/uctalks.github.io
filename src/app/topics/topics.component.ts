@@ -57,6 +57,7 @@ export class TopicsComponent implements OnInit {
     private topicsService: TopicsService,
     public auth: Auth,
     private spinner: SpinnerService,
+    public minDate: Date,
     private snackBar: MdSnackBar,
   ) {}
 

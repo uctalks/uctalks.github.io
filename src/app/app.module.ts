@@ -17,11 +17,14 @@ import {SpinnerService} from './services/spinner-service/spinner.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MdMenuModule,
+  MdInputModule,
   MdButtonModule,
   MdToolbarModule,
   MdTooltipModule,
   MdProgressBarModule,
   MdSnackBarModule,
+  MdDatepickerModule,
+  MdNativeDateModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -50,6 +53,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdDataTableModule,
     MdProgressBarModule,
     MdSnackBarModule,
+    MdDatepickerModule,
+    MdNativeDateModule,
+    MdInputModule,
   ],
   providers: [
     TopicsService,
