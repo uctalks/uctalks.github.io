@@ -6,6 +6,7 @@
 			<ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
 			<ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
 			<ng2-md-datatable-column *ngIf="auth.authenticated">Like</ng2-md-datatable-column>
+			<ng2-md-datatable-column *ngIf="auth.authenticated">Date</ng2-md-datatable-column>
 		</ng2-md-datatable-header>
 
 		<tbody>
@@ -16,6 +17,13 @@
 					<span (click)="like('like', topic._id)" class="topic__likes-up">&uarr;</span>
 					<span (click)="like('dislike', topic._id)" class="topic__likes-down">&darr;</span>
 				</td>
+        <td>
+          <md-input-container>
+            <input mdInput [mdDatepicker]="picker" [min]="minDate" placeholder="Choose a date" [disabled]="!auth.authenticated">
+            <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="!auth.authenticated"></button>
+          </md-input-container>
+          <md-datepicker #picker></md-datepicker>
+        </td>
 			</ng2-md-datatable-row>
 		</tbody>
 	</ng2-md-datatable>
