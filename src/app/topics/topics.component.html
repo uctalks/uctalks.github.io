@@ -17,10 +17,10 @@
 					<span (click)="like('like', topic._id)" class="topic__likes-up">&uarr;</span>
 					<span (click)="like('dislike', topic._id)" class="topic__likes-down">&darr;</span>
 				</td>
-        <td *ngIf="auth.authenticated">
+        <td>
           <md-input-container>
-            <input mdInput [mdDatepicker]="picker" [min]="minDate" placeholder="Choose a date">
-            <button mdSuffix [mdDatepickerToggle]="picker"></button>
+            <input mdInput [mdDatepicker]="picker" [min]="minDate" placeholder="Choose a date" [disabled]="!auth.authenticated">
+            <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="!auth.authenticated"></button>
           </md-input-container>
           <md-datepicker #picker></md-datepicker>
         </td>
