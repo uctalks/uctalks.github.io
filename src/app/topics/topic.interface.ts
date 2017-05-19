@@ -1,6 +1,6 @@
 interface Topic {
   name: string;
-  points: number;
+  likes: number;
   _id: string;
 }
 
