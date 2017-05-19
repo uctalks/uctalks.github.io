@@ -5,7 +5,7 @@ import { Auth } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import VoteDirection from './vote-direction.type';
+import LikeDirection from './like-direction.type';
 
 enum SortOrders { None, Ascending, Descending }
 
@@ -17,7 +17,7 @@ enum SortOrders { None, Ascending, Descending }
 export class TopicsComponent implements OnInit {
   public topics: Topic[];
 
-  static sortTopics(topics: Topic[], sortField: 'name' | 'points', sortOrder: SortOrders): Topic[] {
+  static sortTopics(topics: Topic[], sortField: 'name' | 'likes', sortOrder: SortOrders): Topic[] {
     switch (sortOrder) {
       case SortOrders.None:
         return topics;
@@ -27,8 +27,8 @@ export class TopicsComponent implements OnInit {
           case 'name':
             return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareStrings(a.name, b.name));
 
-          case 'points':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(a.points, b.points));
+          case 'likes':
+            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(a.likes, b.likes));
         }
         break;
 
@@ -37,8 +37,8 @@ export class TopicsComponent implements OnInit {
           case 'name':
             return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareStrings(b.name, a.name));
 
-          case 'points':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(b.points, a.points));
+          case 'likes':
+            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(b.likes, a.likes));
         }
     }
   }
@@ -64,7 +64,7 @@ export class TopicsComponent implements OnInit {
     this.topicsService.getTopics()
       .subscribe(
         topics => {
-          this.topics = TopicsComponent.sortTopics(topics, 'points', 0);
+          this.topics = TopicsComponent.sortTopics(topics, 'likes', 0);
         },
         error => {
           this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
@@ -93,16 +93,16 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  vote(direction: VoteDirection, id: string) {
+  like(direction: LikeDirection, id: string) {
     this.spinner.toggleVisible(true);
 
-    this.topicsService.updateTopicPointsById(id, direction)
+    this.topicsService.updateTopicLikesById(id, direction)
       .subscribe(
         updatedTopic => {
           this.topics = this.topics
             .map(topic => {
               if (topic._id === updatedTopic._id) {
-                topic.points = updatedTopic.points;
+                topic.likes = updatedTopic.likes;
 
                 this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
               }
