@@ -1,13 +1,9 @@
-<h1 md-dialog-title class="mat-dialog-title">Add new topic</h1>
-<div md-dialog-content class="mat-dialog-content">What would you like to do?</div>
-<div md-dialog-actions class="mat-dialog-actions">
-  <!--<button class="mat-button" md-button><span class="mat-button-wrapper">Save</span>-->
-    <!--<div class="mat-button-ripple mat-ripple" md-ripple></div>-->
-
-    <!--<div class="mat-button-focus-overlay"></div>-->
-  <!--</button>-->
-  <button md-button mdTooltip="Add new topic" mdTooltipPosition="above">
-    <!--<md-icon>+</md-icon>-->
-    Save
-  </button>
-</div>
+<h1 md-dialog-title>Add new topic</h1>
+<form (ngSubmit)="dialogRef.close(newTopicProps)">
+  <md-input-container>
+    <input mdInput placeholder="Name" name="newTopic" [(ngModel)]="newTopicProps.name" />
+  </md-input-container>
+  <md-dialog-actions>
+    <button type="submit" md-button (click)="dialogRef.close(newTopicProps)">Option 1</button>
+  </md-dialog-actions>
+</form>

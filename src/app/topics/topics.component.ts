@@ -78,7 +78,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  addTopic(newTopicProps: NewTopicProps) {
+  private addTopic(newTopicProps: NewTopicProps) {
     this.spinner.toggleVisible(true);
 
     this.topicsService.addTopic(newTopicProps)
@@ -96,7 +96,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  like(direction: LikeDirection, id: string) {
+  public like(direction: LikeDirection, id: string) {
     this.spinner.toggleVisible(true);
 
     this.topicsService.updateTopicLikesById(id, direction)
@@ -121,16 +121,18 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  onSelectionChange(val) {
+  public onSelectionChange(val) {
     // @TODO find out what can be done
     console.log(val);
   }
 
-  onSortChange(val) {
+  public onSortChange(val) {
     this.topics = TopicsComponent.sortTopics(this.topics, val.sortBy, val.sortType);
   }
 
   public openDialog() {
-    this.dialog.open(TopicPopupComponent);
+    const dialog = this.dialog.open(TopicPopupComponent);
+
+    dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
   }
 }
