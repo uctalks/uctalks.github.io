@@ -2,6 +2,9 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Http, HttpModule, RequestOptions} from '@angular/http';
+import {RouterModule} from '@angular/router';
+
+import {ROUTES} from './app.routes';
 
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
 
@@ -45,6 +48,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BrowserModule,
     FormsModule,
     HttpModule,
+    RouterModule.forRoot(ROUTES),
     BrowserAnimationsModule,
     MdMenuModule,
     MdButtonModule,
