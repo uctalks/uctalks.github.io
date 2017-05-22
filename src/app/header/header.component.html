@@ -9,8 +9,8 @@
     </div>
 
     <div>
-      <button md-raised-button color="accent" *ngIf="!auth.authenticated" (click)="auth.login()">Login via GL account</button>
-      <button md-raised-button color="primary" *ngIf="auth.authenticated" (click)="auth.logout()">Logout</button>
+      <button md-raised-button color="accent" *ngIf="!auth.isAuthenticated" (click)="auth.login()">Login via GL account</button>
+      <button md-raised-button color="primary" *ngIf="auth.isAuthenticated" (click)="auth.logout()">Logout</button>
     </div>
   </header>
 </md-toolbar>

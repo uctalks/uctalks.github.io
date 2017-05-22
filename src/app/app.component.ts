@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from './services/auth-service/auth.service';
+import { AuthService } from './services/auth-service/auth.service';
 import { SpinnerService } from './services/spinner-service/spinner.service';
 
 @Component({
@@ -10,7 +10,9 @@ import { SpinnerService } from './services/spinner-service/spinner.service';
 export class AppComponent implements OnInit {
   public spinnerIsVisible = true;
 
-  constructor(public auth: Auth, public spinner: SpinnerService) { }
+  constructor(public auth: AuthService, public spinner: SpinnerService) {
+    auth.handleAuthentication();
+  }
 
   ngOnInit() {
     this.spinner.visible$.subscribe(flag => this.spinnerIsVisible = flag);
