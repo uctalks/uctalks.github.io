@@ -1,26 +1,18 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import NewTopicProps from '../topics/new-topic-props.interface';
+import { Component } from '@angular/core';
+import { MdDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-topic-popup',
   templateUrl: './topic-popup.component.html',
-  styleUrls: ['./topic-popup.component.scss']
+  styleUrls: ['./topic-popup.component.scss'],
 })
 export class TopicPopupComponent {
-  @Output() onTopicAdd: EventEmitter<NewTopicProps> = new EventEmitter();
-  newTopicProps: NewTopicProps = { name: '' };
-  showModal = false;
+  newTopicProps = {};
 
-  onModal() {
-    this.showModal = true;
-  }
+  constructor(public dialogRef: MdDialogRef<TopicPopupComponent>) { }
 
-  closeModal() {
-    this.showModal = false;
-  }
-
-  addTopic() {
-    this.onTopicAdd.emit(this.newTopicProps);
-    this.closeModal();
+  close() {
+    console.log(this.newTopicProps);
+    this.dialogRef.close(this.newTopicProps);
   }
 }

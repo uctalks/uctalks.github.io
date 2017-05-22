@@ -1,24 +1,9 @@
-<div class="topic-wrapper">
-  <button class="topic-btn topic-btn_add" (click)="onModal()" md-fab mdTooltip="Add new topic" mdTooltipPosition="above">
-    <md-icon>+</md-icon>
-  </button>
-
-  <div *ngIf="showModal" class="topic-popup">
-
-    <!-- Modal content -->
-    <div class="topic-popup-content">
-      <div class="topic-popup-content__header">
-        <span (click)="closeModal()" class="topic-popup-content__header-close">&times;</span>
-        <h2>Add new topic</h2>
-      </div>
-      <div class="topic-popup-content__body">
-        <form (ngSubmit)="addTopic()">
-          <input name="topic" [(ngModel)]="newTopicProps.name" class="topic-popup-content__body-title" type="text">
-          <br/>
-          <button class="topic-popup-content__body-btn" type="submit">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
+<h1 md-dialog-title>Add new topic</h1>
+<form (ngSubmit)="dialogRef.close(newTopicProps)">
+  <md-input-container>
+    <input mdInput placeholder="Name" name="newTopic" [(ngModel)]="newTopicProps.name" />
+  </md-input-container>
+  <md-dialog-actions>
+    <button type="submit" md-button (click)="dialogRef.close(newTopicProps)">Option 1</button>
+  </md-dialog-actions>
+</form>

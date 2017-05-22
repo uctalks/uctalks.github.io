@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import {MdDialog, MdSnackBar} from '@angular/material';
 import { TopicsService } from '../services/topics-service/topics.service';
 import { Auth } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
 import LikeDirection from './like-direction.type';
+import {TopicPopupComponent} from '../topic-popup/topic-popup.component';
 
 enum SortOrders { None, Ascending, Descending }
 
@@ -59,6 +60,7 @@ export class TopicsComponent implements OnInit {
     public auth: Auth,
     private spinner: SpinnerService,
     private snackBar: MdSnackBar,
+    private dialog: MdDialog,
   ) {}
 
   ngOnInit() {
@@ -76,7 +78,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  addTopic(newTopicProps: NewTopicProps) {
+  private addTopic(newTopicProps: NewTopicProps) {
     this.spinner.toggleVisible(true);
 
     this.topicsService.addTopic(newTopicProps)
@@ -94,7 +96,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  like(direction: LikeDirection, id: string) {
+  public like(direction: LikeDirection, id: string) {
     this.spinner.toggleVisible(true);
 
     this.topicsService.updateTopicLikesById(id, direction)
@@ -119,12 +121,18 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  onSelectionChange(val) {
+  public onSelectionChange(val) {
     // @TODO find out what can be done
     console.log(val);
   }
 
-  onSortChange(val) {
+  public onSortChange(val) {
     this.topics = TopicsComponent.sortTopics(this.topics, val.sortBy, val.sortType);
+  }
+
+  public openDialog() {
+    const dialog = this.dialog.open(TopicPopupComponent);
+
+    dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
   }
 }
