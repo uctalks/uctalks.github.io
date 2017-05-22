@@ -13,8 +13,9 @@ import {HeaderComponent} from './header/header.component';
 import {TopicsComponent} from './topics/topics.component';
 import {TopicPopupComponent} from './topic-popup/topic-popup.component';
 
+import {AuthService} from './services/auth-service/auth.service';
+import {AuthGuardService} from './services/auth-service/auth-guard.service';
 import {TopicsService} from './services/topics-service/topics.service';
-import {Auth} from './services/auth-service/auth.service';
 import {SpinnerService} from './services/spinner-service/spinner.service';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -35,7 +36,10 @@ import 'hammerjs';
 import { MdDataTableModule } from 'ng2-md-datatable';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp(new AuthConfig({}), http, options);
+  return new AuthHttp(new AuthConfig({
+    tokenGetter: (() => localStorage.getItem('access_token')),
+    globalHeaders: [{'Content-Type': 'application/json'}],
+  }), http, options);
 }
 
 @NgModule({
@@ -67,14 +71,15 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdDialogModule,
   ],
   providers: [
-    TopicsService,
+    AuthService,
+    AuthGuardService,
     {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions],
     },
-    Auth,
     SpinnerService,
+    TopicsService,
   ],
   bootstrap: [AppComponent],
 })

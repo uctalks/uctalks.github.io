@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MdDialog, MdSnackBar} from '@angular/material';
 import { TopicsService } from '../services/topics-service/topics.service';
-import { Auth } from '../services/auth-service/auth.service';
+import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
@@ -57,7 +57,7 @@ export class TopicsComponent implements OnInit {
 
   constructor(
     private topicsService: TopicsService,
-    public auth: Auth,
+    public auth: AuthService,
     private spinner: SpinnerService,
     private snackBar: MdSnackBar,
     private dialog: MdDialog,
