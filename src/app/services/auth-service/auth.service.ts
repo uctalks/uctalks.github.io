@@ -7,6 +7,8 @@ import { AUTH_CONFIG } from './auth-config';
 
 @Injectable()
 export class AuthService {
+  private _userProfile: any;
+
   // Configure Auth0
   public auth0 = new auth0.WebAuth(AUTH_CONFIG);
 
@@ -25,7 +27,6 @@ export class AuthService {
       } else if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.snackBar.open('You are loggen in', 'close', { duration: 2000 });
       }
       this.router.navigate(['/']);
     });
@@ -37,6 +38,15 @@ export class AuthService {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+
+    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+      if (err) {
+        this.snackBar.open('Cannot get user profile', 'close', { duration: 3000 });
+      } else if (profile) {
+        this._userProfile = profile;
+        this.snackBar.open(`Hello, ${this._userProfile.given_name}! You are loggen in`, 'close', { duration: 2000 });
+      }
+    });
   }
 
   public logout(): void {
@@ -53,5 +63,9 @@ export class AuthService {
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
+  }
+
+  public get userProfile(): Object {
+    return this._userProfile;
   }
 }
