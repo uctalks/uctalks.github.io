@@ -7,7 +7,7 @@ import { MdDialogRef } from '@angular/material';
   styleUrls: ['./topic-popup.component.scss'],
 })
 export class TopicPopupComponent {
-  newTopicProps = {};
+  newTopicProps = { name: '' };
 
   constructor(public dialogRef: MdDialogRef<TopicPopupComponent>) { }
 
