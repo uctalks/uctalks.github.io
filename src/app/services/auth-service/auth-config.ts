@@ -6,5 +6,5 @@ export const AUTH_CONFIG = {
   responseType: 'token id_token',
   audience: 'https://stativka.eu.auth0.com/userinfo',
   redirectUri: environment.production ? 'https://uctalks.github.io/' : 'http://localhost:4200/',
-  scope: 'openid',
+  scope: 'openid profile',
 };
