@@ -8,6 +8,10 @@
       </md-menu>
     </div>
 
+    <div class="logo">
+      <img src="../../assets/images/logo.png" alt="ucTalks logo">
+    </div>
+
     <div>
       <button md-raised-button color="accent" *ngIf="!auth.isAuthenticated" (click)="auth.login()">Login via GL account</button>
       <button md-raised-button color="primary" *ngIf="auth.isAuthenticated" (click)="auth.logout()">Logout</button>
