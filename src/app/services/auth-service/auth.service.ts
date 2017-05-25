@@ -4,10 +4,12 @@ import 'rxjs/add/operator/filter';
 import auth0 from 'auth0-js';
 import { MdSnackBar } from '@angular/material';
 import { AUTH_CONFIG } from './auth-config';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
-  private _userProfile: any;
+  // observable to track receipt of the user's details
+  public profileDetailsReceived$ = new BehaviorSubject(!!this.userProfileId);
 
   // Configure Auth0
   public auth0 = new auth0.WebAuth(AUTH_CONFIG);
@@ -43,8 +45,10 @@ export class AuthService {
       if (err) {
         this.snackBar.open('Cannot get user profile', 'close', { duration: 3000 });
       } else if (profile) {
-        this._userProfile = profile;
-        this.snackBar.open(`Hello, ${this._userProfile.given_name}! You are loggen in`, 'close', { duration: 2000 });
+        this.snackBar.open(`Hello, ${profile.given_name}! You are loggen in`, 'close', { duration: 2000 });
+        localStorage.setItem('userName', profile.given_name);
+        localStorage.setItem('userId', profile.sub);
+        this.profileDetailsReceived$.next(true); // notify subscribers, that user has logged in
       }
     });
   }
@@ -54,6 +58,8 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -65,7 +71,7 @@ export class AuthService {
     return new Date().getTime() < expiresAt;
   }
 
-  public get userProfile(): Object {
-    return this._userProfile;
+  public get userProfileId(): string | null {
+    return localStorage.getItem('userId');
   }
 }

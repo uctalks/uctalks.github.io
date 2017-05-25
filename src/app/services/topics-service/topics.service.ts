@@ -17,18 +17,18 @@ export class TopicsService {
       .map(res => res.json());
   }
 
-  addTopic( newTopicProps: NewTopicProps ) {
+  addTopic(newTopicProps: NewTopicProps): Observable<Topic> {
     return this.http.post('https://uctalks.herokuapp.com/topics', { newTopicProps })
       .map(res => res.json());
   }
 
-  updateTopicById(id: string, updatedTopicProps: Object) {
+  updateTopicById(id: string, updatedTopicProps: Object): Observable<Topic> {
     return this.http.put(`https://uctalks.herokuapp.com/topics/${id}`, { updatedTopicProps })
       .map(res => res.json());
   }
 
-  updateTopicLikesById(id: string, direction: LikeDirection): Observable<Topic> {
-    return this.http.put(`https://uctalks.herokuapp.com/topics/${id}/likes`, { direction })
+  updateTopicLikesById(id: string, direction: LikeDirection, userId: string | null): Observable<Topic> {
+    return this.http.put(`https://uctalks.herokuapp.com/topics/${id}/likes`, { direction, userId })
       .map(res => res.json());
   }
 }
