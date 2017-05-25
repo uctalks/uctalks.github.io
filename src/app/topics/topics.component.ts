@@ -5,7 +5,6 @@ import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import LikeDirection from './like-direction.type';
 import {TopicPopupComponent} from '../topic-popup/topic-popup.component';
 
 enum SortOrders { None, Ascending, Descending }
@@ -18,6 +17,15 @@ enum SortOrders { None, Ascending, Descending }
 export class TopicsComponent implements OnInit {
   public topics: Topic[];
   public minDate: Date = new Date();
+
+  // update 'likedByUser' property of every topic
+  static checkIfTopicsAreLiked(topics: Topic[], userId: string | null) {
+    return topics.map(topic => {
+      // set true (false) if userId is (not) in array of users, who liked this topic
+      topic.likedByUser = topic.usersLikedIds.includes(userId);
+      return topic;
+    })
+  }
 
   static sortTopics(topics: Topic[], sortField: 'name' | 'likes', sortOrder: SortOrders): Topic[] {
     switch (sortOrder) {
@@ -68,6 +76,14 @@ export class TopicsComponent implements OnInit {
       .subscribe(
         topics => {
           this.topics = TopicsComponent.sortTopics(topics, 'likes', 0);
+
+          // when the user's details are received, check what topics were already liked by this user
+          this.auth.profileDetailsReceived$.subscribe(authenticated => {
+            // check what topics were liked, if user is authenticated and there are at least one topic in topics array
+            if (authenticated && this.topics && this.topics.length) {
+              this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
+            }
+          });
         },
         error => {
           this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
@@ -96,21 +112,23 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  public like(direction: LikeDirection, id: string) {
+  public like(liked: boolean, id: string) {
     this.spinner.toggleVisible(true);
 
-    this.topicsService.updateTopicLikesById(id, direction)
+    this.topicsService.updateTopicLikesById(id, liked, this.auth.userProfileId)
       .subscribe(
         updatedTopic => {
           this.topics = this.topics
             .map(topic => {
               if (topic._id === updatedTopic._id) {
-                topic.likes = updatedTopic.likes;
-
-                this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
+                // if user liked the topic, mark the topic as liked by this user
+                updatedTopic.likedByUser = liked;
+                return updatedTopic;
               }
               return topic;
             });
+
+          this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
         },
         error => {
           this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
@@ -121,9 +139,8 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  public onSelectionChange(val) {
+  public onSelectionChange(/*val*/) {
     // @TODO find out what can be done
-    console.log(val);
   }
 
   public onSortChange(val) {
