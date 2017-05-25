@@ -30,6 +30,7 @@ import {
   MdDialogModule,
   MdDatepickerModule,
   MdNativeDateModule,
+  MdIconModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -58,6 +59,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HttpModule,
     RouterModule.forRoot(ROUTES),
     BrowserAnimationsModule,
+    MdIconModule,
     MdMenuModule,
     MdButtonModule,
     MdToolbarModule,

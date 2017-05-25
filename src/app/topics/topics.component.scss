@@ -1,7 +1,9 @@
+@import '../../styles';
+
 .container {
-	width: 980px;
-	padding-top: 50px;
-	margin: 0 auto;
+  width: 980px;
+  padding-top: 50px;
+  margin: 0 auto;
 }
 
 .topic-add-button {
@@ -10,4 +12,12 @@
   position: fixed;
   bottom: 50px;
   right: 50px;
+}
+
+.topic__like {
+  color: lightgray;
+
+  &.active {
+    color: mat-color($uc-talks-accent);
+  }
 }

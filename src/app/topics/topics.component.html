@@ -11,20 +11,24 @@
 
 	<ng2-md-datatable selectable (selectionChange)="onSelectionChange($event)" (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>
-			<ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
-			<ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
-			<ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
+      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
+      <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
+      <ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
 			<ng2-md-datatable-column>Date</ng2-md-datatable-column>
 		</ng2-md-datatable-header>
 
 		<tbody>
 			<ng2-md-datatable-row *ngFor="let topic of topics" [selectableValue]="topic.name">
-				<td class="numeric">{{topic.likes}}</td>
-				<td>{{topic.name}}</td>
-				<td *ngIf="auth.isAuthenticated" class="topic__likes">
-					<span *ngIf="!topic.likedByUser" (click)="like('like', topic._id)" class="topic__likes-up">&uarr;</span>
-					<span *ngIf="topic.likedByUser" (click)="like('dislike', topic._id)" class="topic__likes-down">&darr;</span>
-				</td>
+        <td *ngIf="auth.isAuthenticated">
+          <md-icon
+            class="topic__like"
+            [ngClass]="{ 'active': topic.likedByUser }"
+            (click)="like((topic.likedByUser ? 'dislike' : 'like'), topic._id)">
+            thumb_up
+          </md-icon>
+        </td>
+        <td class="numeric">{{topic.likes}}</td>
+        <td>{{topic.name}}</td>
         <td>
           <md-input-container>
             <input mdInput [mdDatepicker]="picker" [min]="minDate" placeholder="Choose a date" [disabled]="!auth.isAuthenticated">
