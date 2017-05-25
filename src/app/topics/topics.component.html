@@ -9,7 +9,7 @@
     +
   </button>
 
-	<ng2-md-datatable selectable (selectionChange)="onSelectionChange($event)" (sortChange)="onSortChange($event)">
+	<ng2-md-datatable selectable (selectionChange)="onSelectionChange()" (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>
       <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
