@@ -24,7 +24,6 @@ export class TopicsComponent implements OnInit {
     return topics.map(topic => {
       // set true (false) if userId is (not) in array of users, who liked this topic
       topic.likedByUser = topic.usersLikedIds.includes(userId);
-      console.log(topic.likedByUser);
       return topic;
     })
   }
