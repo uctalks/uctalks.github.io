@@ -5,7 +5,6 @@ import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import LikeDirection from './like-direction.type';
 import {TopicPopupComponent} from '../topic-popup/topic-popup.component';
 
 enum SortOrders { None, Ascending, Descending }
@@ -113,17 +112,17 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  public like(direction: LikeDirection, id: string) {
+  public like(liked: boolean, id: string) {
     this.spinner.toggleVisible(true);
 
-    this.topicsService.updateTopicLikesById(id, direction, this.auth.userProfileId)
+    this.topicsService.updateTopicLikesById(id, liked, this.auth.userProfileId)
       .subscribe(
         updatedTopic => {
           this.topics = this.topics
             .map(topic => {
               if (topic._id === updatedTopic._id) {
                 // if user liked the topic, mark the topic as liked by this user
-                updatedTopic.likedByUser = direction === 'like';
+                updatedTopic.likedByUser = liked;
                 return updatedTopic;
               }
               return topic;
@@ -140,7 +139,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  public onSelectionChange(val) {
+  public onSelectionChange(/*val*/) {
     // @TODO find out what can be done
   }
 

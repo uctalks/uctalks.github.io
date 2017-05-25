@@ -23,7 +23,9 @@
           <md-icon
             class="topic__like"
             [ngClass]="{ 'active': topic.likedByUser }"
-            (click)="like((topic.likedByUser ? 'dislike' : 'like'), topic._id)">
+            [mdTooltip]="(topic.likedByUser ? 'Remove your like from' : 'Like') + ' this topic'"
+            mdTooltipPosition="above"
+            (click)="like(!topic.likedByUser, topic._id)">
             thumb_up
           </md-icon>
         </td>
