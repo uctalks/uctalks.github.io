@@ -20,7 +20,6 @@ import {SpinnerService} from './services/spinner-service/spinner.service';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  MdMenuModule,
   MdInputModule,
   MdButtonModule,
   MdToolbarModule,
@@ -35,6 +34,8 @@ import {
 import 'hammerjs';
 
 import { MdDataTableModule } from 'ng2-md-datatable';
+import { UserComponent } from './user/user.component';
+import { UserService } from './services/user.service';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -49,6 +50,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HeaderComponent,
     TopicsComponent,
     TopicPopupComponent,
+    UserComponent,
   ],
   entryComponents: [
     TopicPopupComponent,
@@ -60,7 +62,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     RouterModule.forRoot(ROUTES),
     BrowserAnimationsModule,
     MdIconModule,
-    MdMenuModule,
     MdButtonModule,
     MdToolbarModule,
     MdTooltipModule,
@@ -82,6 +83,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     },
     SpinnerService,
     TopicsService,
+    UserService,
   ],
   bootstrap: [AppComponent],
 })

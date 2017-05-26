@@ -5,6 +5,7 @@ import auth0 from 'auth0-js';
 import { MdSnackBar } from '@angular/material';
 import { AUTH_CONFIG } from './auth-config';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { UserService } from '../user.service';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
   // Configure Auth0
   public auth0 = new auth0.WebAuth(AUTH_CONFIG);
 
-  constructor(public router: Router, private snackBar: MdSnackBar) {}
+  constructor(public router: Router, private snackBar: MdSnackBar, private userService: UserService) {}
 
   public login(): void {
     // Call the show method to display the widget.
@@ -41,25 +42,41 @@ export class AuthService {
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
 
+    // get more user details
     this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
       if (err) {
         this.snackBar.open('Cannot get user profile', 'close', { duration: 3000 });
       } else if (profile) {
         this.snackBar.open(`Hello, ${profile.given_name}! You are loggen in`, 'close', { duration: 2000 });
-        localStorage.setItem('userName', profile.given_name);
-        localStorage.setItem('userId', profile.sub);
-        this.profileDetailsReceived$.next(true); // notify subscribers, that user has logged in
+
+        const { name, sub, picture } = profile;
+
+        // store user details
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userId', sub);
+        localStorage.setItem('userPicture', picture);
+
+        // notify subscribers, that user has logged in
+        this.profileDetailsReceived$.next(true);
+
+        // add/update user in the database
+        this.userService.addOrUpdateUser({ name, sub, picture }).map(res => res.json());
       }
     });
   }
 
   public logout(): void {
+    // notify subscribers that user has logged out
+    this.profileDetailsReceived$.next(false);
+
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
+    localStorage.removeItem('userPicture');
+
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -73,5 +90,13 @@ export class AuthService {
 
   public get userProfileId(): string | null {
     return localStorage.getItem('userId');
+  }
+
+  public get userProfileName(): string | null {
+    return localStorage.getItem('userName');
+  }
+
+  public get userProfilePicture(): string | null {
+    return localStorage.getItem('userPicture');
   }
 }
