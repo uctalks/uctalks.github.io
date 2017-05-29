@@ -30,12 +30,14 @@ import {
   MdDatepickerModule,
   MdNativeDateModule,
   MdIconModule,
+  MdSelectModule,
 } from '@angular/material';
 import 'hammerjs';
 
 import { MdDataTableModule } from 'ng2-md-datatable';
 import { UserComponent } from './user/user.component';
-import { UserService } from './services/user.service';
+import { UserService } from './services/user-service/user.service';
+import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -51,6 +53,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TopicsComponent,
     TopicPopupComponent,
     UserComponent,
+    UserDropdownComponent,
   ],
   entryComponents: [
     TopicPopupComponent,
@@ -72,6 +75,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdNativeDateModule,
     MdInputModule,
     MdDialogModule,
+    MdSelectModule,
   ],
   providers: [
     AuthService,

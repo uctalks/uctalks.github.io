@@ -14,8 +14,13 @@
 
 .topic__like {
   color: lightgray;
+  cursor: pointer;
 
   &.active {
     color: mat-color($uc-talks-accent);
   }
+}
+
+.topic__table-row {
+  height: 3.5rem;
 }

@@ -5,7 +5,7 @@ import auth0 from 'auth0-js';
 import { MdSnackBar } from '@angular/material';
 import { AUTH_CONFIG } from './auth-config';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { UserService } from '../user.service';
+import { UserService } from '../user-service/user.service';
 
 @Injectable()
 export class AuthService {

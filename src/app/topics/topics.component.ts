@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { TopicsService } from '../services/topics-service/topics.service';
 import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import {TopicPopupComponent} from '../topic-popup/topic-popup.component';
+import { TopicPopupComponent } from '../topic-popup/topic-popup.component';
 
-enum SortOrders { None, Ascending, Descending }
+import { UserService } from '../services/user-service/user.service';
+import User from '../user/user.interface';
+
+enum SortOrders { None, Descending, Ascending }
 
 @Component({
   selector: 'app-topics',
@@ -17,6 +20,7 @@ enum SortOrders { None, Ascending, Descending }
 export class TopicsComponent implements OnInit {
   public topics: Topic[];
   public minDate: Date = new Date();
+  public users: User[];
 
   // update 'likedByUser' property of every topic
   static checkIfTopicsAreLiked(topics: Topic[], userId: string | null) {
@@ -64,18 +68,20 @@ export class TopicsComponent implements OnInit {
   }
 
   constructor(
-    private topicsService: TopicsService,
     public auth: AuthService,
+    private topicsService: TopicsService,
+    private userService: UserService,
     private spinner: SpinnerService,
     private snackBar: MdSnackBar,
     private dialog: MdDialog,
   ) {}
 
   ngOnInit() {
+    // load topics
     this.topicsService.getTopics()
       .subscribe(
         topics => {
-          this.topics = TopicsComponent.sortTopics(topics, 'likes', 0);
+          this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
 
           // when the user's details are received, check what topics were already liked by this user
           this.auth.profileDetailsReceived$.subscribe(authenticated => {
@@ -91,6 +97,18 @@ export class TopicsComponent implements OnInit {
           console.error(error);
         },
         () => this.spinner.toggleVisible(false),
+      );
+
+    // in background load list of users
+    this.userService.getAllUsers()
+      .subscribe(
+        users => {
+          this.users = users;
+        },
+        error => {
+          this.snackBar.open('Cannot receive users', 'close', { duration: 3000 });
+          console.error(error);
+        },
       );
   }
 
@@ -139,10 +157,6 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  public onSelectionChange(/*val*/) {
-    // @TODO find out what can be done
-  }
-
   public onSortChange(val) {
     this.topics = TopicsComponent.sortTopics(this.topics, val.sortBy, val.sortType);
   }
@@ -151,5 +165,12 @@ export class TopicsComponent implements OnInit {
     const dialog = this.dialog.open(TopicPopupComponent);
 
     dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
+  }
+
+  public updateTopicById(speakerId: string, topicId: string): void {
+    this.topicsService.updateTopicById(topicId, { speakerId })
+      .subscribe(updatedTopic => {
+        this.topics = this.topics.map(topic => topic._id === updatedTopic._id ? updatedTopic : topic);
+      })
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import restPrefix from '../rest-prefix';
+import restPrefix from '../../rest-prefix';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -10,5 +10,9 @@ export class UserService {
 
   public addOrUpdateUser(userProps: any): Observable<any> {
     return this.http.post(`${restPrefix}/users/`, { userProps }).map(res => res.json())
+  }
+
+  public getAllUsers(): Observable<any> {
+    return this.http.get(`${restPrefix}/users/all/`).map(res => res.json())
   }
 }
