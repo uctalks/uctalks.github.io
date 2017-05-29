@@ -59,7 +59,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forRoot(ROUTES, { useHash: true }),
     BrowserAnimationsModule,
     MdIconModule,
     MdButtonModule,
