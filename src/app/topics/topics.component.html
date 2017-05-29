@@ -9,16 +9,17 @@
     <md-icon>add</md-icon>
   </button>
 
-	<ng2-md-datatable selectable (selectionChange)="onSelectionChange()" (sortChange)="onSortChange($event)">
+	<ng2-md-datatable (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>
       <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
 			<ng2-md-datatable-column>Date</ng2-md-datatable-column>
+			<ng2-md-datatable-column>Speaker</ng2-md-datatable-column>
 		</ng2-md-datatable-header>
 
 		<tbody>
-			<ng2-md-datatable-row *ngFor="let topic of topics" [selectableValue]="topic.name">
+			<ng2-md-datatable-row class="topic__table-row" *ngFor="let topic of topics" [selectableValue]="topic.name">
         <td *ngIf="auth.isAuthenticated">
           <md-icon
             class="topic__like"
@@ -37,6 +38,15 @@
             <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="!auth.isAuthenticated"></button>
           </md-input-container>
           <md-datepicker #picker></md-datepicker>
+        </td>
+        <td>
+          <app-user-dropdown
+            *ngIf="users"
+            [users]="users"
+            [selectedSpeakerId]="topic.speakerId"
+            [disabled]="!auth.isAuthenticated"
+            (speakerSelected)="updateTopicById($event, topic._id)">
+          </app-user-dropdown>
         </td>
 			</ng2-md-datatable-row>
 		</tbody>
