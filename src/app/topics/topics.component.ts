@@ -88,6 +88,19 @@ export class TopicsComponent implements OnInit {
             // check what topics were liked, if user is authenticated and there are at least one topic in topics array
             if (authenticated && this.topics && this.topics.length) {
               this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
+
+              this.auth.newLogin$.subscribe((newLoginData: User) => {
+                // if new login occurs
+                if (newLoginData) {
+                  const userLoggenInBefore: User | undefined = this.users.find(user => user._id === newLoginData._id);
+
+                  this.users = userLoggenInBefore
+                    // if user logged-in before, update the data
+                    ? this.users.map(user => user._id === newLoginData._id ? newLoginData : user)
+                    // if user logged-in for the first time, add the data
+                    : [...this.users, newLoginData];
+                }
+              })
             }
           });
         },

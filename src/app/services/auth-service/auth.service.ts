@@ -12,6 +12,9 @@ export class AuthService {
   // observable to track receipt of the user's details
   public profileDetailsReceived$ = new BehaviorSubject(!!this.userProfileId);
 
+  // observable to track new login event
+  public newLogin$ = new BehaviorSubject(null);
+
   // Configure Auth0
   public auth0 = new auth0.WebAuth(AUTH_CONFIG);
 
@@ -60,7 +63,10 @@ export class AuthService {
         this.profileDetailsReceived$.next(true);
 
         // add/update user in the database
-        this.userService.addOrUpdateUser({ name, sub, picture }).map(res => res.json());
+        this.userService.addOrUpdateUser({ name, sub, picture }).subscribe(
+          data => this.newLogin$.next(data),
+          () => this.snackBar.open('Cannot post new login data', 'close', { duration: 3000 }),
+        );
       }
     });
   }
