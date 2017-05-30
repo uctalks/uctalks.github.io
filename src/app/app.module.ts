@@ -38,6 +38,7 @@ import { MdDataTableModule } from 'ng2-md-datatable';
 import { UserComponent } from './user/user.component';
 import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
+import { DatepickerComponent } from './datepicker/datepicker.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -54,6 +55,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TopicPopupComponent,
     UserComponent,
     UserDropdownComponent,
+    DatepickerComponent,
   ],
   entryComponents: [
     TopicPopupComponent,

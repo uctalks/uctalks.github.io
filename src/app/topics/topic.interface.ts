@@ -3,6 +3,8 @@ interface Topic {
   likes: number; // likes count
   likedByUser?: boolean, // liked by current user (if any)
   name: string; // topic's name
+  presentationDate?: string, // date of the presentation
+  presented: boolean, // flag indicating whether this topic was already presented or not
   speakerId?: string, // id of the speaker (if any)
   usersLikedIds: string[], // ids of users, who liked this topic or empty array
 }

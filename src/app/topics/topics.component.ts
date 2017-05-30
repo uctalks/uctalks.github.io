@@ -9,6 +9,7 @@ import { TopicPopupComponent } from '../topic-popup/topic-popup.component';
 
 import { UserService } from '../services/user-service/user.service';
 import User from '../user/user.interface';
+import UpdatedTopicProps from './updatedTopicProps.type';
 
 enum SortOrders { None, Descending, Ascending }
 
@@ -78,51 +79,49 @@ export class TopicsComponent implements OnInit {
 
   ngOnInit() {
     // load topics
-    this.topicsService.getTopics()
-      .subscribe(
-        topics => {
-          this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
+    this.topicsService.getTopics().subscribe(
+      topics => {
+        this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
 
-          // when the user's details are received, check what topics were already liked by this user
-          this.auth.profileDetailsReceived$.subscribe(authenticated => {
-            // check what topics were liked, if user is authenticated and there are at least one topic in topics array
-            if (authenticated && this.topics && this.topics.length) {
-              this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
-
-              this.auth.newLogin$.subscribe((newLoginData: User) => {
-                // if new login occurs
-                if (newLoginData) {
-                  const userLoggenInBefore: User | undefined = this.users.find(user => user._id === newLoginData._id);
-
-                  this.users = userLoggenInBefore
-                    // if user logged-in before, update the data
-                    ? this.users.map(user => user._id === newLoginData._id ? newLoginData : user)
-                    // if user logged-in for the first time, add the data
-                    : [...this.users, newLoginData];
-                }
-              })
-            }
-          });
-        },
-        error => {
-          this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
-          console.error(error);
-        },
-        () => this.spinner.toggleVisible(false),
-      );
+        // when the user's details are received, check what topics were already liked by this user
+        this.auth.profileDetailsReceived$.subscribe(authenticated => {
+          // check what topics were liked, if user is authenticated and there are at least one topic in topics array
+          if (authenticated && this.topics && this.topics.length) {
+            this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
+          }
+        });
+      },
+      error => {
+        this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
+        this.spinner.toggleVisible(false);
+        console.error(error);
+      },
+      () => this.spinner.toggleVisible(false),
+    );
 
     // in background load list of users
-    this.userService.getAllUsers()
-      .subscribe(
-        users => {
-          this.users = users;
-        },
-        error => {
-          this.snackBar.open('Cannot receive users', 'close', { duration: 3000 });
-          console.error(error);
-        },
-      );
+    this.userService.getAllUsers().subscribe(
+      users => {
+        this.users = users;
+
+        this.auth.newLogin$.subscribe((newLoginData: User) => {
+          // if new login occurs
+          if (newLoginData) {
+            const userLoggenInBefore: User | undefined = this.users.find(user => user._id === newLoginData._id);
+
+            this.users = userLoggenInBefore
+              // if user logged-in before, update the data
+              ? this.users.map(user => user._id === newLoginData._id ? newLoginData : user)
+              // if user logged-in for the first time, add the data
+              : [...this.users, newLoginData];
+          }
+        });
+      },
+      error => {
+        this.snackBar.open('Cannot receive users', 'close', { duration: 3000 });
+        console.error(error);
+      },
+    );
   }
 
   private addTopic(newTopicProps: NewTopicProps) {
@@ -180,10 +179,13 @@ export class TopicsComponent implements OnInit {
     dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
   }
 
-  public updateTopicById(speakerId: string, topicId: string): void {
-    this.topicsService.updateTopicById(topicId, { speakerId })
-      .subscribe(updatedTopic => {
+  public updateTopicProps(updatedValue: string | Date, updatedProperty: UpdatedTopicProps, topicId: string): void {
+    this.topicsService.updateTopicById(topicId, { [updatedProperty]: updatedValue }).subscribe(
+      updatedTopic => {
         this.topics = this.topics.map(topic => topic._id === updatedTopic._id ? updatedTopic : topic);
-      })
+        this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
+      },
+      () => this.snackBar.open('Cannot update topic', 'close', { duration: 3000 }),
+    );
   }
 }
