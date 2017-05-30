@@ -33,11 +33,12 @@
         <td class="numeric">{{topic.likes}}</td>
         <td>{{topic.name}}</td>
         <td>
-          <md-input-container>
-            <input mdInput [mdDatepicker]="picker" [min]="minDate" placeholder="Choose a date" [disabled]="!auth.isAuthenticated">
-            <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="!auth.isAuthenticated"></button>
-          </md-input-container>
-          <md-datepicker #picker></md-datepicker>
+          <app-datepicker
+            [minDate]="minDate"
+            [selectedDate]="topic.presentationDate"
+            [disabled]="!auth.isAuthenticated"
+            (dateChanged)="updateTopicProps($event, 'presentationDate', topic._id)">
+          </app-datepicker>
         </td>
         <td>
           <app-user-dropdown
@@ -45,7 +46,7 @@
             [users]="users"
             [selectedSpeakerId]="topic.speakerId"
             [disabled]="!auth.isAuthenticated"
-            (speakerSelected)="updateTopicById($event, topic._id)">
+            (speakerSelected)="updateTopicProps($event, 'speakerId', topic._id)">
           </app-user-dropdown>
         </td>
 			</ng2-md-datatable-row>
