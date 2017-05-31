@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
         mdInput
         [mdDatepicker]="picker"
         [min]="minDate"
-        [placeholder]="!selectedDate && 'Choose a date'"
+        [placeholder]="(alwaysShowPlaceholder || !selectedDate) && 'Choose a date'"
         [disabled]="disabled"
         [value]="date"
         (blur)="emitChangeEvent($event)">
@@ -22,6 +22,7 @@ export class DatepickerComponent implements OnInit {
   @Input() disabled: boolean;
   @Input() minDate: Date;
   @Input() selectedDate: string;
+  @Input() alwaysShowPlaceholder: true;
 
   @Output() dateChanged: EventEmitter<Date>;
 
@@ -32,16 +33,22 @@ export class DatepickerComponent implements OnInit {
   }
 
   ngOnInit() {
-    const selectedDate = new Date(this.selectedDate);
+    const selectedDate: false | Date = !!this.selectedDate && new Date(this.selectedDate);
 
     // if selectedDate is provided, assign to 'date' (default input value)
-    if (selectedDate) {
-      this.date = selectedDate;
-    }
+    this.date = selectedDate ? selectedDate : null;
   }
 
-  public emitChangeEvent(userInput: Date): void {
-    // if userInput is proper date, emit dateChanged event
-    userInput instanceof Date && this.dateChanged.emit(userInput);
+  public emitChangeEvent(userInput: Date | FocusEvent): void {
+    if (userInput instanceof FocusEvent) {
+      // if userInput is FocusEvent (user typed the date by hand), prepare the date
+      const date = new Date((userInput.target as HTMLInputElement).value);
+
+      // if date is correctly initialized, emit dateChanged event
+      date.toString() !== 'Invalid Date' && this.dateChanged.emit(date);
+    } else if (userInput instanceof Date) {
+      // if userInput is proper Date (clicked date in the datepicker), emit dateChanged event with userInput itself
+      this.dateChanged.emit(userInput);
+    }
   }
 }

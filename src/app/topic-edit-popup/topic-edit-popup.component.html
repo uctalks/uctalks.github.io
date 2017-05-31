@@ -1,0 +1,53 @@
+<h1 md-dialog-title>Edit {{ data.topic.name }}</h1>
+<form>
+  <div class="edit-form-inputs">
+    <md-input-container class="edit-form-input">
+      <input
+        mdInput
+        placeholder="Name"
+        name="topic.name"
+        [value]="updatedTopicProps.name"
+        (blur)="handleChange($event, 'name')" />
+    </md-input-container>
+
+    <app-datepicker
+      class="edit-form-input"
+      [minDate]="minDate"
+      [selectedDate]="updatedTopicProps.presentationDate"
+      [alwaysShowPlaceholder]="true"
+      (dateChanged)="handleChange($event, 'presentationDate')">
+    </app-datepicker>
+
+    <md-icon
+      *ngIf="updatedTopicProps.presentationDate"
+      class="reset-button"
+      mdTooltip="Reset date"
+      mdTooltipPosition="above"
+      (click)="resetProperty('presentationDate')">
+      clear
+    </md-icon>
+
+    <app-user-dropdown
+      class="edit-form-input edit-form-input_speaker"
+      *ngIf="data.users"
+      [users]="data.users"
+      floatPlaceholder="auto"
+      [selectedSpeakerId]="updatedTopicProps.speakerId"
+      (speakerSelected)="handleChange($event, 'speakerId')">
+    </app-user-dropdown>
+
+    <md-icon
+      *ngIf="updatedTopicProps.speakerId"
+      class="reset-button"
+      mdTooltip="Reset speaker"
+      mdTooltipPosition="above"
+      (click)="resetProperty('speakerId')">
+      clear
+    </md-icon>
+  </div>
+
+  <md-dialog-actions class="edit-form-input">
+    <button md-button [disabled]="!edited" (click)="closeDialog()">Save</button>
+    <button md-button (click)="closeDialog()">Cancel</button>
+  </md-dialog-actions>
+</form>

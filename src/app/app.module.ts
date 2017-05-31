@@ -40,6 +40,7 @@ import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { TopicDeletePopupComponent } from './topic-delete-popup/topic-delete-popup.component';
+import { TopicEditPopupComponent } from './topic-edit-popup/topic-edit-popup.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -55,6 +56,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TopicsComponent,
     TopicAddPopupComponent,
     TopicDeletePopupComponent,
+    TopicEditPopupComponent,
     UserComponent,
     UserDropdownComponent,
     DatepickerComponent,
@@ -62,6 +64,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   entryComponents: [
     TopicAddPopupComponent,
     TopicDeletePopupComponent,
+    TopicEditPopupComponent,
   ],
   imports: [
     BrowserModule,

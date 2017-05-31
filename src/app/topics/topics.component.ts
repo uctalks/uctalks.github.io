@@ -9,8 +9,9 @@ import { TopicAddPopupComponent } from '../topic-add-popup/topic-add-popup.compo
 
 import { UserService } from '../services/user-service/user.service';
 import User from '../user/user.interface';
-import UpdatedTopicProps from './updatedTopicProps.type';
 import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
+import { TopicEditPopupComponent } from '../topic-edit-popup/topic-edit-popup.component';
+import UpdatedTopicProps from './edited-topic-props.interface';
 
 enum SortOrders { None, Descending, Ascending }
 
@@ -125,42 +126,6 @@ export class TopicsComponent implements OnInit {
     );
   }
 
-  private addTopic(newTopicProps: NewTopicProps) {
-    this.spinner.toggleVisible(true);
-
-    this.topicsService.addTopic(newTopicProps)
-      .subscribe(
-        addedTopic => {
-          this.topics.push(addedTopic);
-          this.snackBar.open('New topic saved', 'close', { duration: 3000 });
-        },
-        error => {
-          this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
-          console.error(error);
-        },
-        () => this.spinner.toggleVisible(false),
-      );
-  }
-
-  private deleteTopic(id: string) {
-    this.spinner.toggleVisible(true);
-
-    this.topicsService.deleteTopic(id)
-      .subscribe(
-        deletedTopic => {
-          this.topics = this.topics.filter(topic => topic._id !== deletedTopic._id);
-          this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
-        },
-        error => {
-          this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
-          console.error(error);
-        },
-        () => this.spinner.toggleVisible(false),
-      );
-  }
-
   public like(liked: boolean, id: string) {
     this.spinner.toggleVisible(true);
 
@@ -198,19 +163,89 @@ export class TopicsComponent implements OnInit {
     dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
   }
 
+  public handleInputChange(userInput: FocusEvent | Date | string, property: keyof UpdatedTopicProps, id: string) {
+    const previousValue = this.topics.find(topic => topic._id === id)[property];
+
+    if (userInput instanceof FocusEvent) {
+      userInput = (userInput.target as HTMLInputElement).value;
+    }
+
+    // if previous value was set and it differs from user's input OR if previous value was not set
+    if (previousValue && new Date(previousValue).toString() !== userInput.toString() || (!previousValue && userInput)) {
+      // update the topic's props
+      this.updateTopicProps(id, { [property]: userInput });
+    }
+  }
+
+  public openEditTopicDialog(id: string) {
+    const dialog = this.dialog.open(TopicEditPopupComponent, {
+      data: {
+        topic: this.topics.find(topic => topic._id === id),
+        users: this.users,
+      },
+    });
+
+    dialog.afterClosed().subscribe(updatedTopicProps => {
+      updatedTopicProps && this.updateTopicProps(id, updatedTopicProps)
+    });
+  }
+
   public openDeleteTopicDialog(id: string) {
     const dialog = this.dialog.open(TopicDeletePopupComponent);
 
     dialog.afterClosed().subscribe(toBeDeleted => this.deleteTopic(id));
   }
 
-  public updateTopicProps(updatedValue: string | Date, updatedProperty: UpdatedTopicProps, topicId: string): void {
-    this.topicsService.updateTopicById(topicId, { [updatedProperty]: updatedValue }).subscribe(
+  private addTopic(newTopicProps: NewTopicProps) {
+    this.spinner.toggleVisible(true);
+
+    this.topicsService.addTopic(newTopicProps)
+      .subscribe(
+        addedTopic => {
+          this.topics.push(addedTopic);
+          this.snackBar.open('New topic saved', 'close', { duration: 3000 });
+        },
+        error => {
+          this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
+      );
+  }
+
+  private deleteTopic(id: string) {
+    this.spinner.toggleVisible(true);
+
+    this.topicsService.deleteTopic(id)
+      .subscribe(
+        deletedTopic => {
+          this.topics = this.topics.filter(topic => topic._id !== deletedTopic._id);
+          this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
+        },
+        error => {
+          this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
+      );
+  }
+
+  private updateTopicProps(topicId: string, updatedTopicProps: UpdatedTopicProps ): void {
+    this.spinner.toggleVisible(true);
+
+    this.topicsService.updateTopicById(topicId, updatedTopicProps).subscribe(
       updatedTopic => {
         this.topics = this.topics.map(topic => topic._id === updatedTopic._id ? updatedTopic : topic);
         this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
       },
-      () => this.snackBar.open('Cannot update topic', 'close', { duration: 3000 }),
+      error => {
+        this.snackBar.open('Cannot update topic', 'close', { duration: 3000 });
+        this.spinner.toggleVisible(false);
+        console.error(error);
+      },
+      () => this.spinner.toggleVisible(false),
     );
   }
 }

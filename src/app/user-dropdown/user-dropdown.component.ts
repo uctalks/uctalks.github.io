@@ -8,7 +8,7 @@ import User from '../user/user.interface';
     <md-select
       name="user"
       placeholder="Speaker"
-      floatPlaceholder="never"
+      [floatPlaceholder]="floatPlaceholder || 'never'"
       [disabled]="disabled"
       [(ngModel)]="selectedSpeakerId"
       (change)="emitSpeakerSelectEvent($event)">
@@ -23,6 +23,7 @@ export class UserDropdownComponent {
   @Input() users: User[];
   @Input() selectedSpeakerId: string;
   @Input() disabled: boolean;
+  @Input() floatPlaceholder: 'always' | 'auto' | 'never';
   @Output() speakerSelected: EventEmitter<string>;
 
   constructor() {
