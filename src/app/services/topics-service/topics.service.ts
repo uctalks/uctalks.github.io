@@ -22,6 +22,11 @@ export class TopicsService {
       .map(res => res.json());
   }
 
+  deleteTopic(id): Observable<Topic> {
+    return this.http.delete(`${restPrefix}/topics/${id}`)
+      .map(res => res.json());
+  }
+
   updateTopicById(id: string, updatedTopicProps: Object): Observable<Topic> {
     return this.http.put(`${restPrefix}/topics/${id}`, { updatedTopicProps })
       .map(res => res.json());

@@ -5,11 +5,12 @@ import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from './topic.interface';
-import { TopicPopupComponent } from '../topic-popup/topic-popup.component';
+import { TopicAddPopupComponent } from '../topic-add-popup/topic-add-popup.component';
 
 import { UserService } from '../services/user-service/user.service';
 import User from '../user/user.interface';
 import UpdatedTopicProps from './updatedTopicProps.type';
+import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
 
 enum SortOrders { None, Descending, Ascending }
 
@@ -142,6 +143,24 @@ export class TopicsComponent implements OnInit {
       );
   }
 
+  private deleteTopic(id: string) {
+    this.spinner.toggleVisible(true);
+
+    this.topicsService.deleteTopic(id)
+      .subscribe(
+        deletedTopic => {
+          this.topics = this.topics.filter(topic => topic._id !== deletedTopic._id);
+          this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
+        },
+        error => {
+          this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
+          this.spinner.toggleVisible(false);
+          console.error(error);
+        },
+        () => this.spinner.toggleVisible(false),
+      );
+  }
+
   public like(liked: boolean, id: string) {
     this.spinner.toggleVisible(true);
 
@@ -173,10 +192,16 @@ export class TopicsComponent implements OnInit {
     this.topics = TopicsComponent.sortTopics(this.topics, val.sortBy, val.sortType);
   }
 
-  public openDialog() {
-    const dialog = this.dialog.open(TopicPopupComponent);
+  public openAddTopicDialog() {
+    const dialog = this.dialog.open(TopicAddPopupComponent);
 
     dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
+  }
+
+  public openDeleteTopicDialog(id: string) {
+    const dialog = this.dialog.open(TopicDeletePopupComponent);
+
+    dialog.afterClosed().subscribe(toBeDeleted => this.deleteTopic(id));
   }
 
   public updateTopicProps(updatedValue: string | Date, updatedProperty: UpdatedTopicProps, topicId: string): void {

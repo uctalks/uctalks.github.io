@@ -24,3 +24,12 @@
 .topic__table-row {
   height: 3.5rem;
 }
+
+.topic__delete {
+  cursor: pointer;
+  transition: color .5s;
+
+  &:hover {
+    color: mat-color($uc-talks-warn);
+  }
+}
