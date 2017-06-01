@@ -56,7 +56,6 @@ export class AuthService {
 
         // store user details
         localStorage.setItem('userName', name);
-        localStorage.setItem('userId', sub);
         localStorage.setItem('userPicture', picture);
 
         // notify subscribers, that user has logged in
@@ -64,7 +63,10 @@ export class AuthService {
 
         // add/update user in the database
         this.userService.addOrUpdateUser({ name, sub, picture }).subscribe(
-          data => this.newLogin$.next(data),
+          user => {
+            this.newLogin$.next(user);
+            localStorage.setItem('userId', user._id);
+          },
           () => this.snackBar.open('Cannot post new login data', 'close', { duration: 3000 }),
         );
       }
