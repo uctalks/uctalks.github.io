@@ -11,7 +11,7 @@ import {AuthConfig, AuthHttp} from 'angular2-jwt';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {TopicsComponent} from './topics/topics.component';
-import {TopicPopupComponent} from './topic-popup/topic-popup.component';
+import {TopicAddPopupComponent} from './topic-add-popup/topic-add-popup.component';
 
 import {AuthService} from './services/auth-service/auth.service';
 import {AuthGuardService} from './services/auth-service/auth-guard.service';
@@ -21,6 +21,7 @@ import {SpinnerService} from './services/spinner-service/spinner.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MdInputModule,
+  MdCheckboxModule,
   MdButtonModule,
   MdToolbarModule,
   MdTooltipModule,
@@ -39,6 +40,8 @@ import { UserComponent } from './user/user.component';
 import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
+import { TopicDeletePopupComponent } from './topic-delete-popup/topic-delete-popup.component';
+import { TopicEditPopupComponent } from './topic-edit-popup/topic-edit-popup.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -52,13 +55,17 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AppComponent,
     HeaderComponent,
     TopicsComponent,
-    TopicPopupComponent,
+    TopicAddPopupComponent,
+    TopicDeletePopupComponent,
+    TopicEditPopupComponent,
     UserComponent,
     UserDropdownComponent,
     DatepickerComponent,
   ],
   entryComponents: [
-    TopicPopupComponent,
+    TopicAddPopupComponent,
+    TopicDeletePopupComponent,
+    TopicEditPopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +75,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BrowserAnimationsModule,
     MdIconModule,
     MdButtonModule,
+    MdCheckboxModule,
     MdToolbarModule,
     MdTooltipModule,
     MdDataTableModule,

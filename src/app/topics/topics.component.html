@@ -2,7 +2,7 @@
   <button
 		*ngIf="auth.isAuthenticated"
 		class="topic-add-button"
-		(click)="openDialog()"
+		(click)="openAddTopicDialog()"
 		md-fab
 		mdTooltip="Add new topic"
 		mdTooltipPosition="above">
@@ -11,15 +11,51 @@
 
 	<ng2-md-datatable (sortChange)="onSortChange($event)">
 		<ng2-md-datatable-header>
-      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
-      <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
-			<ng2-md-datatable-column>Date</ng2-md-datatable-column>
-			<ng2-md-datatable-column>Speaker</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Speaker</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Date</ng2-md-datatable-column>
+      <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Presented</ng2-md-datatable-column>
+      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
+      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Edit</ng2-md-datatable-column>
+			<ng2-md-datatable-column *ngIf="auth.isAuthenticated">Delete topic</ng2-md-datatable-column>
 		</ng2-md-datatable-header>
 
 		<tbody>
 			<ng2-md-datatable-row class="topic__table-row" *ngFor="let topic of topics" [selectableValue]="topic.name">
+        <td>{{topic.name}}</td>
+
+        <td>
+          <app-user-dropdown
+            *ngIf="users"
+            [users]="users"
+            [selectedSpeakerId]="topic.speakerId"
+            [disabled]="!auth.isAuthenticated"
+            (speakerSelected)="handleInputChange($event, 'speakerId', topic._id)">
+          </app-user-dropdown>
+        </td>
+
+        <td>
+          <app-datepicker
+            [minDate]="minDate"
+            [selectedDate]="topic.presentationDate"
+            [disabled]="!auth.isAuthenticated"
+            (dateChanged)="handleInputChange($event, 'presentationDate', topic._id)">
+          </app-datepicker>
+        </td>
+
+        <td class="numeric">{{topic.likes}}</td>
+
+        <td>
+          <md-checkbox
+            [checked]="topic.presented"
+            [indeterminate]="!topic.presented && topic.speakerId"
+            [align]="'start'"
+            [disabled]="!auth.isAuthenticated || !topic.speakerId || !topic.presentationDate"
+            (change)="handleInputChange($event, 'presented', topic._id)">
+          </md-checkbox>
+        </td>
+
         <td *ngIf="auth.isAuthenticated">
           <md-icon
             class="topic__like"
@@ -30,24 +66,23 @@
             thumb_up
           </md-icon>
         </td>
-        <td class="numeric">{{topic.likes}}</td>
-        <td>{{topic.name}}</td>
-        <td>
-          <app-datepicker
-            [minDate]="minDate"
-            [selectedDate]="topic.presentationDate"
-            [disabled]="!auth.isAuthenticated"
-            (dateChanged)="updateTopicProps($event, 'presentationDate', topic._id)">
-          </app-datepicker>
+
+        <td *ngIf="auth.isAuthenticated">
+          <md-icon
+            class="topic__edit"
+            (click)="openEditTopicDialog(topic._id)">
+            mode_edit
+          </md-icon>
         </td>
-        <td>
-          <app-user-dropdown
-            *ngIf="users"
-            [users]="users"
-            [selectedSpeakerId]="topic.speakerId"
-            [disabled]="!auth.isAuthenticated"
-            (speakerSelected)="updateTopicProps($event, 'speakerId', topic._id)">
-          </app-user-dropdown>
+
+        <td *ngIf="auth.isAuthenticated">
+          <md-icon
+            class="topic__delete"
+            mdTooltip="Completely delete the topic"
+            mdTooltipPosition="above"
+            (click)="openDeleteTopicDialog(topic._id)">
+            delete_forever
+          </md-icon>
         </td>
 			</ng2-md-datatable-row>
 		</tbody>

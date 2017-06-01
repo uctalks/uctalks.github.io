@@ -12,13 +12,30 @@
   right: 50px;
 }
 
-.topic__like {
-  color: lightgray;
+@mixin topic-control-button($active-color) {
   cursor: pointer;
+  transition: color .5s;
+
+  &:hover {
+    color: $active-color;
+  }
+}
+
+.topic__like {
+  @include topic-control-button(lighten(mat-color($uc-talks-accent), 30%));
+  color: lightgrey;
 
   &.active {
     color: mat-color($uc-talks-accent);
   }
+}
+
+.topic__edit {
+  @include topic-control-button(mat-color($uc-talks-accent));
+}
+
+.topic__delete {
+  @include topic-control-button(mat-color($uc-talks-warn));
 }
 
 .topic__table-row {
