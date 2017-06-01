@@ -13,7 +13,7 @@ import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-po
 import { TopicEditPopupComponent } from '../topic-edit-popup/topic-edit-popup.component';
 import UpdatedTopicProps from './edited-topic-props.interface';
 
-enum SortOrders { None, Descending, Ascending }
+enum SortOrders { Descending = 1, Ascending }
 
 @Component({
   selector: 'app-topics',
@@ -34,37 +34,60 @@ export class TopicsComponent implements OnInit {
     })
   }
 
-  static sortTopics(topics: Topic[], sortField: 'name' | 'likes', sortOrder: SortOrders): Topic[] {
+  static sortTopics(
+    topics: Topic[],
+    sortField: 'name' | 'likes' | 'presentationDate' | 'speakerId' | 'presented',
+    sortOrder: SortOrders,
+  ): Topic[] {
     switch (sortOrder) {
-      case SortOrders.None:
-        return topics;
-
       case SortOrders.Ascending:
         switch (sortField) {
           case 'name':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareStrings(a.name, b.name));
+          case 'presentationDate':
+          case 'speakerId':
+            return topics.sort((a: Topic, b: Topic) => TopicsComponent.compareStrings(a[sortField], b[sortField]));
 
           case 'likes':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(a.likes, b.likes));
+          case 'presented':
+            return topics.sort((a: Topic, b: Topic) => TopicsComponent.compareBoolsOrNumbers(a[sortField], b[sortField]));
+
+          default:
+            return topics;
         }
-        break;
 
       case SortOrders.Descending:
         switch (sortField) {
           case 'name':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareStrings(b.name, a.name));
+          case 'presentationDate':
+          case 'speakerId':
+            return topics.sort((a: Topic, b: Topic) => TopicsComponent.compareStrings(b[sortField], a[sortField]));
 
           case 'likes':
-            return topics.sort((a: Topic, b: Topic): SortOrders => TopicsComponent.compareNumbers(b.likes, a.likes));
+          case 'presented':
+            return topics.sort((a: Topic, b: Topic) => TopicsComponent.compareBoolsOrNumbers(b[sortField], a[sortField]));
+
+          default:
+            return topics;
         }
+
+      default:
+        return topics;
     }
   }
 
-  static compareNumbers(a: number, b: number): SortOrders {
-    return b - a;
+  static compareBoolsOrNumbers(a: boolean | number, b: boolean | number) {
+    return Number(b) - Number(a);
   }
 
-  static compareStrings(a: string, b: string): SortOrders {
+  static compareStrings(a: string, b: string) {
+    if (a === undefined && b === undefined) {
+      return 0;
+    } else if (a === undefined && b !== undefined) {
+      return 1;
+    } else if (a !== undefined && b === undefined) {
+      return -1;
+    }
+
     a = a.toLowerCase();
     b = b.toLowerCase();
     return b > a ? 1 : b === a ? 0 : -1;
@@ -160,7 +183,7 @@ export class TopicsComponent implements OnInit {
   public openAddTopicDialog() {
     const dialog = this.dialog.open(TopicAddPopupComponent);
 
-    dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
+    dialog.afterClosed().subscribe(newTopicProps => newTopicProps && this.addTopic(newTopicProps));
   }
 
   public handleInputChange(
@@ -200,7 +223,7 @@ export class TopicsComponent implements OnInit {
   public openDeleteTopicDialog(id: string) {
     const dialog = this.dialog.open(TopicDeletePopupComponent);
 
-    dialog.afterClosed().subscribe(toBeDeleted => this.deleteTopic(id));
+    dialog.afterClosed().subscribe(toBeDeleted => toBeDeleted && this.deleteTopic(id));
   }
 
   private addTopic(newTopicProps: NewTopicProps) {
@@ -244,7 +267,14 @@ export class TopicsComponent implements OnInit {
 
     this.topicsService.updateTopicById(topicId, updatedTopicProps).subscribe(
       updatedTopic => {
-        this.topics = this.topics.map(topic => topic._id === updatedTopic._id ? updatedTopic : topic);
+        this.topics = this.topics.map(topic => {
+          if (topic._id === updatedTopic._id) {
+            // if user liked the topic, mark the topic as liked by this user
+            updatedTopic.likedByUser = updatedTopic.usersLikedIds.includes(this.auth.userProfileId);
+            return updatedTopic;
+          }
+          return topic;
+        });
         this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
       },
       error => {
