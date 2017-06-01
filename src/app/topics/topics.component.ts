@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MdCheckboxChange, MdDialog, MdSnackBar } from '@angular/material';
 import { TopicsService } from '../services/topics-service/topics.service';
 import { AuthService } from '../services/auth-service/auth.service';
 import { SpinnerService } from '../services/spinner-service/spinner.service';
@@ -163,15 +163,22 @@ export class TopicsComponent implements OnInit {
     dialog.afterClosed().subscribe(newTopicProps => this.addTopic(newTopicProps));
   }
 
-  public handleInputChange(userInput: FocusEvent | Date | string, property: keyof UpdatedTopicProps, id: string) {
+  public handleInputChange(
+    userInput: MdCheckboxChange | FocusEvent | Date | boolean | string, property: keyof UpdatedTopicProps,
+    id: string,
+  ) {
     const previousValue = this.topics.find(topic => topic._id === id)[property];
 
     if (userInput instanceof FocusEvent) {
       userInput = (userInput.target as HTMLInputElement).value;
+    } else if (userInput instanceof MdCheckboxChange) {
+      userInput = userInput.checked;
     }
 
     // if previous value was set and it differs from user's input OR if previous value was not set
-    if (previousValue && new Date(previousValue).toString() !== userInput.toString() || (!previousValue && userInput)) {
+    if (previousValue
+      && new Date(previousValue.toString()).toString() !== userInput.toString()
+      || (!previousValue && userInput !== null)) {
       // update the topic's props
       this.updateTopicProps(id, { [property]: userInput });
     }

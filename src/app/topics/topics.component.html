@@ -15,6 +15,7 @@
       <ng2-md-datatable-column>Speaker</ng2-md-datatable-column>
       <ng2-md-datatable-column>Date</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
+      <ng2-md-datatable-column>Presented</ng2-md-datatable-column>
       <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
       <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Edit</ng2-md-datatable-column>
 			<ng2-md-datatable-column *ngIf="auth.isAuthenticated">Delete topic</ng2-md-datatable-column>
@@ -44,6 +45,16 @@
         </td>
 
         <td class="numeric">{{topic.likes}}</td>
+
+        <td>
+          <md-checkbox
+            [checked]="topic.presented"
+            [indeterminate]="!topic.presented && topic.speakerId"
+            [align]="'start'"
+            [disabled]="!auth.isAuthenticated || !topic.speakerId || !topic.presentationDate"
+            (change)="handleInputChange($event, 'presented', topic._id)">
+          </md-checkbox>
+        </td>
 
         <td *ngIf="auth.isAuthenticated">
           <md-icon

@@ -21,6 +21,7 @@ import {SpinnerService} from './services/spinner-service/spinner.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MdInputModule,
+  MdCheckboxModule,
   MdButtonModule,
   MdToolbarModule,
   MdTooltipModule,
@@ -74,6 +75,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BrowserAnimationsModule,
     MdIconModule,
     MdButtonModule,
+    MdCheckboxModule,
     MdToolbarModule,
     MdTooltipModule,
     MdDataTableModule,
