@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-import NewTopicProps from '../../topics/new-topic-props.interface';
+import NewTopicProps from '../../components/topics/new-topic-props.interface';
 import { Observable } from 'rxjs/Observable';
-import Topic from '../../topics/topic.interface';
+import Topic from '../../models/topic';
 import restPrefix from '../../rest-prefix';
 
 @Injectable()

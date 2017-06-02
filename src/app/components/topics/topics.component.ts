@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MdCheckboxChange, MdDialog, MdSnackBar } from '@angular/material';
 import { TopicsService } from '../../services/topics-service/topics.service';
 import { AuthService } from '../../services/auth-service/auth.service';
@@ -21,7 +21,8 @@ enum SortOrders { Descending = 1, Ascending }
   styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent implements OnInit {
-  public topics: Topic[];
+  @Input() topics: Topic[];
+
   public minDate: Date = new Date();
   public users: User[];
 
