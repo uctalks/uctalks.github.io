@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MdCheckboxChange, MdDialog, MdSnackBar } from '@angular/material';
-import { TopicsService } from '../services/topics-service/topics.service';
-import { AuthService } from '../services/auth-service/auth.service';
-import { SpinnerService } from '../services/spinner-service/spinner.service';
+import { TopicsService } from '../../services/topics-service/topics.service';
+import { AuthService } from '../../services/auth-service/auth.service';
+import { SpinnerService } from '../../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
-import Topic from './topic.interface';
+import Topic from '../../models/topic';
 import { TopicAddPopupComponent } from '../topic-add-popup/topic-add-popup.component';
 
-import { UserService } from '../services/user-service/user.service';
+import { UserService } from '../../services/user-service/user.service';
 import User from '../user/user.interface';
 import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
 import { TopicEditPopupComponent } from '../topic-edit-popup/topic-edit-popup.component';

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material';
-import Topic from '../topics/topic.interface';
+import Topic from '../../models/topic';
 import UpdatedTopicProps from '../topics/edited-topic-props.interface';
 import User from '../user/user.interface';
 
