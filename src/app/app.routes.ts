@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { TopicsComponent } from './components/topics/topics.component';
+import {TopicsPageComponent} from './containers/topics-page';
 import { UserComponent } from './components/user/user.component';
 
 export const ROUTES: Routes = [
-  { path: 'topics',	component: TopicsComponent },
+  { path: 'topics',	component: TopicsPageComponent },
   { path: 'user',	component: UserComponent },
 
   { path: '', redirectTo: '/topics', pathMatch: 'prefix' },

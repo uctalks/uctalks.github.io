@@ -1,63 +1,35 @@
 import { createSelector } from 'reselect';
-import { Book } from '../models/book';
-import * as book from '../actions/book';
-import * as collection from '../actions/topics';
-
+import Topic from '../models/topic';
+import * as topics from '../actions/topics';
 
 export interface State {
   ids: string[];
-  entities: { [id: string]: Book };
-  selectedBookId: string | null;
-};
+  // entities: { [id: string]: Topic };
+  topics: Topic[],
+}
 
 export const initialState: State = {
   ids: [],
-  entities: {},
-  selectedBookId: null,
+  // entities: {},
+  topics: [],
 };
 
-export function reducer(state = initialState, action: book.Actions | collection.Actions): State {
+export function reducer(state = initialState, action: topics.Actions | topics.Actions): State {
   switch (action.type) {
-    case book.SEARCH_COMPLETE:
-    case collection.LOAD_TOPICS_SUCCESS: {
-      const books = action.payload;
-      const newBooks = books.filter(book => !state.entities[book.id]);
+    case topics.LOAD_TOPICS_SUCCESS: {
+      const topics = action.payload;
 
-      const newBookIds = newBooks.map(book => book.id);
-      const newBookEntities = newBooks.reduce((entities: { [id: string]: Book }, book: Book) => {
-        return Object.assign(entities, {
-          [book.id]: book
-        });
-      }, {});
+      const topicsIds = topics.map(topic => topic._id);
+      // const topicsEntities = topics.reduce((entities: { [id: string]: Topic }, topic: Topic) => {
+      //   return Object.assign(entities, {
+      //     [topic._id]: topic,
+      //   });
+      // }, {});
 
       return {
-        ids: [ ...state.ids, ...newBookIds ],
-        entities: Object.assign({}, state.entities, newBookEntities),
-        selectedBookId: state.selectedBookId
-      };
-    }
-
-    case book.LOAD: {
-      const book = action.payload;
-
-      if (state.ids.indexOf(book.id) > -1) {
-        return state;
-      }
-
-      return {
-        ids: [ ...state.ids, book.id ],
-        entities: Object.assign({}, state.entities, {
-          [book.id]: book
-        }),
-        selectedBookId: state.selectedBookId
-      };
-    }
-
-    case book.SELECT: {
-      return {
-        ids: state.ids,
-        entities: state.entities,
-        selectedBookId: action.payload
+        ids: [ ...topicsIds ],
+        topics,
+        // entities: Object.assign({}, topicsEntities),
       };
     }
 
@@ -67,25 +39,10 @@ export function reducer(state = initialState, action: book.Actions | collection.
   }
 }
 
-/**
- * Because the data structure is defined within the reducer it is optimal to
- * locate our selector functions at this level. If store is to be thought of
- * as a database, and reducers the tables, selectors can be considered the
- * queries into said database. Remember to keep your selectors small and
- * focused so they can be combined and composed to fit each particular
- * use-case.
- */
-
-export const getEntities = (state: State) => state.entities;
+export const getTopics = (state: State) => state.topics;
 
 export const getIds = (state: State) => state.ids;
 
-export const getSelectedId = (state: State) => state.selectedBookId;
-
-export const getSelected = createSelector(getEntities, getSelectedId, (entities, selectedId) => {
-  return entities[selectedId];
-});
-
-export const getAll = createSelector(getEntities, getIds, (entities, ids) => {
+export const getAll = createSelector(getTopics, getIds, (entities, ids) => {
   return ids.map(id => entities[id]);
 });

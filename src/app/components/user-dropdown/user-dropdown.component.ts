@@ -17,7 +17,6 @@ import User from '../user/user.interface';
       </md-option>
     </md-select>
   `,
-  styleUrls: ['./user-dropdown.component.scss'],
 })
 export class UserDropdownComponent {
   @Input() users: User[];

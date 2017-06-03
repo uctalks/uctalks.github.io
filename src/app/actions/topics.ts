@@ -52,18 +52,18 @@ export class AddTopicFailAction implements Action {
 /**
  * Load Topics Actions
  */
-export class LoadAction implements Action {
+export class LoadTopicsAction implements Action {
   readonly type = LOAD_TOPICS;
 }
 
-export class LoadSuccessAction implements Action {
+export class LoadTopicsSuccessAction implements Action {
   readonly type = LOAD_TOPICS_SUCCESS;
 
   constructor(public payload: Topic[]) {
   }
 }
 
-export class LoadFailAction implements Action {
+export class LoadTopicsFailAction implements Action {
   readonly type = LOAD_TOPICS_FAIL;
 
   constructor(public payload: any) {
@@ -148,9 +148,9 @@ export type Actions
   | AddTopicSuccessAction
   | AddTopicFailAction
 
-  | LoadAction
-  | LoadSuccessAction
-  | LoadFailAction
+  | LoadTopicsAction
+  | LoadTopicsSuccessAction
+  | LoadTopicsFailAction
 
   | UpdateAction
   | UpdateSuccessAction

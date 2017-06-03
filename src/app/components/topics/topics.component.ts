@@ -105,25 +105,25 @@ export class TopicsComponent implements OnInit {
 
   ngOnInit() {
     // load topics
-    this.topicsService.getTopics().subscribe(
-      topics => {
-        this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
-
-        // when the user's details are received, check what topics were already liked by this user
-        this.auth.profileDetailsReceived$.subscribe(authenticated => {
-          // check what topics were liked, if user is authenticated and there are at least one topic in topics array
-          if (authenticated && this.topics && this.topics.length) {
-            this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
-          }
-        });
-      },
-      error => {
-        this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
-        this.spinner.toggleVisible(false);
-        console.error(error);
-      },
-      () => this.spinner.toggleVisible(false),
-    );
+    // this.topicsService.getTopics().subscribe(
+    //   topics => {
+    //     this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
+    //
+    //     // when the user's details are received, check what topics were already liked by this user
+    //     this.auth.profileDetailsReceived$.subscribe(authenticated => {
+    //       // check what topics were liked, if user is authenticated and there are at least one topic in topics array
+    //       if (authenticated && this.topics && this.topics.length) {
+    //         this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
+    //       }
+    //     });
+    //   },
+    //   error => {
+    //     this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
+    //     this.spinner.toggleVisible(false);
+    //     console.error(error);
+    //   },
+    //   () => this.spinner.toggleVisible(false),
+    // );
 
     // in background load list of users
     this.userService.getAllUsers().subscribe(

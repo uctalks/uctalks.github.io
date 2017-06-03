@@ -13,7 +13,7 @@ export interface State {
 }
 
 const reducers = {
-  books: fromTopics.reducer,
+  topics: fromTopics.reducer,
   router: fromRouter.routerReducer,
 };
 
@@ -30,5 +30,5 @@ export function reducer(state: any, action: any) {
 
 export const getTopicsState = (state: State) => state.topics;
 
-export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getEntities);
+export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getTopics);
 export const getTopicsIds = createSelector(getTopicsState, fromTopics.getIds);

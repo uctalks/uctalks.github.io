@@ -6,11 +6,11 @@ import {RouterModule} from '@angular/router';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { DBModule } from '@ngrx/db';
+// import { DBModule } from '@ngrx/db';
 import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { TopicsEffects } from './effects/topics.db';
+import { TopicsEffects } from './effects/topics';
 
 import { reducer } from './reducers';
 // import { schema } from './db'; // @TODO find out how to user DB
