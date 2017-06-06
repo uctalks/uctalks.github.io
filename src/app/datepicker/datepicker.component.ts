@@ -12,6 +12,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
         [placeholder]="(alwaysShowPlaceholder || !selectedDate) && 'Choose a date'"
         [disabled]="disabled"
         [value]="date"
+        [required]="required"
         (blur)="emitChangeEvent($event)">
       <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="disabled"></button>
     </md-input-container>
@@ -23,6 +24,7 @@ export class DatepickerComponent implements OnInit {
   @Input() minDate: Date;
   @Input() selectedDate: string;
   @Input() alwaysShowPlaceholder: true;
+  @Input() required: true | undefined;
 
   @Output() dateChanged: EventEmitter<Date>;
 

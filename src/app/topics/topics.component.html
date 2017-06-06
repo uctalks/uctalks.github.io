@@ -37,7 +37,7 @@
 
         <td>
           <app-datepicker
-            [minDate]="minDate"
+            [minDate]="!topic.presented && minDate"
             [selectedDate]="topic.presentationDate"
             [disabled]="!auth.isAuthenticated"
             (dateChanged)="handleInputChange($event, 'presentationDate', topic._id)">
