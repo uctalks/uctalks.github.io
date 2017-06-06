@@ -40,7 +40,7 @@ export class TopicsComponent implements OnInit {
     sortOrder: SortOrders,
   ): Topic[] {
     switch (sortOrder) {
-      case SortOrders.Ascending:
+      case SortOrders.Descending:
         switch (sortField) {
           case 'name':
           case 'presentationDate':
@@ -55,7 +55,7 @@ export class TopicsComponent implements OnInit {
             return topics;
         }
 
-      case SortOrders.Descending:
+      case SortOrders.Ascending:
         switch (sortField) {
           case 'name':
           case 'presentationDate':
@@ -106,7 +106,7 @@ export class TopicsComponent implements OnInit {
     // load topics
     this.topicsService.getTopics().subscribe(
       topics => {
-        this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
+        this.topics = TopicsComponent.sortTopics(topics, 'presentationDate', SortOrders.Ascending);
 
         // when the user's details are received, check what topics were already liked by this user
         this.auth.profileDetailsReceived$.subscribe(authenticated => {
