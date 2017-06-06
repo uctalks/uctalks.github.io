@@ -1,9 +1,0 @@
-<h1 md-dialog-title>Add new topic</h1>
-<form (ngSubmit)="close()">
-  <md-input-container>
-    <input mdInput placeholder="Name" name="newTopic" [(ngModel)]="newTopicProps.name" />
-  </md-input-container>
-  <md-dialog-actions>
-    <button md-button (click)="close()">Add</button>
-  </md-dialog-actions>
-</form>

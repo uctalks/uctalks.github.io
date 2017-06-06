@@ -5,6 +5,7 @@ import NewTopicProps from '../../components/topics/new-topic-props.interface';
 import { Observable } from 'rxjs/Observable';
 import Topic from '../../models/topic';
 import restPrefix from '../../rest-prefix';
+import UpdatedTopicProps from '../../components/topics/edited-topic-props.interface';
 
 @Injectable()
 export class TopicsService {
@@ -27,7 +28,7 @@ export class TopicsService {
       .map(res => res.json());
   }
 
-  updateTopicById(id: string, updatedTopicProps: Object): Observable<Topic> {
+  updateTopicById(id: string, updatedTopicProps: UpdatedTopicProps): Observable<Topic> {
     return this.http.put(`${restPrefix}/topics/${id}`, { updatedTopicProps })
       .map(res => res.json());
   }

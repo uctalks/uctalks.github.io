@@ -1,4 +1,4 @@
-<h1 md-dialog-title>Edit {{ data.topic.name }}</h1>
+<h1 md-dialog-title>Edit {{ data.topic?.name }}</h1>
 <form>
   <div class="edit-form-inputs">
     <md-input-container class="edit-form-input">
@@ -6,20 +6,31 @@
         mdInput
         placeholder="Name"
         name="topic.name"
-        [value]="updatedTopicProps.name"
+        [value]="updatedTopicProps?.name"
         (blur)="handleChange($event, 'name')" />
     </md-input-container>
+
+    <md-checkbox
+      class="edit-form-input"
+      [checked]="updatedTopicProps?.presented"
+      [indeterminate]="!updatedTopicProps?.presented && updatedTopicProps?.speakerId"
+      [align]="'start'"
+      [mdTooltip]="'Mark as ' + (updatedTopicProps?.presented ? 'not' : '') + ' presented'"
+      mdTooltipPosition="above"
+      (change)="handleChange($event, 'presented')">
+    </md-checkbox>
 
     <app-datepicker
       class="edit-form-input"
       [minDate]="minDate"
-      [selectedDate]="updatedTopicProps.presentationDate"
+      [selectedDate]="updatedTopicProps?.presentationDate"
+      [required]="updatedTopicProps?.presented"
       [alwaysShowPlaceholder]="true"
       (dateChanged)="handleChange($event, 'presentationDate')">
     </app-datepicker>
 
     <md-icon
-      *ngIf="updatedTopicProps.presentationDate"
+      *ngIf="updatedTopicProps?.presentationDate"
       class="reset-button"
       mdTooltip="Reset date"
       mdTooltipPosition="above"
@@ -32,12 +43,13 @@
       *ngIf="data.users"
       [users]="data.users"
       floatPlaceholder="auto"
-      [selectedSpeakerId]="updatedTopicProps.speakerId"
+      [selectedSpeakerId]="updatedTopicProps?.speakerId"
+      [required]="updatedTopicProps?.presented"
       (speakerSelected)="handleChange($event, 'speakerId')">
     </app-user-dropdown>
 
     <md-icon
-      *ngIf="updatedTopicProps.speakerId"
+      *ngIf="updatedTopicProps?.speakerId"
       class="reset-button"
       mdTooltip="Reset speaker"
       mdTooltipPosition="above"
@@ -47,7 +59,7 @@
   </div>
 
   <md-dialog-actions class="edit-form-input">
-    <button md-button [disabled]="!edited" (click)="closeDialog()">Save</button>
-    <button md-button (click)="closeDialog()">Cancel</button>
+    <button md-button [disabled]="!edited || invalid" (click)="closeDialog()">Save</button>
+    <button md-button (click)="closeDialog(true)">Cancel</button>
   </md-dialog-actions>
 </form>

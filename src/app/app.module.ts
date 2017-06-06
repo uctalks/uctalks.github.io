@@ -22,7 +22,6 @@ import {AuthConfig, AuthHttp} from 'angular2-jwt';
 import {AppComponent} from './components/app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {TopicsComponent} from './components/topics/topics.component';
-import {TopicAddPopupComponent} from './components/topic-add-popup/topic-add-popup.component';
 
 import {AuthService} from './services/auth-service/auth.service';
 import {AuthGuardService} from './services/auth-service/auth-guard.service';
@@ -52,7 +51,7 @@ import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
 import { DatepickerComponent } from './components/datepicker/datepicker.component';
 import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
-import { TopicEditPopupComponent } from './components/topic-edit-popup/topic-edit-popup.component';
+import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import { TopicsPageComponent } from './containers/topics-page';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -67,18 +66,16 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AppComponent,
     HeaderComponent,
     TopicsComponent,
-    TopicAddPopupComponent,
     TopicDeletePopupComponent,
-    TopicEditPopupComponent,
+    TopicAddOrEditPopupComponent,
     UserComponent,
     UserDropdownComponent,
     DatepickerComponent,
     TopicsPageComponent,
   ],
   entryComponents: [
-    TopicAddPopupComponent,
     TopicDeletePopupComponent,
-    TopicEditPopupComponent,
+    TopicAddOrEditPopupComponent,
   ],
   imports: [
     BrowserModule,

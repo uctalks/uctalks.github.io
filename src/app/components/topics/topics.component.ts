@@ -5,12 +5,11 @@ import { AuthService } from '../../services/auth-service/auth.service';
 import { SpinnerService } from '../../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from '../../models/topic';
-import { TopicAddPopupComponent } from '../topic-add-popup/topic-add-popup.component';
 
 import { UserService } from '../../services/user-service/user.service';
 import User from '../user/user.interface';
 import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
-import { TopicEditPopupComponent } from '../topic-edit-popup/topic-edit-popup.component';
+import { TopicAddOrEditPopupComponent } from '../topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import UpdatedTopicProps from './edited-topic-props.interface';
 
 enum SortOrders { Descending = 1, Ascending }
@@ -41,7 +40,7 @@ export class TopicsComponent implements OnInit {
     sortOrder: SortOrders,
   ): Topic[] {
     switch (sortOrder) {
-      case SortOrders.Ascending:
+      case SortOrders.Descending:
         switch (sortField) {
           case 'name':
           case 'presentationDate':
@@ -56,7 +55,7 @@ export class TopicsComponent implements OnInit {
             return topics;
         }
 
-      case SortOrders.Descending:
+      case SortOrders.Ascending:
         switch (sortField) {
           case 'name':
           case 'presentationDate':
@@ -182,7 +181,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public openAddTopicDialog() {
-    const dialog = this.dialog.open(TopicAddPopupComponent);
+    const dialog = this.dialog.open(TopicAddOrEditPopupComponent, { data: { users: this.users } });
 
     dialog.afterClosed().subscribe(newTopicProps => newTopicProps && this.addTopic(newTopicProps));
   }
@@ -209,7 +208,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public openEditTopicDialog(id: string) {
-    const dialog = this.dialog.open(TopicEditPopupComponent, {
+    const dialog = this.dialog.open(TopicAddOrEditPopupComponent, {
       data: {
         topic: this.topics.find(topic => topic._id === id),
         users: this.users,

@@ -11,6 +11,7 @@ import User from '../user/user.interface';
       [floatPlaceholder]="floatPlaceholder || 'never'"
       [disabled]="disabled"
       [(ngModel)]="selectedSpeakerId"
+      [required]="required"
       (change)="emitSpeakerSelectEvent($event)">
       <md-option *ngFor="let user of users" [value]="user._id">
         {{user.name}}
@@ -23,6 +24,7 @@ export class UserDropdownComponent {
   @Input() selectedSpeakerId: string;
   @Input() disabled: boolean;
   @Input() floatPlaceholder: 'always' | 'auto' | 'never';
+  @Input() required: true | undefined;
   @Output() speakerSelected: EventEmitter<string>;
 
   constructor() {
