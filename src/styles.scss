@@ -21,3 +21,8 @@ body {
 [disabled] {
   cursor: not-allowed;
 }
+
+a {
+  color: currentColor;
+  cursor: pointer;
+}

@@ -31,6 +31,7 @@ import {
   MdNativeDateModule,
   MdIconModule,
   MdSelectModule,
+  MdMenuModule,
 } from '@angular/material';
 import 'hammerjs';
 
@@ -83,6 +84,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MdInputModule,
     MdDialogModule,
     MdSelectModule,
+    MdMenuModule,
   ],
   providers: [
     AuthService,

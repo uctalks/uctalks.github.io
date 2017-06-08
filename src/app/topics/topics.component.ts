@@ -10,7 +10,7 @@ import { UserService } from '../services/user-service/user.service';
 import User from '../user/user.interface';
 import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from '../topic-add-or-edit-popup/topic-add-or-edit-popup.component';
-import UpdatedTopicProps from './edited-topic-props.interface';
+import TopicProps from './topic-props.interface';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -186,7 +186,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public handleInputChange(
-    userInput: MdCheckboxChange | FocusEvent | Date | boolean | string, property: keyof UpdatedTopicProps,
+    userInput: MdCheckboxChange | FocusEvent | Date | boolean | string, property: keyof TopicProps,
     id: string,
   ) {
     const previousValue = this.topics.find(topic => topic._id === id)[property];
@@ -261,7 +261,7 @@ export class TopicsComponent implements OnInit {
       );
   }
 
-  private updateTopicProps(topicId: string, updatedTopicProps: UpdatedTopicProps ): void {
+  private updateTopicProps(topicId: string, updatedTopicProps: TopicProps ): void {
     this.spinner.toggleVisible(true);
 
     this.topicsService.updateTopicById(topicId, updatedTopicProps).subscribe(
