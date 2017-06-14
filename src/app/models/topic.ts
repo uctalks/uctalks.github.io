@@ -1,4 +1,4 @@
-import { UsefulLink } from './useful-link.interface';
+import { UsefulLink } from '../components/topics/useful-link.interface';
 
 interface Topic {
   _id: string; // database id

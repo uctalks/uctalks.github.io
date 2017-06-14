@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import Topic from '../models/topic';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
-import UpdatedTopicProps from '../components/topics/edited-topic-props.interface';
+import TopicProps from '../components/topics/topic-props.interface';
 
 export const ADD_TOPIC = '[Topics] Add Topic';
 export const ADD_TOPIC_SUCCESS = '[Topics] Add Topic Success';
@@ -77,7 +77,7 @@ export class LoadTopicsFailAction implements Action {
 export class UpdateAction implements Action {
   readonly type = UPDATE_TOPIC;
 
-  constructor(public payload: UpdatedTopicProps) {
+  constructor(public payload: TopicProps) {
   }
 }
 
