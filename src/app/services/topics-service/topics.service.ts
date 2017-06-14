@@ -5,7 +5,7 @@ import NewTopicProps from '../../components/topics/new-topic-props.interface';
 import { Observable } from 'rxjs/Observable';
 import Topic from '../../models/topic';
 import restPrefix from '../../rest-prefix';
-import TopicProps from '../../topics/topic-props.interface';
+import TopicProps from '../../components/topics/topic-props.interface';
 
 @Injectable()
 export class TopicsService {
