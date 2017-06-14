@@ -19,3 +19,18 @@
   margin-left: 10px;
   transform: translateY(-4px);
 }
+
+.useful-links {
+  flex-flow: column;
+  align-items: baseline;
+}
+
+.useful-links__header {
+  margin-right: 20px;
+}
+
+.useful-links__header_update {
+  min-width: 100%;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}

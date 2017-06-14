@@ -76,7 +76,7 @@
 
         <!-- Useful links -->
         <td>
-          <div *ngIf="topic.usefulLinks?.length; else noUsefulLinks">
+          <div *ngIf="topic.usefulLinks.length; else noUsefulLinks">
             <button md-icon-button [mdMenuTriggerFor]="menu">
               <md-icon class="topic__useful-links" mdTooltip="Useful links" mdTooltipPosition="above">more_vert</md-icon>
             </button>
