@@ -4,15 +4,16 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "ng": "ng",
     "start": "ng serve --hmr -e=dev-hmr",
-    "serve": "ng serve",
+    "build-aot-and-deploy": "npm run build-aot && npm run deploy",
     "test": "ng test",
-    "lint": "ng lint",
     "e2e": "ng e2e",
+    "lint": "ng lint",
+    "ng": "ng",
+    "serve": "ng serve",
     "build": "ng build --prod",
     "build-aot": "ng build --prod --aot",
-    "deploy": "npm run build-aot && gh-pages -d dist -b master"
+    "deploy": "gh-pages -d dist -b master"
   },
   "private": true,
   "dependencies": {
