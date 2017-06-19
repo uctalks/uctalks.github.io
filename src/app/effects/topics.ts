@@ -1,35 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Actions, Effect } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {Actions, Effect} from '@ngrx/effects';
+import {Observable} from 'rxjs/Observable';
+import {MdSnackBar} from '@angular/material';
+import {TopicsService} from '../services/topics-service/topics.service';
 import * as topics from '../actions/topics';
-import restPrefix from '../rest-prefix';
 
 @Injectable()
 export class TopicsEffects {
   @Effect() loadTopics$ = this.actions$
   // Listen for the topics.LOAD_TOPICS action
     .ofType(topics.LOAD_TOPICS)
-    .switchMap(() => this.http.get(`${restPrefix}/topics`)
+    .switchMap(() => this.topicsService.getTopics()
       // If successful, dispatch success action with result
-        .map(res => ({ type: topics.LOAD_TOPICS_SUCCESS, payload: res.json() }))
+      .map(payload => new topics.LoadTopicsSuccessAction(payload))
         // If request fails, dispatch failed action
-        .catch(() => Observable.of({ type: topics.LOAD_TOPICS_FAIL })),
-    );
+      .catch(error => {
+        this.snackBar.open('Cannot receive topics', 'close', {duration: 3000});
+        return Observable.of(new topics.LoadTopicsFailAction(error));
+      }));
 
-
-  // @Effect() loadTopics$ = this.actions$
-  // // Listen for the 'LOGIN' action
-  //   .ofType(topics.LOAD_TOPICS)
-  //   // Map the payload into JSON to use as the request body
-  //   .map(action => JSON.stringify(action.payload))
-  //   .switchMap(payload => this.http.post('/auth', payload)
-  //     // If successful, dispatch success action with result
-  //       .map(res => ({ type: 'LOGIN_SUCCESS', payload: res.json() }))
-  //       // If request fails, dispatch failed action
-  //       .catch(() => Observable.of({ type: 'LOGIN_FAILED' })),
-  //   );
-
-  constructor(private http: Http, private actions$: Actions) {
+  constructor(
+    private actions$: Actions,
+    private snackBar: MdSnackBar,
+    private topicsService: TopicsService,
+    ) {
   }
 }

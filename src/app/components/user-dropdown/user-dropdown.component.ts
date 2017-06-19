@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MdSelectChange } from '@angular/material';
-import User from '../user/user.interface';
+import User from '../../models/user';
 
 @Component({
   selector: 'app-user-dropdown',

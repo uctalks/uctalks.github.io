@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import * as fromRoot from '../reducers';
 import Topic from '../models/topic';
 import { LoadTopicsAction } from '../actions/topics';
+import { LoadUsersAction } from '../actions/users';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class TopicsPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new LoadTopicsAction());
+    this.store.dispatch(new LoadUsersAction());
   }
 }
 

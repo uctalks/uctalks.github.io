@@ -1,13 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MdCheckboxChange, MdDialog, MdSnackBar } from '@angular/material';
+import { MdCheckboxChange, MdDialog } from '@angular/material';
 import { TopicsService } from '../../services/topics-service/topics.service';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { SpinnerService } from '../../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from '../../models/topic';
 
-import { UserService } from '../../services/user-service/user.service';
-import User from '../user/user.interface';
+import User from '../../models/user';
 import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from '../topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import TopicProps from './topic-props.interface';
@@ -20,10 +19,10 @@ enum SortOrders { Descending = 1, Ascending }
   styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent implements OnInit {
-  @Input() topics: Topic[];
+  @Input() public topics: Topic[];
+  @Input() public users: User[];
 
   public minDate: Date = new Date();
-  public users: User[];
 
   // update 'likedByUser' property of every topic
   static checkIfTopicsAreLiked(topics: Topic[], userId: string | null) {
@@ -96,57 +95,47 @@ export class TopicsComponent implements OnInit {
   constructor(
     public auth: AuthService,
     private topicsService: TopicsService,
-    private userService: UserService,
     private spinner: SpinnerService,
-    private snackBar: MdSnackBar,
     private dialog: MdDialog,
   ) {}
 
   ngOnInit() {
-    // load topics
     // this.topicsService.getTopics().subscribe(
     //   topics => {
+    // @TODO implement sorting in reselect
     //     this.topics = TopicsComponent.sortTopics(topics, 'likes', SortOrders.Ascending);
     //
     //     // when the user's details are received, check what topics were already liked by this user
     //     this.auth.profileDetailsReceived$.subscribe(authenticated => {
     //       // check what topics were liked, if user is authenticated and there are at least one topic in topics array
     //       if (authenticated && this.topics && this.topics.length) {
+    // @TODO implement `liked` check
     //         this.topics = TopicsComponent.checkIfTopicsAreLiked(this.topics, this.auth.userProfileId);
     //       }
     //     });
     //   },
-    //   error => {
-    //     this.snackBar.open('Cannot receive topics', 'close', { duration: 3000 });
-    //     this.spinner.toggleVisible(false);
-    //     console.error(error);
-    //   },
-    //   () => this.spinner.toggleVisible(false),
     // );
 
     // in background load list of users
-    this.userService.getAllUsers().subscribe(
-      users => {
-        this.users = users;
-
-        this.auth.newLogin$.subscribe((newLoginData: User) => {
-          // if new login occurs
-          if (newLoginData) {
-            const userLoggenInBefore: User | undefined = this.users.find(user => user._id === newLoginData._id);
-
-            this.users = userLoggenInBefore
-              // if user logged-in before, update the data
-              ? this.users.map(user => user._id === newLoginData._id ? newLoginData : user)
-              // if user logged-in for the first time, add the data
-              : [...this.users, newLoginData];
-          }
-        });
-      },
-      error => {
-        this.snackBar.open('Cannot receive users', 'close', { duration: 3000 });
-        console.error(error);
-      },
-    );
+    // this.userService.getAllUsers().subscribe(
+    //   users => {
+    //     this.users = users;
+    //
+    //     // @TODO implement check of user's log-in
+    //     this.auth.newLogin$.subscribe((newLoginData: User) => {
+    //       // if new login occurs
+    //       if (newLoginData) {
+    //         const userLoggenInBefore: User | undefined = this.users.find(user => user._id === newLoginData._id);
+    //
+    //         this.users = userLoggenInBefore
+    //           // if user logged-in before, update the data
+    //           ? this.users.map(user => user._id === newLoginData._id ? newLoginData : user)
+    //           // if user logged-in for the first time, add the data
+    //           : [...this.users, newLoginData];
+    //       }
+    //     });
+    //   },
+    // );
   }
 
   public like(liked: boolean, id: string) {
@@ -165,10 +154,10 @@ export class TopicsComponent implements OnInit {
               return topic;
             });
 
-          this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
+          // this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
         },
         error => {
-          this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
+          // this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
           this.spinner.toggleVisible(false);
           console.error(error);
         },
@@ -233,10 +222,10 @@ export class TopicsComponent implements OnInit {
       .subscribe(
         addedTopic => {
           this.topics.push(addedTopic);
-          this.snackBar.open('New topic saved', 'close', { duration: 3000 });
+          // this.snackBar.open('New topic saved', 'close', { duration: 3000 });
         },
         error => {
-          this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
+          // this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
           this.spinner.toggleVisible(false);
           console.error(error);
         },
@@ -251,10 +240,10 @@ export class TopicsComponent implements OnInit {
       .subscribe(
         deletedTopic => {
           this.topics = this.topics.filter(topic => topic._id !== deletedTopic._id);
-          this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
+          // this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
         },
         error => {
-          this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
+          // this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
           this.spinner.toggleVisible(false);
           console.error(error);
         },
@@ -275,10 +264,10 @@ export class TopicsComponent implements OnInit {
           }
           return topic;
         });
-        this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
+        // this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
       },
       error => {
-        this.snackBar.open('Cannot update topic', 'close', { duration: 3000 });
+        // this.snackBar.open('Cannot update topic', 'close', { duration: 3000 });
         this.spinner.toggleVisible(false);
         console.error(error);
       },

@@ -6,15 +6,18 @@ import { compose } from '@ngrx/core/compose';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { combineReducers } from '@ngrx/store';
 import * as fromTopics from './topics';
+import * as fromUsers from './users';
 
 export interface State {
-  topics: fromTopics.State;
   router: fromRouter.RouterState;
+  topics: fromTopics.State;
+  users: fromUsers.State;
 }
 
 const reducers = {
-  topics: fromTopics.reducer,
   router: fromRouter.routerReducer,
+  topics: fromTopics.reducer,
+  users: fromUsers.reducer,
 };
 
 const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers);
@@ -29,6 +32,10 @@ export function reducer(state: any, action: any) {
 }
 
 export const getTopicsState = (state: State) => state.topics;
-
 export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getTopics);
 export const getTopicsIds = createSelector(getTopicsState, fromTopics.getIds);
+
+
+export const getUsersState = (state: State) => state.users;
+export const getUserEntities = createSelector(getUsersState, fromUsers.getEntities);
+export const getUserIds = createSelector(getUsersState, fromUsers.getIds);

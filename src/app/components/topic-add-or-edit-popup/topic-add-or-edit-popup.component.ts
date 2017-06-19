@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MD_DIALOG_DATA, MdCheckboxChange, MdDialogRef } from '@angular/material';
 import Topic from '../../models/topic';
 import TopicProps from '../topics/topic-props.interface';
-import User from '../user/user.interface';
+import User from '../../models/user';
 import { UsefulLink } from '../topics/useful-link.interface';
 
 interface InputData {
