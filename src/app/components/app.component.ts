@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../services/auth-service/auth.service';
@@ -6,6 +6,7 @@ import * as fromRoot from '../reducers/index';
 
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wrapper mat-app-background">
       <app-header></app-header>
