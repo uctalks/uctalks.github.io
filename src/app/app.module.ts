@@ -6,14 +6,14 @@ import {RouterModule} from '@angular/router';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-// import { DBModule } from '@ngrx/db';
+
 import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { TopicsEffects } from './effects/topics';
+import { UsersEffects } from './effects/users';
 
 import { reducer } from './reducers';
-// import { schema } from './db'; // @TODO find out how to user DB
 
 import {ROUTES} from './app.routes';
 
@@ -26,7 +26,6 @@ import {TopicsComponent} from './components/topics/topics.component';
 import {AuthService} from './services/auth-service/auth.service';
 import {AuthGuardService} from './services/auth-service/auth-guard.service';
 import {TopicsService} from './services/topics-service/topics.service';
-import {SpinnerService} from './services/spinner-service/spinner.service';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -88,7 +87,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     RouterStoreModule.connectRouter(),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     EffectsModule.run(TopicsEffects),
-    // DBModule.provideDB(schema), // @TODO get back to DB
+    EffectsModule.run(UsersEffects),
     MdIconModule,
     MdButtonModule,
     MdCheckboxModule,
@@ -112,7 +111,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions],
     },
-    SpinnerService,
     TopicsService,
     UserService,
   ],

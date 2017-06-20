@@ -1,20 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../services/auth-service/auth.service';
-import { SpinnerService } from '../services/spinner-service/spinner.service';
+import * as fromRoot from '../reducers/index';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <div class="wrapper mat-app-background">
+      <app-header></app-header>
+
+      <md-progress-bar *ngIf="spinnerIsVisible$ | async" class="spinner" mode="indeterminate" color="accent"></md-progress-bar>
+
+      <router-outlet></router-outlet>
+    </div>
+  `,
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  public spinnerIsVisible = true;
+export class AppComponent {
+  public spinnerIsVisible$: Observable<boolean>;
 
-  constructor(public auth: AuthService, public spinner: SpinnerService) {
+  constructor(private auth: AuthService, private store: Store<fromRoot.State>) {
+    this.spinnerIsVisible$ = store.select(fromRoot.getSpinnerIsVisible);
     auth.handleAuthentication();
-  }
-
-  ngOnInit() {
-    this.spinner.visible$.subscribe(flag => this.spinnerIsVisible = flag);
   }
 }

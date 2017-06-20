@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MdCheckboxChange, MdDialog } from '@angular/material';
 import { TopicsService } from '../../services/topics-service/topics.service';
 import { AuthService } from '../../services/auth-service/auth.service';
-import { SpinnerService } from '../../services/spinner-service/spinner.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from '../../models/topic';
 
@@ -95,7 +94,6 @@ export class TopicsComponent implements OnInit {
   constructor(
     public auth: AuthService,
     private topicsService: TopicsService,
-    private spinner: SpinnerService,
     private dialog: MdDialog,
   ) {}
 
@@ -139,8 +137,6 @@ export class TopicsComponent implements OnInit {
   }
 
   public like(liked: boolean, id: string) {
-    this.spinner.toggleVisible(true);
-
     this.topicsService.updateTopicLikesById(id, liked, this.auth.userProfileId)
       .subscribe(
         updatedTopic => {
@@ -158,10 +154,8 @@ export class TopicsComponent implements OnInit {
         },
         error => {
           // this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
           console.error(error);
         },
-        () => this.spinner.toggleVisible(false),
       );
   }
 
@@ -216,8 +210,6 @@ export class TopicsComponent implements OnInit {
   }
 
   private addTopic(newTopicProps: NewTopicProps) {
-    this.spinner.toggleVisible(true);
-
     this.topicsService.addTopic(newTopicProps)
       .subscribe(
         addedTopic => {
@@ -226,16 +218,12 @@ export class TopicsComponent implements OnInit {
         },
         error => {
           // this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
           console.error(error);
         },
-        () => this.spinner.toggleVisible(false),
       );
   }
 
   private deleteTopic(id: string) {
-    this.spinner.toggleVisible(true);
-
     this.topicsService.deleteTopic(id)
       .subscribe(
         deletedTopic => {
@@ -244,16 +232,12 @@ export class TopicsComponent implements OnInit {
         },
         error => {
           // this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
-          this.spinner.toggleVisible(false);
           console.error(error);
         },
-        () => this.spinner.toggleVisible(false),
       );
   }
 
   private updateTopicProps(topicId: string, updatedTopicProps: TopicProps ): void {
-    this.spinner.toggleVisible(true);
-
     this.topicsService.updateTopicById(topicId, updatedTopicProps).subscribe(
       updatedTopic => {
         this.topics = this.topics.map(topic => {
@@ -268,10 +252,8 @@ export class TopicsComponent implements OnInit {
       },
       error => {
         // this.snackBar.open('Cannot update topic', 'close', { duration: 3000 });
-        this.spinner.toggleVisible(false);
         console.error(error);
       },
-      () => this.spinner.toggleVisible(false),
     );
   }
 }

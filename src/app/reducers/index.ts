@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 import { ActionReducer } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
+import * as fromTopics from './topics';
+import * as fromUsers from './users';
 import { environment } from '../../environments/environment';
 import { compose } from '@ngrx/core/compose';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { combineReducers } from '@ngrx/store';
-import * as fromTopics from './topics';
-import * as fromUsers from './users';
 
 export interface State {
   router: fromRouter.RouterState;
@@ -32,10 +32,19 @@ export function reducer(state: any, action: any) {
 }
 
 export const getTopicsState = (state: State) => state.topics;
-export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getTopics);
+export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getEntities);
 export const getTopicsIds = createSelector(getTopicsState, fromTopics.getIds);
-
+export const getTopicsIsFetching = createSelector(getTopicsState, fromTopics.getIsFetching);
+export const getTopics = createSelector(getTopicsEntities, getTopicsIds, (entities, ids) => ids.map(id => entities[id]));
 
 export const getUsersState = (state: State) => state.users;
 export const getUserEntities = createSelector(getUsersState, fromUsers.getEntities);
 export const getUserIds = createSelector(getUsersState, fromUsers.getIds);
+export const getUserIsFetching = createSelector(getUsersState, fromUsers.getIsFetching);
+export const getUsers = createSelector(getUserEntities, getUserIds, (entities, ids) => ids.map(id => entities[id]));
+
+export const getSpinnerIsVisible = createSelector(
+  getTopicsIsFetching,
+  getUserIsFetching,
+  (topicsIsFetching, usersIsFetching) => topicsIsFetching || usersIsFetching,
+);

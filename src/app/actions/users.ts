@@ -18,7 +18,6 @@ export class LoadUsersSuccessAction implements Action {
   readonly type = LOAD_USERS_SUCCESS;
 
   constructor(public payload: User[]) {
-    console.log(payload);
   }
 }
 
