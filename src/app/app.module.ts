@@ -19,7 +19,7 @@ import {ROUTES} from './app.routes';
 
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
 
-import {AppComponent} from './components/app.component';
+import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {TopicsComponent} from './components/topics/topics.component';
 
