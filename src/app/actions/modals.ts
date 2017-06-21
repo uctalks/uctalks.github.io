@@ -1,18 +1,24 @@
 import { Action } from '@ngrx/store';
 
-export const OPEN_ADD_OR_EDIT_TOPIC_MODAL = '[Modal] Open Add-Or-Edit Topic';
-export const CLOSE_ADD_OR_EDIT_TOPIC_MODAL = '[Modal] Close Add-Or-Edit Topic';
+export const OPEN_ADD_TOPIC_MODAL = '[Modal] Open Add Topic';
+export const CLOSE_ADD_TOPIC_MODAL = '[Modal] Close Add Topic';
+
+export const OPEN_EDIT_TOPIC_MODAL = '[Modal] Open Edit Topic';
+export const CLOSE_EDIT_TOPIC_MODAL = '[Modal] Close Edit Topic';
 
 export const OPEN_DELETE_TOPIC_MODAL = '[Modal] Open Delete Topic';
 export const CLOSE_DELETE_TOPIC_MODAL = '[Modal] Close Delete Topic';
 
 
-export class OpenAddOrEditTopicModalAction implements Action {
-  readonly type = LOAD_USERS;
+export class OpenAddTopicModalAction implements Action {
+  readonly type = OPEN_ADD_TOPIC_MODAL;
+
+  constructor(public payload: User[]) {
+  }
 }
 
-export class CloseAddOrEditTopicModalAction implements Action {
-  readonly type = LOAD_USERS_SUCCESS;
+export class CloseAddTopicModalAction implements Action {
+  readonly type = CLOSE_ADD_TOPIC_MODAL;
 
   constructor(public payload: User[]) {
   }

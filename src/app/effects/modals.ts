@@ -2,14 +2,17 @@ import {Injectable} from '@angular/core';
 import {Actions, Effect} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 import {MdDialog} from '@angular/material';
-import * as users from '../actions/users';
+import * as modals from '../actions/modals';
 import {TopicAddOrEditPopupComponent} from '../components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 
 @Injectable()
-export class UsersEffects {
-  @Effect() loadUsers$ = this.actions$
-    .ofType(users.LOAD_USERS)
-    .do(action => this.dialog.open(TopicAddOrEditPopupComponent, { data: { users: action.payload } }))
+export class ModalsEffects {
+  @Effect() openAddOrEditTopalModal$ = this.actions$
+    .ofType(modals.OPEN_ADD_OR_EDIT_TOPIC_MODAL)
+    .do(action => {
+      const dialog = this.dialog.open(TopicAddOrEditPopupComponent, { data: { users: action.payload } });
+      di
+    })
       // If successful, dispatch success action with result
         .map(payload => new users.LoadUsersSuccessAction(payload))
         // If request fails, dispatch failed action
