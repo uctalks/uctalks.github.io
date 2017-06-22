@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { Component, Inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../reducers/';
+import { CloseAllModals, CloseDeleteTopicModalActionAndDelete } from '../../actions/topics';
+import { MD_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-topic-delete-popup',
@@ -15,10 +18,15 @@ import { MdDialogRef } from '@angular/material';
   styleUrls: ['./topic-delete-popup.component.scss'],
 })
 export class TopicDeletePopupComponent {
+  constructor(private store: Store<fromRoot.State>, @Inject(MD_DIALOG_DATA) public data: { id: string }) {
 
-  constructor(public dialogRef: MdDialogRef<TopicDeletePopupComponent>) { }
+  }
 
   close(toBeDeleted: boolean) {
-    this.dialogRef.close(toBeDeleted);
+    console.log(this.data);
+
+    toBeDeleted
+      ? this.store.dispatch(new CloseDeleteTopicModalActionAndDelete({id: this.data.id}))
+      : this.store.dispatch(new CloseAllModals());
   }
 }

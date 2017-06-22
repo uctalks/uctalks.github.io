@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MdCheckboxChange, MdDialog } from '@angular/material';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../reducers/';
 import { TopicsService } from '../../services/topics-service/topics.service';
 import { AuthService } from '../../services/auth-service/auth.service';
 import NewTopicProps from './new-topic-props.interface';
 import Topic from '../../models/topic';
-
 import User from '../../models/user';
-import { TopicDeletePopupComponent } from '../topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from '../topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import TopicProps from './topic-props.interface';
+import { OpenDeleteTopicModalAction } from '../../actions/topics';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -95,6 +96,7 @@ export class TopicsComponent implements OnInit {
     public auth: AuthService,
     private topicsService: TopicsService,
     private dialog: MdDialog,
+    private store: Store<fromRoot.State>,
   ) {}
 
   ngOnInit() {
@@ -204,9 +206,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public openDeleteTopicDialog(id: string) {
-    const dialog = this.dialog.open(TopicDeletePopupComponent);
-
-    dialog.afterClosed().subscribe(toBeDeleted => toBeDeleted && this.deleteTopic(id));
+    this.store.dispatch(new OpenDeleteTopicModalAction({ id }));
   }
 
   private addTopic(newTopicProps: NewTopicProps) {

@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import Topic from '../models/topic';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
+import User from '../models/user';
 
 export const ADD_TOPIC = '[Topics] Add Topic';
 export const ADD_TOPIC_SUCCESS = '[Topics] Add Topic Success';
@@ -19,9 +20,21 @@ export const LIKE_TOPIC = '[Topics] Like';
 export const LIKE_TOPIC_SUCCESS = '[Topics] Like Success';
 export const LIKE_TOPIC_FAIL = '[Topics] Like Fail';
 
-export const REMOVE_TOPIC = '[Topics] Remove Topic';
-export const REMOVE_TOPIC_SUCCESS = '[Topics] Remove Topic Success';
-export const REMOVE_TOPIC_FAIL = '[Topics] Remove Topic Fail';
+export const DELETE_TOPIC = '[Topics] Remove Topic';
+export const DELETE_TOPIC_SUCCESS = '[Topics] Remove Topic Success';
+export const DELETE_TOPIC_FAIL = '[Topics] Remove Topic Fail';
+
+export const OPEN_ADD_TOPIC_MODAL = '[Topics] Open Add Topic Modal';
+export const CLOSE_ADD_TOPIC_MODAL = '[Topics] Close Add Topic Modal';
+
+export const OPEN_EDIT_TOPIC_MODAL = '[Topics] Open Edit Topic Modal';
+export const CLOSE_EDIT_TOPIC_MODAL = '[Topics] Close Edit Topic Modal';
+
+export const OPEN_DELETE_TOPIC_MODAL = '[Topics] Open Delete Topic Modal';
+export const CLOSE_DELETE_TOPIC_MODAL_AND_DELETE = '[Topics] Close Delete Topic Modal And Delete';
+export const CLOSE_DELETE_TOPIC_MODAL_WITHOUT_DELETION = '[Topics] Close Delete Topic Modal Without Deletion';
+
+export const CLOSE_ALL_MODALS = '[Topics] Close All Modals';
 
 
 /**
@@ -119,27 +132,85 @@ export class LikeFailAction implements Action {
 
 
 /**
- * Remove Book from Collection Actions
+ * Delete Topic Actions
  */
-export class RemoveTopicAction implements Action {
-  readonly type = REMOVE_TOPIC;
+export class DeleteTopicAction implements Action {
+  readonly type = DELETE_TOPIC;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { id: string }) {
   }
 }
 
-export class RemoveTopicSuccessAction implements Action {
-  readonly type = REMOVE_TOPIC_SUCCESS;
+export class DeleteTopicSuccessAction implements Action {
+  readonly type = DELETE_TOPIC_SUCCESS;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { id: string }) {
   }
 }
 
-export class RemoveTopicFailAction implements Action {
-  readonly type = REMOVE_TOPIC_FAIL;
+export class DeleteTopicFailAction implements Action {
+  readonly type = DELETE_TOPIC_FAIL;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { id: string }) {
   }
+}
+
+
+/**
+ * Add Topic Modal Actions
+ */
+export class OpenAddTopicModalAction implements Action {
+  readonly type = OPEN_ADD_TOPIC_MODAL;
+
+  constructor(public payload: User[]) {
+  }
+}
+
+export class CloseAddTopicModalAction implements Action {
+  readonly type = CLOSE_ADD_TOPIC_MODAL;
+
+  constructor(public payload: User[]) {
+  }
+}
+
+
+/**
+ * Edit Topic Modal Actions
+ */
+export class OpenEditTopicModalAction implements Action {
+  readonly type = OPEN_EDIT_TOPIC_MODAL;
+
+  constructor(public payload: any) {
+  }
+}
+
+export class CloseEditTopicModalAction implements Action {
+  readonly type = CLOSE_EDIT_TOPIC_MODAL;
+
+  constructor(public payload: User) {
+  }
+}
+
+
+/**
+ * Delete Topic Modal Actions
+ */
+export class OpenDeleteTopicModalAction implements Action {
+  readonly type = OPEN_DELETE_TOPIC_MODAL;
+
+  constructor(public payload: { id: string }) {
+  }
+}
+
+export class CloseDeleteTopicModalActionAndDelete implements Action {
+  readonly type = CLOSE_DELETE_TOPIC_MODAL_AND_DELETE;
+
+  constructor(public payload: { id: string }) {
+  }
+}
+
+export class CloseAllModals implements Action {
+  readonly type = CLOSE_ALL_MODALS;
 }
 
 
@@ -160,6 +231,17 @@ export type Actions
   | LikeSuccessAction
   | LikeFailAction
 
-  | RemoveTopicAction
-  | RemoveTopicSuccessAction
-  | RemoveTopicFailAction;
+  | DeleteTopicAction
+  | DeleteTopicSuccessAction
+  | DeleteTopicFailAction
+
+  | OpenAddTopicModalAction
+  | CloseAddTopicModalAction
+
+  | OpenEditTopicModalAction
+  | CloseEditTopicModalAction
+
+  | OpenDeleteTopicModalAction
+  | CloseDeleteTopicModalActionAndDelete
+
+  | CloseAllModals;
