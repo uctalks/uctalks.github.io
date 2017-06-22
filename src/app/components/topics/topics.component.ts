@@ -4,12 +4,10 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
 import { TopicsService } from '../../services/topics-service/topics.service';
 import { AuthService } from '../../services/auth-service/auth.service';
-import NewTopicProps from './new-topic-props.interface';
 import Topic from '../../models/topic';
 import User from '../../models/user';
-import { TopicAddOrEditPopupComponent } from '../topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import TopicProps from './topic-props.interface';
-import { OpenDeleteTopicModalAction } from '../../actions/topics';
+import {OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction} from '../../actions/topics';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -166,9 +164,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public openAddTopicDialog() {
-    const dialog = this.dialog.open(TopicAddOrEditPopupComponent, { data: { users: this.users } });
-
-    dialog.afterClosed().subscribe(newTopicProps => newTopicProps && this.addTopic(newTopicProps));
+    this.store.dispatch(new OpenAddTopicModalAction());
   }
 
   public handleInputChange(
@@ -192,49 +188,12 @@ export class TopicsComponent implements OnInit {
     }
   }
 
-  public openEditTopicDialog(id: string) {
-    const dialog = this.dialog.open(TopicAddOrEditPopupComponent, {
-      data: {
-        topic: this.topics.find(topic => topic._id === id),
-        users: this.users,
-      },
-    });
-
-    dialog.afterClosed().subscribe(updatedTopicProps => {
-      updatedTopicProps && this.updateTopicProps(id, updatedTopicProps)
-    });
+  public openEditTopicDialog(topic: Topic) {
+    this.store.dispatch(new OpenEditTopicModalAction({ topic }));
   }
 
   public openDeleteTopicDialog(id: string) {
     this.store.dispatch(new OpenDeleteTopicModalAction({ id }));
-  }
-
-  private addTopic(newTopicProps: NewTopicProps) {
-    this.topicsService.addTopic(newTopicProps)
-      .subscribe(
-        addedTopic => {
-          this.topics.push(addedTopic);
-          // this.snackBar.open('New topic saved', 'close', { duration: 3000 });
-        },
-        error => {
-          // this.snackBar.open('Cannot add new topic', 'close', { duration: 3000 });
-          console.error(error);
-        },
-      );
-  }
-
-  private deleteTopic(id: string) {
-    this.topicsService.deleteTopic(id)
-      .subscribe(
-        deletedTopic => {
-          this.topics = this.topics.filter(topic => topic._id !== deletedTopic._id);
-          // this.snackBar.open('Topic deleted', 'close', { duration: 3000 });
-        },
-        error => {
-          // this.snackBar.open('Cannot delete topic', 'close', { duration: 3000 });
-          console.error(error);
-        },
-      );
   }
 
   private updateTopicProps(topicId: string, updatedTopicProps: TopicProps ): void {

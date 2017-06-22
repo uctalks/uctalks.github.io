@@ -1,4 +1,4 @@
-<span md-dialog-title *ngIf="data.topic; then editMode else addMode"></span>
+<span md-dialog-title *ngIf="data?.topic; then editMode else addMode"></span>
 <ng-template #addMode><h1 md-dialog-title>Add new topic</h1></ng-template>
 <ng-template #editMode><h1 md-dialog-title>Edit {{data.topic.name}}</h1></ng-template>
 
@@ -43,8 +43,7 @@
 
     <app-user-dropdown
       class="edit-form-input edit-form-input_speaker"
-      *ngIf="data.users"
-      [users]="data.users"
+      [users]="users$ | async"
       floatPlaceholder="auto"
       [selectedSpeakerId]="topicProps?.speakerId"
       [required]="topicProps?.presented"

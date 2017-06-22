@@ -1,8 +1,7 @@
 import { Action } from '@ngrx/store';
-import Topic from '../models/topic';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
-import User from '../models/user';
+import Topic from '../models/topic';
 
 export const ADD_TOPIC = '[Topics] Add Topic';
 export const ADD_TOPIC_SUCCESS = '[Topics] Add Topic Success';
@@ -13,8 +12,8 @@ export const LOAD_TOPICS_SUCCESS = '[Topics] Load Success';
 export const LOAD_TOPICS_FAIL = '[Topics] Load Fail';
 
 export const UPDATE_TOPIC = '[Topics] Update Topic Complete';
-export const UPDATE_TOPIC_SUCCESS = '[Topics] Remove Topic Success';
-export const UPDATE_TOPIC_FAIL = '[Topics] Remove Topic Fail';
+export const UPDATE_TOPIC_SUCCESS = '[Topics] Update Topic Success';
+export const UPDATE_TOPIC_FAIL = '[Topics] Update Topic Fail';
 
 export const LIKE_TOPIC = '[Topics] Like';
 export const LIKE_TOPIC_SUCCESS = '[Topics] Like Success';
@@ -25,14 +24,13 @@ export const DELETE_TOPIC_SUCCESS = '[Topics] Remove Topic Success';
 export const DELETE_TOPIC_FAIL = '[Topics] Remove Topic Fail';
 
 export const OPEN_ADD_TOPIC_MODAL = '[Topics] Open Add Topic Modal';
-export const CLOSE_ADD_TOPIC_MODAL = '[Topics] Close Add Topic Modal';
+export const CLOSE_ADD_TOPIC_MODAL_AND_ADD = '[Topics] Close Add Topic Modal And Add';
 
 export const OPEN_EDIT_TOPIC_MODAL = '[Topics] Open Edit Topic Modal';
-export const CLOSE_EDIT_TOPIC_MODAL = '[Topics] Close Edit Topic Modal';
+export const CLOSE_EDIT_TOPIC_MODAL_AND_UPDATE = '[Topics] Close Edit Topic Modal And Update';
 
 export const OPEN_DELETE_TOPIC_MODAL = '[Topics] Open Delete Topic Modal';
 export const CLOSE_DELETE_TOPIC_MODAL_AND_DELETE = '[Topics] Close Delete Topic Modal And Delete';
-export const CLOSE_DELETE_TOPIC_MODAL_WITHOUT_DELETION = '[Topics] Close Delete Topic Modal Without Deletion';
 
 export const CLOSE_ALL_MODALS = '[Topics] Close All Modals';
 
@@ -43,14 +41,14 @@ export const CLOSE_ALL_MODALS = '[Topics] Close All Modals';
 export class AddTopicAction implements Action {
   readonly type = ADD_TOPIC;
 
-  constructor(public payload: NewTopicProps) {
+  constructor(public payload: { newTopicProps: NewTopicProps }) {
   }
 }
 
 export class AddTopicSuccessAction implements Action {
   readonly type = ADD_TOPIC_SUCCESS;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { addedTopic: Topic }) {
   }
 }
 
@@ -87,21 +85,21 @@ export class LoadTopicsFailAction implements Action {
 /**
  * Update Topic Actions
  */
-export class UpdateAction implements Action {
+export class UpdateTopicAction implements Action {
   readonly type = UPDATE_TOPIC;
 
-  constructor(public payload: TopicProps) {
+  constructor(public payload: { id: string, updatedTopicProps: TopicProps }) {
   }
 }
 
-export class UpdateSuccessAction implements Action {
+export class UpdateTopicSuccessAction implements Action {
   readonly type = UPDATE_TOPIC_SUCCESS;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { updatedTopic: Topic }) {
   }
 }
 
-export class UpdateFailAction implements Action {
+export class UpdateTopicFailAction implements Action {
   readonly type = UPDATE_TOPIC_FAIL;
 
   constructor(public payload: any) {
@@ -161,15 +159,12 @@ export class DeleteTopicFailAction implements Action {
  */
 export class OpenAddTopicModalAction implements Action {
   readonly type = OPEN_ADD_TOPIC_MODAL;
-
-  constructor(public payload: User[]) {
-  }
 }
 
 export class CloseAddTopicModalAction implements Action {
-  readonly type = CLOSE_ADD_TOPIC_MODAL;
+  readonly type = CLOSE_ADD_TOPIC_MODAL_AND_ADD;
 
-  constructor(public payload: User[]) {
+  constructor(public payload: { newTopicProps: TopicProps }) {
   }
 }
 
@@ -180,14 +175,14 @@ export class CloseAddTopicModalAction implements Action {
 export class OpenEditTopicModalAction implements Action {
   readonly type = OPEN_EDIT_TOPIC_MODAL;
 
-  constructor(public payload: any) {
+  constructor(public payload: { topic: Topic }) {
   }
 }
 
 export class CloseEditTopicModalAction implements Action {
-  readonly type = CLOSE_EDIT_TOPIC_MODAL;
+  readonly type = CLOSE_EDIT_TOPIC_MODAL_AND_UPDATE;
 
-  constructor(public payload: User) {
+  constructor(public payload: { updatedTopicProps: TopicProps, id: string }) {
   }
 }
 
@@ -223,9 +218,9 @@ export type Actions
   | LoadTopicsSuccessAction
   | LoadTopicsFailAction
 
-  | UpdateAction
-  | UpdateSuccessAction
-  | UpdateFailAction
+  | UpdateTopicAction
+  | UpdateTopicSuccessAction
+  | UpdateTopicFailAction
 
   | LikeAction
   | LikeSuccessAction

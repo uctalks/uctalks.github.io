@@ -22,9 +22,7 @@ export class TopicDeletePopupComponent {
 
   }
 
-  close(toBeDeleted: boolean) {
-    console.log(this.data);
-
+  public close(toBeDeleted: boolean): void {
     toBeDeleted
       ? this.store.dispatch(new CloseDeleteTopicModalActionAndDelete({id: this.data.id}))
       : this.store.dispatch(new CloseAllModals());
