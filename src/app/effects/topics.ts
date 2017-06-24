@@ -47,6 +47,22 @@ export class TopicsEffects {
         return Observable.of(new topics.UpdateTopicFailAction(error));
       }));
 
+  // @TODO think how we can combine with updateTopic$
+  @Effect() likeTopic$ = this.actions$
+    .ofType(topics.LIKE_TOPIC)
+    .switchMap(action => {
+      const { topicId, userId, liked } = action.payload;
+      return this.topicsService.updateTopicLikesById(topicId, liked, userId)
+        .map(updatedTopic => {
+          this.snackBar.open('Topic has been updated', 'close', {duration: 3000});
+          return new topics.LikeSuccessAction({ updatedTopic })
+        })
+        .catch(error => {
+          this.snackBar.open('Cannot update topic', 'close', {duration: 3000});
+          return Observable.of(new topics.LikeFailAction(error));
+        })
+    });
+
   @Effect() removeTopic$ = this.actions$
     .ofType(topics.DELETE_TOPIC)
     .switchMap(action => this.topicsService.deleteTopic(action.payload.id)

@@ -112,12 +112,15 @@ export class UpdateTopicFailAction implements Action {
  */
 export class LikeAction implements Action {
   readonly type = LIKE_TOPIC;
+
+  constructor(public payload: { topicId: string, userId: string, liked: boolean }) {
+  }
 }
 
 export class LikeSuccessAction implements Action {
   readonly type = LIKE_TOPIC_SUCCESS;
 
-  constructor(public payload: Topic) {
+  constructor(public payload: { updatedTopic: Topic }) {
   }
 }
 

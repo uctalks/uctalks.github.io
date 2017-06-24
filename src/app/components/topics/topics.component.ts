@@ -7,7 +7,10 @@ import { AuthService } from '../../services/auth-service/auth.service';
 import Topic from '../../models/topic';
 import User from '../../models/user';
 import TopicProps from './topic-props.interface';
-import {OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction, UpdateTopicAction} from '../../actions/topics';
+import {
+  LikeAction, OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction,
+  UpdateTopicAction
+} from '../../actions/topics';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -136,27 +139,8 @@ export class TopicsComponent implements OnInit {
     // );
   }
 
-  public like(liked: boolean, id: string) {
-    this.topicsService.updateTopicLikesById(id, liked, this.auth.userProfileId)
-      .subscribe(
-        updatedTopic => {
-          this.topics = this.topics
-            .map(topic => {
-              if (topic._id === updatedTopic._id) {
-                // if user liked the topic, mark the topic as liked by this user
-                updatedTopic.likedByUser = liked;
-                return updatedTopic;
-              }
-              return topic;
-            });
-
-          // this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
-        },
-        error => {
-          // this.snackBar.open('Cannot save changes', 'close', { duration: 3000 });
-          console.error(error);
-        },
-      );
+  public like(liked: boolean, topicId: string) {
+    this.store.dispatch(new LikeAction({ topicId, liked, userId: this.auth.userProfileId }));
   }
 
   public onSortChange(val) {
