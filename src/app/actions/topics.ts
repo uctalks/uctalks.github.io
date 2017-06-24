@@ -11,7 +11,7 @@ export const LOAD_TOPICS = '[Topics] Load';
 export const LOAD_TOPICS_SUCCESS = '[Topics] Load Success';
 export const LOAD_TOPICS_FAIL = '[Topics] Load Fail';
 
-export const UPDATE_TOPIC = '[Topics] Update Topic Complete';
+export const UPDATE_TOPIC = '[Topics] Update Topic';
 export const UPDATE_TOPIC_SUCCESS = '[Topics] Update Topic Success';
 export const UPDATE_TOPIC_FAIL = '[Topics] Update Topic Fail';
 

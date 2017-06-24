@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth-service/auth.service';
 import Topic from '../../models/topic';
 import User from '../../models/user';
 import TopicProps from './topic-props.interface';
-import {OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction} from '../../actions/topics';
+import {OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction, UpdateTopicAction} from '../../actions/topics';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -196,23 +196,7 @@ export class TopicsComponent implements OnInit {
     this.store.dispatch(new OpenDeleteTopicModalAction({ id }));
   }
 
-  private updateTopicProps(topicId: string, updatedTopicProps: TopicProps ): void {
-    this.topicsService.updateTopicById(topicId, updatedTopicProps).subscribe(
-      updatedTopic => {
-        this.topics = this.topics.map(topic => {
-          if (topic._id === updatedTopic._id) {
-            // if user liked the topic, mark the topic as liked by this user
-            updatedTopic.likedByUser = updatedTopic.usersLikedIds.includes(this.auth.userProfileId);
-            return updatedTopic;
-          }
-          return topic;
-        });
-        // this.snackBar.open(`'${updatedTopic.name}' has been updated`, 'close', { duration: 3000 });
-      },
-      error => {
-        // this.snackBar.open('Cannot update topic', 'close', { duration: 3000 });
-        console.error(error);
-      },
-    );
+  private updateTopicProps(id: string, updatedTopicProps: TopicProps ): void {
+    this.store.dispatch(new UpdateTopicAction({ id, updatedTopicProps }));
   }
 }
