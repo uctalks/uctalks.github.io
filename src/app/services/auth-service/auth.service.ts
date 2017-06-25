@@ -29,8 +29,7 @@ export class AuthService {
   }
 
   public handleAuthentication(): Observable<any> {
-    console.log('handleAuthentication');
-    return Observable.bindNodeCallback(this.auth0.parseHash)();
+    return Observable.bindNodeCallback(this.auth0.parseHash.bind(this.auth0))();
 
     // this.auth0.parseHash((err, authResult) => {
     //   if (err) {

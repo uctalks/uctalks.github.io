@@ -30,7 +30,7 @@ export class UsersEffects {
         console.log(authResult);
         if (authResult && authResult.accessToken && authResult.idToken) {
           window.location.hash = '';
-          this.store.dispatch(go(['/home']));
+          // @TODO extract to another effect
           this.auth.setSession(authResult);
         } else {
           return this.auth.isAuthenticated
@@ -39,11 +39,10 @@ export class UsersEffects {
         }
       })
       .catch(error => {
-        console.log(error);
         this.store.dispatch(go(['/home']));
         this.snackBar.open(error.errorDescription, 'close', { duration: 4000 });
         console.error(error);
-        return Observable.of(new users.CheckUserLoginFailAction(error))
+        return Observable.of(new users.CheckUserLoginFailAction(error));
       }),
     );
 
