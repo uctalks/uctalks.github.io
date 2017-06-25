@@ -1,6 +1,6 @@
 <main class="container">
   <button
-		*ngIf="auth.isAuthenticated"
+		*ngIf="userIsLoggedIn"
 		class="topic-add-button"
 		(click)="openAddTopicDialog()"
 		md-fab
@@ -18,9 +18,9 @@
       <ng2-md-datatable-column>Slides</ng2-md-datatable-column>
       <ng2-md-datatable-column>Useful links</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
-      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Like</ng2-md-datatable-column>
-      <ng2-md-datatable-column *ngIf="auth.isAuthenticated">Edit</ng2-md-datatable-column>
-			<ng2-md-datatable-column *ngIf="auth.isAuthenticated">Delete topic</ng2-md-datatable-column>
+      <ng2-md-datatable-column *ngIf="userIsLoggedIn">Like</ng2-md-datatable-column>
+      <ng2-md-datatable-column *ngIf="userIsLoggedIn">Edit</ng2-md-datatable-column>
+			<ng2-md-datatable-column *ngIf="userIsLoggedIn">Delete topic</ng2-md-datatable-column>
 		</ng2-md-datatable-header>
 
 		<tbody>
@@ -34,7 +34,7 @@
             *ngIf="users"
             [users]="users"
             [selectedSpeakerId]="topic.speakerId"
-            [disabled]="!auth.isAuthenticated"
+            [disabled]="!userIsLoggedIn"
             (speakerSelected)="handleInputChange($event, 'speakerId', topic._id)">
           </app-user-dropdown>
         </td>
@@ -44,7 +44,7 @@
           <app-datepicker
             [minDate]="!topic.presented && minDate"
             [selectedDate]="topic.presentationDate"
-            [disabled]="!auth.isAuthenticated"
+            [disabled]="!userIsLoggedIn"
             (dateChanged)="handleInputChange($event, 'presentationDate', topic._id)">
           </app-datepicker>
         </td>
@@ -55,7 +55,7 @@
             [checked]="topic.presented"
             [indeterminate]="!topic.presented && topic.speakerId"
             [align]="'start'"
-            [disabled]="!auth.isAuthenticated || !topic.speakerId || !topic.presentationDate"
+            [disabled]="!userIsLoggedIn || !topic.speakerId || !topic.presentationDate"
             (change)="handleInputChange($event, 'presented', topic._id)">
           </md-checkbox>
         </td>
@@ -99,7 +99,7 @@
         <td class="numeric">{{topic.likes}}</td>
 
         <!-- Like -->
-        <td *ngIf="auth.isAuthenticated">
+        <td *ngIf="userIsLoggedIn">
           <md-icon
             class="topic__like"
             [ngClass]="{ 'active': topic.likedByUser }"
@@ -111,7 +111,7 @@
         </td>
 
         <!-- Edit -->
-        <td *ngIf="auth.isAuthenticated">
+        <td *ngIf="userIsLoggedIn">
           <md-icon
             class="topic__edit"
             (click)="openEditTopicDialog(topic)">
@@ -120,7 +120,7 @@
         </td>
 
         <!-- Delete -->
-        <td *ngIf="auth.isAuthenticated">
+        <td *ngIf="userIsLoggedIn">
           <md-icon
             class="topic__delete"
             mdTooltip="Completely delete the topic"

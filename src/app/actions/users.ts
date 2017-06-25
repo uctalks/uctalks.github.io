@@ -7,6 +7,8 @@ export const CHECK_USER_LOGIN_FAIL = '[Users] Check User Login Fail';
 export const USER_IS_LOGGED_IN = '[Users] User Logged In';
 export const USER_IS_NOT_LOGGED_IN = '[Users] User Is Not Logged In';
 
+export const USER_LOGOUT = '[Users] Logout';
+
 export const LOAD_USERS = '[Users] Load';
 export const LOAD_USERS_SUCCESS = '[Users] Load Success';
 export const LOAD_USERS_FAIL = '[Users] Load Fail';
@@ -70,14 +72,17 @@ export class LoadUsersFailAction implements Action {
 export class PostUserAction implements Action {
   readonly type = POST_USER;
 
-  constructor(public payload: User) {
+  constructor(public payload: {
+    user: { name: string, sub: string, picture: string },
+    session: { expiresIn: string, accessToken: string, idToken: string },
+   }) {
   }
 }
 
 export class PostUserSuccessAction implements Action {
   readonly type = POST_USER_SUCCESS;
 
-  constructor(public payload: User) {
+  constructor(public payload: { user: User, session: { expiresIn: string, accessToken: string, idToken: string } }) {
   }
 }
 
@@ -88,12 +93,23 @@ export class PostUserFailAction implements Action {
   }
 }
 
+export class LogoutAction implements Action {
+  readonly type = USER_LOGOUT;
+}
 
 export type Actions
   = LoadUsersAction
   | LoadUsersSuccessAction
   | LoadUsersFailAction
 
+  | LogoutAction
+
+  | CheckUserLoginAction
+  | CheckUserLoginFailAction
+
   | PostUserAction
   | PostUserSuccessAction
-  | PostUserFailAction;
+  | PostUserFailAction
+
+  | UserIsLoggedInAction
+  | UserIsNotLoggedInAction;

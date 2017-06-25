@@ -14,16 +14,22 @@ import User from '../models/user';
   selector: 'app-topics-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-topics [topics]="topics$ | async" [users]="users$ | async"></app-topics>
+    <app-topics
+      [topics]="topics$ | async"
+      [users]="users$ | async"
+      [userIsLoggedIn]="userIsLoggedIn$ | async">
+    </app-topics>
   `,
 })
 export class TopicsPageComponent implements OnInit {
   topics$: Observable<Topic[]>;
   users$: Observable<User[]>;
+  userIsLoggedIn$: Observable<boolean>;
 
   constructor(private store: Store<fromRoot.State>) {
     this.topics$ = store.select(fromRoot.getTopics);
     this.users$ = store.select(fromRoot.getUsers);
+    this.userIsLoggedIn$ = store.select(fromRoot.getUserIsLoggedIn);
   }
 
   ngOnInit() {

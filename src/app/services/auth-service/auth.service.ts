@@ -30,55 +30,18 @@ export class AuthService {
 
   public handleAuthentication(): Observable<any> {
     return Observable.bindNodeCallback(this.auth0.parseHash.bind(this.auth0))();
-
-    // this.auth0.parseHash((err, authResult) => {
-    //   if (err) {
-    //     this.router.navigate(['/home']);
-    //     this.snackBar.open(err.errorDescription, 'close', { duration: 4000 });
-    //     console.error(err);
-    //   } else if (authResult && authResult.accessToken && authResult.idToken) {
-    //     window.location.hash = '';
-    //     this.router.navigate(['/home']);
-    //     this.setSession(authResult);
-    //   } else {
-    //     this.isAuthenticated
-    //       ? this.store.dispatch(new UserIsLoggedInAction({ id: this.userProfileId }))
-    //       : this.store.dispatch(new UserIsNotLoggedInAction());
-    //   }
-    // });
   }
 
-  public setSession(authResult): void {
-    console.log('authResult', authResult);
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 10000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
+  public setSession({ expiresIn, accessToken, idToken, userId }): void {
+    const expiresAt = JSON.stringify((expiresIn * 10000) + new Date().getTime());
     localStorage.setItem('expires_at', expiresAt);
-
-    // get more user details
-    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
-      if (err) {
-        this.snackBar.open('Cannot get user profile', 'close', { duration: 3000 });
-      } else if (profile) {
-        this.snackBar.open(`Hello, ${profile.given_name}! You are loggen in`, 'close', { duration: 2000 });
-
-        const { name, sub, picture } = profile;
-
-
-        // add/update user in the database
-        this.userService.addOrUpdateUser({ name, sub, picture }).subscribe(
-          user => {
-            localStorage.setItem('userId', user._id);
-          },
-          () => this.snackBar.open('Cannot post new login data', 'close', { duration: 3000 }),
-        );
-      }
-    });
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('id_token', idToken);
+    localStorage.setItem('userId', userId);
   }
 
   public logout(): void {
-    // Remove tokens and expiry time from localStorage
+    // Remove tokens,expiry time and userId from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
@@ -97,13 +60,5 @@ export class AuthService {
 
   public get userProfileId(): string | null {
     return localStorage.getItem('userId');
-  }
-
-  public get userProfileName(): string | null {
-    return localStorage.getItem('userName');
-  }
-
-  public get userProfilePicture(): string | null {
-    return localStorage.getItem('userPicture');
   }
 }

@@ -35,6 +35,17 @@ export function reducer(state = initialState, action: users.Actions): State {
       return { ...state, isFetching: false };
     }
 
+    case users.USER_IS_LOGGED_IN:
+      return { ...state, isLoggedIn: true, currentUserId: action.payload.id };
+
+    case users.USER_LOGOUT:
+      return { ...state, isLoggedIn: false, currentUserId: null };
+
+    case users.POST_USER_SUCCESS: {
+      const user = action.payload.user;
+      return { ...state, isLoggedIn: true, currentUserId: user._id, users: Object.assign(users, { [user._id]: user }) };
+    }
+
     default: {
       return state;
     }

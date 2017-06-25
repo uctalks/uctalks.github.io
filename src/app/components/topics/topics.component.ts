@@ -3,6 +3,7 @@ import { MdCheckboxChange, MdDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
 import { TopicsService } from '../../services/topics-service/topics.service';
+// @TODO remove AuthService:
 import { AuthService } from '../../services/auth-service/auth.service';
 import Topic from '../../models/topic';
 import User from '../../models/user';
@@ -19,6 +20,7 @@ enum SortOrders { Descending = 1, Ascending }
 export class TopicsComponent implements OnInit {
   @Input() public topics: Topic[];
   @Input() public users: User[];
+  @Input() public userIsLoggedIn: boolean;
 
   public minDate: Date = new Date();
 

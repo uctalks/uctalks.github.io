@@ -9,7 +9,7 @@ import { CheckUserLoginAction } from './actions/users';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wrapper mat-app-background">
-      <app-header></app-header>
+      <app-header [userIsLoggedIn]="userIsLoggedIn$ | async"></app-header>
 
       <md-progress-bar *ngIf="spinnerIsVisible$ | async" class="spinner" mode="indeterminate" color="accent"></md-progress-bar>
 
@@ -20,9 +20,11 @@ import { CheckUserLoginAction } from './actions/users';
 })
 export class AppComponent implements OnInit {
   public spinnerIsVisible$: Observable<boolean>;
+  public userIsLoggedIn$: Observable<boolean>;
 
   constructor(private store: Store<fromRoot.State>) {
     this.spinnerIsVisible$ = store.select(fromRoot.getSpinnerIsVisible);
+    this.userIsLoggedIn$ = store.select(fromRoot.getUserIsLoggedIn);
   }
 
   ngOnInit() {
