@@ -42,6 +42,7 @@ export const getUserEntities = createSelector(getUsersState, fromUsers.getEntiti
 export const getUserIds = createSelector(getUsersState, fromUsers.getIds);
 export const getUserIsFetching = createSelector(getUsersState, fromUsers.getIsFetching);
 export const getUserIsLoggedIn = createSelector(getUsersState, fromUsers.getIsLoggenIn);
+export const getCurrentUserId = createSelector(getUsersState, fromUsers.getCurrentUserId);
 export const getUsers = createSelector(getUserEntities, getUserIds, (entities, ids) => ids.map(id => entities[id]));
 
 export const getSpinnerIsVisible = createSelector(

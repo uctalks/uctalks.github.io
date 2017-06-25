@@ -3,8 +3,6 @@ import { MdCheckboxChange, MdDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
 import { TopicsService } from '../../services/topics-service/topics.service';
-// @TODO remove AuthService:
-import { AuthService } from '../../services/auth-service/auth.service';
 import Topic from '../../models/topic';
 import User from '../../models/user';
 import TopicProps from './topic-props.interface';
@@ -21,6 +19,7 @@ export class TopicsComponent implements OnInit {
   @Input() public topics: Topic[];
   @Input() public users: User[];
   @Input() public userIsLoggedIn: boolean;
+  @Input() public currentUserId: string;
 
   public minDate: Date = new Date();
 
@@ -93,7 +92,6 @@ export class TopicsComponent implements OnInit {
   }
 
   constructor(
-    public auth: AuthService,
     private topicsService: TopicsService,
     private dialog: MdDialog,
     private store: Store<fromRoot.State>,
@@ -139,7 +137,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public like(liked: boolean, topicId: string) {
-    this.store.dispatch(new topicsActions.LikeAction({ topicId, liked, userId: this.auth.userProfileId }));
+    this.store.dispatch(new topicsActions.LikeAction({ topicId, liked, userId: this.currentUserId }));
   }
 
   public onSortChange(val) {
