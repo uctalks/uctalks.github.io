@@ -23,10 +23,11 @@ export function reducer(state = initialState, action: topics.Actions): State {
     case topics.DELETE_TOPIC:
       return { ...state, isFetching: true };
 
+
     case topics.ADD_TOPIC_SUCCESS: {
       const ids = [...state.ids, action.payload.addedTopic._id];
 
-      const entities = { ...state.entities, [action.payload.addedTopic._id]: action.payload.addedTopic }
+      const entities = { ...state.entities, [action.payload.addedTopic._id]: action.payload.addedTopic };
 
       return { ids, entities, isFetching: false };
     }
@@ -51,6 +52,7 @@ export function reducer(state = initialState, action: topics.Actions): State {
 
     case topics.DELETE_TOPIC_SUCCESS:
       return { ...state, ids: state.ids.filter(id => id !== (action as DeleteTopicSuccessAction).payload.id), isFetching: false };
+
 
     case topics.ADD_TOPIC_FAIL:
     case topics.UPDATE_TOPIC_FAIL:

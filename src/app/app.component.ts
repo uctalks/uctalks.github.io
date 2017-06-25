@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { AuthService } from './services/auth-service/auth.service';
 import * as fromRoot from './reducers/';
+import { CheckUserLoginAction } from './actions/users';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +18,14 @@ import * as fromRoot from './reducers/';
   `,
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public spinnerIsVisible$: Observable<boolean>;
 
-  constructor(private auth: AuthService, private store: Store<fromRoot.State>) {
+  constructor(private store: Store<fromRoot.State>) {
     this.spinnerIsVisible$ = store.select(fromRoot.getSpinnerIsVisible);
-    auth.handleAuthentication();
+  }
+
+  ngOnInit() {
+    this.store.dispatch(new CheckUserLoginAction());
   }
 }

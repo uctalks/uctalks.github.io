@@ -7,10 +7,7 @@ import { AuthService } from '../../services/auth-service/auth.service';
 import Topic from '../../models/topic';
 import User from '../../models/user';
 import TopicProps from './topic-props.interface';
-import {
-  LikeAction, OpenAddTopicModalAction, OpenDeleteTopicModalAction, OpenEditTopicModalAction,
-  UpdateTopicAction
-} from '../../actions/topics';
+import * as topicsActions from '../../actions/topics';
 
 enum SortOrders { Descending = 1, Ascending }
 
@@ -140,7 +137,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public like(liked: boolean, topicId: string) {
-    this.store.dispatch(new LikeAction({ topicId, liked, userId: this.auth.userProfileId }));
+    this.store.dispatch(new topicsActions.LikeAction({ topicId, liked, userId: this.auth.userProfileId }));
   }
 
   public onSortChange(val) {
@@ -148,7 +145,7 @@ export class TopicsComponent implements OnInit {
   }
 
   public openAddTopicDialog() {
-    this.store.dispatch(new OpenAddTopicModalAction());
+    this.store.dispatch(new topicsActions.OpenAddTopicModalAction());
   }
 
   public handleInputChange(
@@ -173,14 +170,14 @@ export class TopicsComponent implements OnInit {
   }
 
   public openEditTopicDialog(topic: Topic) {
-    this.store.dispatch(new OpenEditTopicModalAction({ topic }));
+    this.store.dispatch(new topicsActions.OpenEditTopicModalAction({ topic }));
   }
 
   public openDeleteTopicDialog(id: string) {
-    this.store.dispatch(new OpenDeleteTopicModalAction({ id }));
+    this.store.dispatch(new topicsActions.OpenDeleteTopicModalAction({ id }));
   }
 
   private updateTopicProps(id: string, updatedTopicProps: TopicProps ): void {
-    this.store.dispatch(new UpdateTopicAction({ id, updatedTopicProps }));
+    this.store.dispatch(new topicsActions.UpdateTopicAction({ id, updatedTopicProps }));
   }
 }
