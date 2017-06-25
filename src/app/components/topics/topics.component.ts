@@ -18,7 +18,6 @@ enum SortOrders { Descending = 1, Ascending }
 export class TopicsComponent implements OnInit {
   @Input() public topics: Topic[];
   @Input() public users: User[];
-  @Input() public userIsLoggedIn: boolean;
   @Input() public currentUserId: string;
 
   public minDate: Date = new Date();

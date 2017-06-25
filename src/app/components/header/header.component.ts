@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../../reducers/';
-import { LogoutAction } from '../../actions/users';
+import { LogoutAction } from '../../actions/currentUserId';
 import { AuthService } from '../../services/auth-service/auth.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth-service/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  @Input() userIsLoggedIn: boolean;
+  @Input() currentUserId: string;
 
   constructor(public auth: AuthService, private store: Store<State>) {}
 

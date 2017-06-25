@@ -2,19 +2,15 @@ import User from '../models/user';
 import * as users from '../actions/users';
 
 export interface State {
-  currentUserId: string;
   entities: { [id: string]: User };
   ids: string[];
   isFetching: boolean;
-  isLoggedIn: boolean;
 }
 
 export const initialState: State = {
-  currentUserId: null,
   entities: {},
   ids: [],
   isFetching: false,
-  isLoggedIn: false,
 };
 
 export function reducer(state = initialState, action: users.Actions): State {
@@ -24,9 +20,10 @@ export function reducer(state = initialState, action: users.Actions): State {
     }
 
     case users.LOAD_USERS_SUCCESS: {
-      const ids = action.payload.map(topic => topic._id);
+      const ids = (action as users.LoadUsersSuccessAction).payload.map(topic => topic._id);
 
-      const entities = action.payload.reduce((users: { [id: string]: User }, user: User) => Object.assign(users, { [user._id]: user }), {});
+      const entities = (action as users.LoadUsersSuccessAction).payload
+        .reduce((users: { [id: string]: User }, user: User) => Object.assign(users, { [user._id]: user }), {});
 
       return { ...state, ids, entities, isFetching: false };
     }
@@ -35,15 +32,9 @@ export function reducer(state = initialState, action: users.Actions): State {
       return { ...state, isFetching: false };
     }
 
-    case users.USER_IS_LOGGED_IN:
-      return { ...state, isLoggedIn: true, currentUserId: action.payload.id };
-
-    case users.USER_LOGOUT:
-      return { ...state, isLoggedIn: false, currentUserId: null };
-
-    case users.POST_USER_SUCCESS: {
-      const user = action.payload.user;
-      return { ...state, isLoggedIn: true, currentUserId: user._id, users: Object.assign(users, { [user._id]: user }) };
+    case users.ADD_OR_UPDATE_USER: {
+      const user = action.payload;
+      return { ...state, users: Object.assign(users, { [user._id]: user }) };
     }
 
     default: {
@@ -52,12 +43,8 @@ export function reducer(state = initialState, action: users.Actions): State {
   }
 }
 
-export const getCurrentUserId = (state: State) => state.currentUserId;
-
 export const getEntities = (state: State) => state.entities;
 
 export const getIds = (state: State) => state.ids;
 
 export const getIsFetching = (state: State) => state.isFetching;
-
-export const getIsLoggenIn = (state: State) => state.isLoggedIn;

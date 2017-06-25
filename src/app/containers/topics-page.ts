@@ -17,7 +17,6 @@ import User from '../models/user';
     <app-topics
       [topics]="topics$ | async"
       [users]="users$ | async"
-      [userIsLoggedIn]="userIsLoggedIn$ | async"
       [currentUserId]="currentUserId$ | async">
     </app-topics>
   `,
@@ -25,13 +24,11 @@ import User from '../models/user';
 export class TopicsPageComponent implements OnInit {
   topics$: Observable<Topic[]>;
   users$: Observable<User[]>;
-  userIsLoggedIn$: Observable<boolean>;
   currentUserId$: Observable<string>;
 
   constructor(private store: Store<fromRoot.State>) {
     this.topics$ = store.select(fromRoot.getTopics);
     this.users$ = store.select(fromRoot.getUsers);
-    this.userIsLoggedIn$ = store.select(fromRoot.getUserIsLoggedIn);
     this.currentUserId$ = store.select(fromRoot.getCurrentUserId);
   }
 

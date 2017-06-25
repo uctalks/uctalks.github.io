@@ -53,6 +53,7 @@ import { DatepickerComponent } from './components/datepicker/datepicker.componen
 import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import { TopicsPageComponent } from './containers/topics-page';
+import { CurrenUserIdEffects } from "app/effects/currentUserId";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -88,6 +89,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     EffectsModule.run(TopicsEffects),
     EffectsModule.run(UsersEffects),
+    EffectsModule.run(CurrenUserIdEffects),
     MdIconModule,
     MdButtonModule,
     MdCheckboxModule,
