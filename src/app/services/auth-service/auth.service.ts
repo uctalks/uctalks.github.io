@@ -9,7 +9,6 @@ import { AUTH_CONFIG } from './auth-config';
 import { UserService } from '../user-service/user.service';
 import { Store } from '@ngrx/store';
 import { State } from 'app/reducers';
-import { UserIsLoggedInAction, UserIsNotLoggedInAction } from 'app/actions/users';
 
 @Injectable()
 export class AuthService {

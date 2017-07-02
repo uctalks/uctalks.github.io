@@ -1,13 +1,12 @@
-import { createSelector } from 'reselect';
-import { ActionReducer } from '@ngrx/store';
+import {createSelector} from 'reselect';
+import {ActionReducer, combineReducers} from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import * as fromTopics from './topics';
 import * as fromUsers from './users';
 import * as fromCurrentUserId from './currentUserId';
-import { environment } from '../../environments/environment';
-import { compose } from '@ngrx/core/compose';
-import { storeFreeze } from 'ngrx-store-freeze';
-import { combineReducers } from '@ngrx/store';
+import {environment} from '../../environments/environment';
+import {compose} from '@ngrx/core/compose';
+import {storeFreeze} from 'ngrx-store-freeze';
 
 export interface State {
   router: fromRouter.RouterState;
@@ -34,21 +33,32 @@ export function reducer(state: any, action: any) {
   }
 }
 
+// currentUserId selectors
+export const getCurrentUserIdState = (state: State) => state.currentUserId;
+export const getCurrentUserId = createSelector(getCurrentUserIdState, fromCurrentUserId.getCurrentUserId);
+
+// topics selectors
 export const getTopicsState = (state: State) => state.topics;
 export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getEntities);
 export const getTopicsIds = createSelector(getTopicsState, fromTopics.getIds);
 export const getTopicsIsFetching = createSelector(getTopicsState, fromTopics.getIsFetching);
-export const getTopics = createSelector(getTopicsEntities, getTopicsIds, (entities, ids) => ids.map(id => entities[id]));
+export const getTopics = createSelector(
+  getTopicsEntities,
+  getTopicsIds,
+  getCurrentUserId,
+  (entities, ids, currentUserId) => ids.map(id => (
+    {...(entities[id]), likedByUser: entities[id].usersLikedIds.includes(currentUserId) }
+  )),
+);
 
+// users selectors
 export const getUsersState = (state: State) => state.users;
 export const getUserEntities = createSelector(getUsersState, fromUsers.getEntities);
 export const getUserIds = createSelector(getUsersState, fromUsers.getIds);
 export const getUserIsFetching = createSelector(getUsersState, fromUsers.getIsFetching);
 export const getUsers = createSelector(getUserEntities, getUserIds, (entities, ids) => ids.map(id => entities[id]));
 
-export const getCurrentUserIdState = (state: State) => state.currentUserId;
-export const getCurrentUserId = createSelector(getCurrentUserIdState, fromCurrentUserId.getCurrentUserId);
-
+// spinnerIsVisible selector
 export const getSpinnerIsVisible = createSelector(
   getTopicsIsFetching,
   getUserIsFetching,
