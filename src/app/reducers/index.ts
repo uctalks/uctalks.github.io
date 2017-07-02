@@ -7,6 +7,7 @@ import * as fromCurrentUserId from './currentUserId';
 import {environment} from '../../environments/environment';
 import {compose} from '@ngrx/core/compose';
 import {storeFreeze} from 'ngrx-store-freeze';
+import {TopicsService} from '../services/topics-service/topics.service';
 
 export interface State {
   router: fromRouter.RouterState;
@@ -42,14 +43,18 @@ export const getTopicsState = (state: State) => state.topics;
 export const getTopicsEntities = createSelector(getTopicsState, fromTopics.getEntities);
 export const getTopicsIds = createSelector(getTopicsState, fromTopics.getIds);
 export const getTopicsIsFetching = createSelector(getTopicsState, fromTopics.getIsFetching);
+export const getTopicsSort = createSelector(getTopicsState, fromTopics.getSort);
 export const getTopics = createSelector(
   getTopicsEntities,
   getTopicsIds,
   getCurrentUserId,
-  (entities, ids, currentUserId) => ids.map(id => (
-    {...(entities[id]), likedByUser: entities[id].usersLikedIds.includes(currentUserId) }
-  )),
-);
+  getTopicsSort,
+  (entities, ids, currentUserId, sort) => TopicsService.sortTopics(
+    ids.map(id => (
+      {...(entities[id]), likedByUser: entities[id].usersLikedIds.includes(currentUserId) }
+    )),
+    sort,
+  ));
 
 // users selectors
 export const getUsersState = (state: State) => state.users;

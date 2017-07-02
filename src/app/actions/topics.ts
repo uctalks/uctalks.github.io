@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
 import Topic from '../models/topic';
+import {TopicsSortBy, TopicsSortTypes} from '../services/topics-service/topics.service';
 
 export const ADD_TOPIC = '[Topics] Add Topic';
 export const ADD_TOPIC_SUCCESS = '[Topics] Add Topic Success';
@@ -22,6 +23,8 @@ export const LIKE_TOPIC_FAIL = '[Topics] Like Fail';
 export const DELETE_TOPIC = '[Topics] Remove Topic';
 export const DELETE_TOPIC_SUCCESS = '[Topics] Remove Topic Success';
 export const DELETE_TOPIC_FAIL = '[Topics] Remove Topic Fail';
+
+export const SORT_TOPICS = '[Topics] Sort Topics';
 
 export const OPEN_ADD_TOPIC_MODAL = '[Topics] Open Add Topic Modal';
 export const CLOSE_ADD_TOPIC_MODAL_AND_ADD = '[Topics] Close Add Topic Modal And Add';
@@ -158,6 +161,17 @@ export class DeleteTopicFailAction implements Action {
 
 
 /**
+ * Sort Topics Action
+ */
+export class SortTopicsAction implements Action {
+  readonly type = SORT_TOPICS;
+
+  constructor(public payload: { sortBy: TopicsSortBy, sortType: TopicsSortTypes }) {
+  }
+}
+
+
+/**
  * Add Topic Modal Actions
  */
 export class OpenAddTopicModalAction implements Action {
@@ -232,6 +246,8 @@ export type Actions
   | DeleteTopicAction
   | DeleteTopicSuccessAction
   | DeleteTopicFailAction
+
+  | SortTopicsAction
 
   | OpenAddTopicModalAction
   | CloseAddTopicModalAction

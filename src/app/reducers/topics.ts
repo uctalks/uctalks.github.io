@@ -1,17 +1,20 @@
 import Topic from '../models/topic';
 import * as topics from '../actions/topics';
-import { DeleteTopicSuccessAction } from '../actions/topics';
+import {DeleteTopicSuccessAction, SortTopicsAction} from '../actions/topics';
+import {TopicsSortTypes, TopicsSortBy} from '../services/topics-service/topics.service';
 
 export interface State {
-  entities: { [id: string]: Topic },
+  entities: { [id: string]: Topic };
   ids: string[];
   isFetching: boolean;
+  sort: { sortBy: TopicsSortBy, sortType: TopicsSortTypes };
 }
 
 export const initialState: State = {
   ids: [],
   entities: {},
   isFetching: false,
+  sort: { sortBy: 'presentationDate', sortType: TopicsSortTypes.Descending },
 };
 
 export function reducer(state = initialState, action: topics.Actions): State {
@@ -29,7 +32,7 @@ export function reducer(state = initialState, action: topics.Actions): State {
 
       const entities = { ...state.entities, [action.payload.addedTopic._id]: action.payload.addedTopic };
 
-      return { ids, entities, isFetching: false };
+      return { ...state, ids, entities, isFetching: false };
     }
 
     case topics.UPDATE_TOPIC_SUCCESS:
@@ -47,12 +50,14 @@ export function reducer(state = initialState, action: topics.Actions): State {
       const entities = action.payload
         .reduce((topics: { [id: string]: Topic }, topic: Topic) => Object.assign(topics, { [topic._id]: topic }), {});
 
-      return { ids, entities, isFetching: false };
+      return { ...state, ids, entities, isFetching: false };
     }
 
     case topics.DELETE_TOPIC_SUCCESS:
       return { ...state, ids: state.ids.filter(id => id !== (action as DeleteTopicSuccessAction).payload.id), isFetching: false };
 
+    case topics.SORT_TOPICS:
+      return { ...state, sort: (action as SortTopicsAction).payload };
 
     case topics.ADD_TOPIC_FAIL:
     case topics.UPDATE_TOPIC_FAIL:
@@ -71,3 +76,5 @@ export const getEntities = (state: State) => state.entities;
 export const getIds = (state: State) => state.ids;
 
 export const getIsFetching = (state: State) => state.isFetching;
+
+export const getSort = (state: State) => state.sort;
