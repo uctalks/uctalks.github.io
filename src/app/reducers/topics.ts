@@ -13,7 +13,7 @@ export interface State {
 export const initialState: State = {
   ids: [],
   entities: {},
-  isFetching: false,
+  isFetching: true,
   sort: { sortBy: 'presentationDate', sortType: TopicsSortTypes.Descending },
 };
 
