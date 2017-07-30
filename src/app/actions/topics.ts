@@ -181,7 +181,7 @@ export class OpenAddTopicModalAction implements Action {
 export class CloseAddTopicModalAction implements Action {
   readonly type = CLOSE_ADD_TOPIC_MODAL_AND_ADD;
 
-  constructor(public payload: { newTopicProps: TopicProps }) {
+  constructor(public payload: { newTopicProps: NewTopicProps }) {
   }
 }
 

@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { go } from '@ngrx/router-store';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/switchMap';
 import { MdSnackBar } from '@angular/material';
-import { Store } from '@ngrx/store';
+import {Action, Store} from '@ngrx/store';
+import {Router} from '@angular/router';
 import { State } from 'app/reducers';
 import * as users from '../actions/currentUserId';
 import { UserService } from '../services/user-service/user.service';
 import { AuthService } from '../services/auth-service/auth.service';
-import { UserIsLoggedInAction } from "../actions/currentUserId";
-import { AddOrUpdateUserAction } from "app/actions/users";
+import {PostUserAction, PostUserSuccessAction, UserIsLoggedInAction} from '../actions/currentUserId';
+import { AddOrUpdateUserAction } from '../actions/users';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class CurrenUserIdEffects {
-  @Effect() checkUserLogin$ = this.actions$
+  @Effect() checkUserLogin$: Observable<Action> = this.actions$
     .ofType(users.CHECK_USER_LOGIN)
     .switchMap(() => this.auth.handleAuthentication()
       .map(authResult => {
@@ -32,7 +36,7 @@ export class CurrenUserIdEffects {
         }
       })
       .catch(error => {
-        this.store.dispatch(go(['/home']));
+        this.router.navigate(['/home']);
         this.snackBar.open('Error during the login check', 'close', { duration: 4000 });
         console.error(error);
         return Observable.of(new users.CheckUserLoginFailAction(error));
@@ -41,7 +45,7 @@ export class CurrenUserIdEffects {
 
   @Effect() postUsers$ = this.actions$
     .ofType(users.POST_USER)
-    .switchMap(action => this.userService.addOrUpdateUser(action.payload.user)
+    .switchMap((action: PostUserAction) => this.userService.addOrUpdateUser(action.payload.user)
       .map(user => {
         this.store.dispatch(new AddOrUpdateUserAction(user));
         this.store.dispatch(new UserIsLoggedInAction({ id: user._id }));
@@ -55,7 +59,7 @@ export class CurrenUserIdEffects {
 
   @Effect({ dispatch: false }) postUsersSuccess$ = this.actions$
     .ofType(users.POST_USER_SUCCESS)
-    .do(action => {
+    .do((action: PostUserSuccessAction) => {
       const userId = action.payload.user._id;
       const { expiresIn, accessToken, idToken } = action.payload.session;
       this.snackBar.open(`You are loggen in`, 'close', { duration: 2000 });
@@ -73,9 +77,10 @@ export class CurrenUserIdEffects {
   constructor(
     private actions$: Actions,
     private auth: AuthService,
+    private router: Router,
     private snackBar: MdSnackBar,
-    private userService: UserService,
     private store: Store<State>,
+    private userService: UserService,
   ) {
   }
 }

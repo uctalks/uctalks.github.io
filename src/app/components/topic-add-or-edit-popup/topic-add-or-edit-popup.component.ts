@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MD_DIALOG_DATA, MdCheckboxChange, MdDialogRef } from '@angular/material';
 import Topic from '../../models/topic';
 import TopicProps from '../topics/topic-props.interface';
+import NewTopicProps from '../topics/new-topic-props.interface';
 import { UsefulLink } from '../topics/useful-link.interface';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
@@ -51,7 +52,7 @@ export class TopicAddOrEditPopupComponent {
     this.edited && !isCanceled
     ? this.data && this.data.topic
       ? this.store.dispatch(new CloseEditTopicModalAction({ updatedTopicProps: this.topicProps, id: this.data.topic._id }))
-      : this.store.dispatch(new CloseAddTopicModalAction({ newTopicProps: this.topicProps }))
+      : this.store.dispatch(new CloseAddTopicModalAction({ newTopicProps: (this.topicProps as NewTopicProps) }))
     : this.store.dispatch(new CloseAllModals());
   }
 

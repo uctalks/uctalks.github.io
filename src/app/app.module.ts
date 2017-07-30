@@ -7,13 +7,15 @@ import {RouterModule} from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { RouterStoreModule } from '@ngrx/router-store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { environment } from '../environments/environment';
 
 import { TopicsEffects } from './effects/topics';
 import { UsersEffects } from './effects/users';
 
-import { reducer } from './reducers';
+import { reducers } from './reducers';
 
 import {ROUTES} from './app.routes';
 
@@ -53,7 +55,7 @@ import { DatepickerComponent } from './components/datepicker/datepicker.componen
 import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import { TopicsPageComponent } from './containers/topics-page';
-import { CurrenUserIdEffects } from "app/effects/currentUserId";
+import { CurrenUserIdEffects } from 'app/effects/currentUserId';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -84,12 +86,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     BrowserAnimationsModule,
-    StoreModule.provideStore(reducer),
-    RouterStoreModule.connectRouter(),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    EffectsModule.run(TopicsEffects),
-    EffectsModule.run(UsersEffects),
-    EffectsModule.run(CurrenUserIdEffects),
+    StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule,
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
+    EffectsModule.forRoot([
+      TopicsEffects,
+      UsersEffects,
+      CurrenUserIdEffects,
+    ]),
     MdIconModule,
     MdButtonModule,
     MdCheckboxModule,

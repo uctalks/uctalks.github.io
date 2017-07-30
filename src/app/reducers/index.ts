@@ -1,38 +1,24 @@
 import {createSelector} from 'reselect';
-import {ActionReducer, combineReducers} from '@ngrx/store';
+import {ActionReducerMap} from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import * as fromTopics from './topics';
 import * as fromUsers from './users';
 import * as fromCurrentUserId from './currentUserId';
-import {environment} from '../../environments/environment';
-import {compose} from '@ngrx/core/compose';
-import {storeFreeze} from 'ngrx-store-freeze';
 import {TopicsService} from '../services/topics-service/topics.service';
 
 export interface State {
-  router: fromRouter.RouterState;
+  router: fromRouter.RouterReducerState;
   topics: fromTopics.State;
   users: fromUsers.State;
   currentUserId: fromCurrentUserId.State;
 }
 
-const reducers = {
+export const reducers: ActionReducerMap<State> = {
   router: fromRouter.routerReducer,
   topics: fromTopics.reducer,
   users: fromUsers.reducer,
   currentUserId: fromCurrentUserId.reducer,
 };
-
-const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers);
-const productionReducer: ActionReducer<State> = combineReducers(reducers);
-
-export function reducer(state: any, action: any) {
-  if (environment.production) {
-    return productionReducer(state, action);
-  } else {
-    return developmentReducer(state, action);
-  }
-}
 
 // currentUserId selectors
 export const getCurrentUserIdState = (state: State) => state.currentUserId;

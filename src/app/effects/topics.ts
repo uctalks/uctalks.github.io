@@ -8,6 +8,10 @@ import {TopicDeletePopupComponent} from '../components/topic-delete-popup/topic-
 import {TopicAddOrEditPopupComponent} from '../components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
+import {
+  AddTopicAction, CloseAddTopicModalAction, CloseDeleteTopicModalActionAndDelete, CloseEditTopicModalAction, DeleteTopicAction, LikeAction,
+  OpenDeleteTopicModalAction, OpenEditTopicModalAction, UpdateTopicAction,
+} from '../actions/topics';
 
 @Injectable()
 export class TopicsEffects {
@@ -25,7 +29,7 @@ export class TopicsEffects {
 
   @Effect() addTopic$ = this.actions$
     .ofType(topics.ADD_TOPIC)
-    .switchMap(action => this.topicsService.addTopic(action.payload.newTopicProps)
+    .switchMap((action: AddTopicAction) => this.topicsService.addTopic(action.payload.newTopicProps)
       .map(addedTopic => {
         this.snackBar.open('New topic has been added', 'close', {duration: 3000});
         return new topics.AddTopicSuccessAction({addedTopic})
@@ -37,7 +41,7 @@ export class TopicsEffects {
 
   @Effect() updateTopic$ = this.actions$
     .ofType(topics.UPDATE_TOPIC)
-    .switchMap(action => this.topicsService.updateTopicById(action.payload.id, action.payload.updatedTopicProps)
+    .switchMap((action: UpdateTopicAction) => this.topicsService.updateTopicById(action.payload.id, action.payload.updatedTopicProps)
       .map(updatedTopic => {
         this.snackBar.open('Topic has been updated', 'close', {duration: 3000});
         return new topics.UpdateTopicSuccessAction({updatedTopic})
@@ -50,7 +54,7 @@ export class TopicsEffects {
   // @TODO think how we can combine with updateTopic$
   @Effect() likeTopic$ = this.actions$
     .ofType(topics.LIKE_TOPIC)
-    .switchMap(action => {
+    .switchMap((action: LikeAction) => {
       const { topicId, userId, liked } = action.payload;
       return this.topicsService.updateTopicLikesById(topicId, liked, userId)
         .map(updatedTopic => {
@@ -65,7 +69,7 @@ export class TopicsEffects {
 
   @Effect() removeTopic$ = this.actions$
     .ofType(topics.DELETE_TOPIC)
-    .switchMap(action => this.topicsService.deleteTopic(action.payload.id)
+    .switchMap((action: DeleteTopicAction) => this.topicsService.deleteTopic(action.payload.id)
       .map(deletedTopic => {
         this.snackBar.open('Topic has been deleted', 'close', {duration: 3000});
         return new topics.DeleteTopicSuccessAction({id: deletedTopic._id})
@@ -82,7 +86,7 @@ export class TopicsEffects {
 
   @Effect() closeAddTopicModalAndAdd$ = this.actions$
     .ofType(topics.CLOSE_ADD_TOPIC_MODAL_AND_ADD)
-    .switchMap(action => {
+    .switchMap((action: CloseAddTopicModalAction) => {
       const {newTopicProps}: { newTopicProps: NewTopicProps } = action.payload;
       this.dialog.closeAll();
       return Observable.of(new topics.AddTopicAction({newTopicProps}));
@@ -90,11 +94,11 @@ export class TopicsEffects {
 
   @Effect({dispatch: false}) openEditTopicModal$ = this.actions$
     .ofType(topics.OPEN_EDIT_TOPIC_MODAL)
-    .do(action => this.dialog.open(TopicAddOrEditPopupComponent, {data: {topic: action.payload.topic}}));
+    .do((action: OpenEditTopicModalAction) => this.dialog.open(TopicAddOrEditPopupComponent, {data: {topic: action.payload.topic}}));
 
   @Effect() closeEditTopicModalAndUpdate$ = this.actions$
     .ofType(topics.CLOSE_EDIT_TOPIC_MODAL_AND_UPDATE)
-    .switchMap(action => {
+    .switchMap((action: CloseEditTopicModalAction) => {
       const {updatedTopicProps, id}: { updatedTopicProps: TopicProps, id: string } = action.payload;
       this.dialog.closeAll();
       return Observable.of(new topics.UpdateTopicAction({updatedTopicProps, id}));
@@ -102,11 +106,11 @@ export class TopicsEffects {
 
   @Effect({dispatch: false}) openDeleteTopicModal$ = this.actions$
     .ofType(topics.OPEN_DELETE_TOPIC_MODAL)
-    .do(action => this.dialog.open(TopicDeletePopupComponent, {data: {id: action.payload.id}}));
+    .do((action: OpenDeleteTopicModalAction) => this.dialog.open(TopicDeletePopupComponent, {data: {id: action.payload.id}}));
 
   @Effect() closeDeleteTopicModalAndDelete$ = this.actions$
     .ofType(topics.CLOSE_DELETE_TOPIC_MODAL_AND_DELETE)
-    .switchMap(action => {
+    .switchMap((action: CloseDeleteTopicModalActionAndDelete) => {
       const {id} = action.payload;
       this.dialog.closeAll();
       return Observable.of(new topics.DeleteTopicAction({id}));

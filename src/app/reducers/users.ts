@@ -1,5 +1,5 @@
 import User from '../models/user';
-import * as users from '../actions/users';
+import * as usersActions from '../actions/users';
 
 export interface State {
   entities: { [id: string]: User };
@@ -13,28 +13,28 @@ export const initialState: State = {
   isFetching: false,
 };
 
-export function reducer(state = initialState, action: users.Actions): State {
+export function reducer(state = initialState, action: usersActions.Actions): State {
   switch (action.type) {
-    case users.LOAD_USERS: {
+    case usersActions.LOAD_USERS: {
       return { ...state, isFetching: true };
     }
 
-    case users.LOAD_USERS_SUCCESS: {
-      const ids = (action as users.LoadUsersSuccessAction).payload.map(topic => topic._id);
+    case usersActions.LOAD_USERS_SUCCESS: {
+      const ids = (action as usersActions.LoadUsersSuccessAction).payload.map(topic => topic._id);
 
-      const entities = (action as users.LoadUsersSuccessAction).payload
-        .reduce((users: { [id: string]: User }, user: User) => Object.assign(users, { [user._id]: user }), {});
+      const entities = (action as usersActions.LoadUsersSuccessAction).payload
+        .reduce((usersEntities: { [id: string]: User }, user: User) => Object.assign(usersEntities, { [user._id]: user }), {});
 
       return { ...state, ids, entities, isFetching: false };
     }
 
-    case users.LOAD_USERS_FAIL: {
+    case usersActions.LOAD_USERS_FAIL: {
       return { ...state, isFetching: false };
     }
 
-    case users.ADD_OR_UPDATE_USER: {
+    case usersActions.ADD_OR_UPDATE_USER: {
       const user = action.payload;
-      return { ...state, users: Object.assign(users, { [user._id]: user }) };
+      return { ...state, entities: Object.assign(state.entities, { [user._id]: user }) };
     }
 
     default: {

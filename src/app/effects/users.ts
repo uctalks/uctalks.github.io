@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { go } from '@ngrx/router-store';
 import { Observable } from 'rxjs/Observable';
 import { MdSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
