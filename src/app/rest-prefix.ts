@@ -1,5 +1,5 @@
 /**
  * Uncomment respective line
  */
-// export default 'https://uctalks.herokuapp.com';
-export default 'http://localhost:5000';
+export default 'https://uctalks.herokuapp.com';
+// export default 'http://localhost:5000';

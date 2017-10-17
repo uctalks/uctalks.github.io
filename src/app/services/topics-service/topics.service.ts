@@ -1,14 +1,73 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
-import NewTopicProps from '../../topics/new-topic-props.interface';
-import { Observable } from 'rxjs/Observable';
-import Topic from '../../topics/topic.interface';
+import NewTopicProps from '../../components/topics/new-topic-props.interface';
+import {Observable} from 'rxjs/Observable';
+import Topic from '../../models/topic';
 import restPrefix from '../../rest-prefix';
-import TopicProps from '../../topics/topic-props.interface';
+import TopicProps from '../../components/topics/topic-props.interface';
+
+export type TopicsSortBy = 'name' | 'likes' | 'presentationDate' | 'speakerId' | 'presented';
+
+export enum TopicsSortTypes { Descending = 1, Ascending }
 
 @Injectable()
 export class TopicsService {
+
+  static sortTopics(topics: Topic[], { sortBy, sortType }: { sortBy: TopicsSortBy, sortType: TopicsSortTypes }): Topic[] {
+    switch (sortType) {
+      case TopicsSortTypes.Descending:
+        switch (sortBy) {
+          case 'name':
+          case 'presentationDate':
+          case 'speakerId':
+            return topics.sort((a: Topic, b: Topic) => TopicsService.compareStrings(a[sortBy], b[sortBy]));
+
+          case 'likes':
+          case 'presented':
+            return topics.sort((a: Topic, b: Topic) => TopicsService.compareBoolsOrNumbers(a[sortBy], b[sortBy]));
+
+          default:
+            return topics;
+        }
+
+      case TopicsSortTypes.Ascending:
+        switch (sortBy) {
+          case 'name':
+          case 'presentationDate':
+          case 'speakerId':
+            return topics.sort((a: Topic, b: Topic) => TopicsService.compareStrings(b[sortBy], a[sortBy]));
+
+          case 'likes':
+          case 'presented':
+            return topics.sort((a: Topic, b: Topic) => TopicsService.compareBoolsOrNumbers(b[sortBy], a[sortBy]));
+
+          default:
+            return topics;
+        }
+
+      default:
+        return topics;
+    }
+  }
+
+  static compareBoolsOrNumbers(a: boolean | number, b: boolean | number) {
+    return Number(b) - Number(a);
+  }
+
+  static compareStrings(a: string, b: string) {
+    if (!a && !b) {
+      return 0;
+    } else if (!a && b) {
+      return 1;
+    } else if (a && !b) {
+      return -1;
+    }
+
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+    return b > a ? 1 : b === a ? 0 : -1;
+  }
 
   constructor(private http: Http) {
   }

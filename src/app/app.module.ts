@@ -4,18 +4,30 @@ import {FormsModule} from '@angular/forms';
 import {Http, HttpModule, RequestOptions} from '@angular/http';
 import {RouterModule} from '@angular/router';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { environment } from '../environments/environment';
+
+import { TopicsEffects } from './effects/topics';
+import { UsersEffects } from './effects/users';
+
+import { reducers } from './reducers';
+
 import {ROUTES} from './app.routes';
 
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
 
 import {AppComponent} from './app.component';
-import {HeaderComponent} from './header/header.component';
-import {TopicsComponent} from './topics/topics.component';
+import {HeaderComponent} from './components/header/header.component';
+import {TopicsComponent} from './components/topics/topics.component';
 
 import {AuthService} from './services/auth-service/auth.service';
 import {AuthGuardService} from './services/auth-service/auth-guard.service';
 import {TopicsService} from './services/topics-service/topics.service';
-import {SpinnerService} from './services/spinner-service/spinner.service';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -36,12 +48,14 @@ import {
 import 'hammerjs';
 
 import { MdDataTableModule } from 'ng2-md-datatable';
-import { UserComponent } from './user/user.component';
+import { UserComponent } from './components/user/user.component';
 import { UserService } from './services/user-service/user.service';
-import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
-import { DatepickerComponent } from './datepicker/datepicker.component';
-import { TopicDeletePopupComponent } from './topic-delete-popup/topic-delete-popup.component';
-import { TopicAddOrEditPopupComponent } from './topic-add-or-edit-popup/topic-add-or-edit-popup.component';
+import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
+import { DatepickerComponent } from './components/datepicker/datepicker.component';
+import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
+import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
+import { TopicsPageComponent } from './containers/topics-page';
+import { CurrenUserIdEffects } from 'app/effects/currentUserId';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -60,6 +74,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     UserComponent,
     UserDropdownComponent,
     DatepickerComponent,
+    TopicsPageComponent,
   ],
   entryComponents: [
     TopicDeletePopupComponent,
@@ -71,6 +86,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     BrowserAnimationsModule,
+    StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule,
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
+    EffectsModule.forRoot([
+      TopicsEffects,
+      UsersEffects,
+      CurrenUserIdEffects,
+    ]),
     MdIconModule,
     MdButtonModule,
     MdCheckboxModule,
@@ -94,7 +117,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions],
     },
-    SpinnerService,
     TopicsService,
     UserService,
   ],

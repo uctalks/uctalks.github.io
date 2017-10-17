@@ -1,0 +1,36 @@
+@import '../../../styles';
+@import '../topics/topics.component';
+
+.edit-form-inputs {
+  display: flex;
+  align-items: center;
+}
+
+.edit-form-input:not(:first-child) {
+  margin-left: 25px;
+}
+
+.edit-form-input_speaker {
+  transform: translateY(-4px);
+}
+
+.reset-button {
+  @include topic-control-button(mat-color($uc-talks-accent));
+  margin-left: 10px;
+  transform: translateY(-4px);
+}
+
+.useful-links {
+  flex-flow: column;
+  align-items: baseline;
+}
+
+.useful-links__header {
+  margin-right: 20px;
+}
+
+.useful-links__header_update {
+  min-width: 100%;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}

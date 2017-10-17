@@ -1,20 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth-service/auth.service';
-import { SpinnerService } from './services/spinner-service/spinner.service';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromRoot from './reducers/';
+import { CheckUserLoginAction } from './actions/currentUserId';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="wrapper mat-app-background">
+      <app-header [currentUserId]="currentUserId$ | async"></app-header>
+
+      <md-progress-bar *ngIf="spinnerIsVisible$ | async" class="spinner" mode="indeterminate" color="accent"></md-progress-bar>
+
+      <router-outlet></router-outlet>
+    </div>
+  `,
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public spinnerIsVisible = true;
+  public spinnerIsVisible$: Observable<boolean>;
+  public currentUserId$: Observable<string>;
 
-  constructor(public auth: AuthService, public spinner: SpinnerService) {
-    auth.handleAuthentication();
+  constructor(private store: Store<fromRoot.State>) {
+    this.spinnerIsVisible$ = store.select(fromRoot.getSpinnerIsVisible);
+    this.currentUserId$ = store.select(fromRoot.getCurrentUserId);
   }
 
   ngOnInit() {
-    this.spinner.visible$.subscribe(flag => this.spinnerIsVisible = flag);
+    this.store.dispatch(new CheckUserLoginAction());
   }
 }
