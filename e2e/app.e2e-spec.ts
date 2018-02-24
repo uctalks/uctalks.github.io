@@ -1,14 +1,15 @@
-import { A2Page } from './app.po';
+import { HomePage } from './app.po';
 
 describe('a2 App', () => {
-  let page: A2Page;
+  let page: HomePage;
 
   beforeEach(() => {
-    page = new A2Page();
+    page = new HomePage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message saying ucTalks (alpha)', async () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    const text = await page.getTitleText();
+    expect(text).toEqual('ucTalks (alpha)');
   });
 });
