@@ -60,4 +60,12 @@ export class AuthService {
   public get userProfileId(): string | null {
     return localStorage.getItem('userId');
   }
+
+  public get userProfileName(): string | null {
+    return localStorage.getItem('userName');
+  }
+
+  public get userProfilePicture(): string | null {
+    return localStorage.getItem('userPicture');
+  }
 }
