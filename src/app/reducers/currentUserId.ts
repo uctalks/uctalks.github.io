@@ -1,4 +1,3 @@
-import User from '../models/user';
 import * as currentUserId from '../actions/currentUserId';
 
 export type State = string;

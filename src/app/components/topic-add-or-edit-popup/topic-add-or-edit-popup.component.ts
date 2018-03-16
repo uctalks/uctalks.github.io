@@ -1,14 +1,14 @@
 import { Component, Inject } from '@angular/core';
-import { MD_DIALOG_DATA, MdCheckboxChange, MdDialogRef } from '@angular/material';
 import Topic from '../../models/topic';
 import TopicProps from '../topics/topic-props.interface';
 import NewTopicProps from '../topics/new-topic-props.interface';
 import { UsefulLink } from '../topics/useful-link.interface';
-import {Store} from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
-import {CloseAddTopicModalAction, CloseAllModals, CloseEditTopicModalAction} from '../../actions/topics';
-import {Observable} from 'rxjs/Observable';
+import { CloseAddTopicModalAction, CloseAllModals, CloseEditTopicModalAction } from '../../actions/topics';
+import { Observable } from 'rxjs/Observable';
 import User from '../../models/user';
+import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-topic-add-or-edit-popup',
@@ -23,11 +23,9 @@ export class TopicAddOrEditPopupComponent {
   public newUsefulLink: UsefulLink = { description: '', link: '' };
   public users$: Observable<User[]>;
 
-  constructor(
-    public dialogRef: MdDialogRef<TopicAddOrEditPopupComponent>,
-    private store: Store<fromRoot.State>,
-    @Inject(MD_DIALOG_DATA) public data: { topic?: Topic },
-  ) {
+  constructor(public dialogRef: MatDialogRef<TopicAddOrEditPopupComponent>,
+              private store: Store<fromRoot.State>,
+              @Inject(MAT_DIALOG_DATA) public data: { topic?: Topic },) {
     if (this.data && this.data.topic) {
       // set initial properties in 'edit' mode
       const { linkToSlides, name, presentationDate, presented, speakerId, usefulLinks } = this.data.topic;
@@ -38,7 +36,7 @@ export class TopicAddOrEditPopupComponent {
         presented,
         speakerId,
         usefulLinks,
-      }
+      };
     } else {
       // set minDate in 'add' mode
       this.minDate = new Date();
@@ -50,18 +48,18 @@ export class TopicAddOrEditPopupComponent {
   public closeDialog(isCanceled?: true): void {
     // this.dialogRef.close(this.edited && !isCanceled ? this.topicProps : null);
     this.edited && !isCanceled
-    ? this.data && this.data.topic
+      ? this.data && this.data.topic
       ? this.store.dispatch(new CloseEditTopicModalAction({ updatedTopicProps: this.topicProps, id: this.data.topic._id }))
       : this.store.dispatch(new CloseAddTopicModalAction({ newTopicProps: (this.topicProps as NewTopicProps) }))
-    : this.store.dispatch(new CloseAllModals());
+      : this.store.dispatch(new CloseAllModals());
   }
 
-  public handleChange(userInput: FocusEvent | MdCheckboxChange | Date | string | boolean, property: keyof TopicProps): void {
+  public handleChange(userInput: FocusEvent | MatCheckboxChange | Date | string | boolean, property: keyof TopicProps): void {
     const previousValue = this.topicProps && this.topicProps[property];
 
     if (userInput instanceof FocusEvent) {
       userInput = (userInput.target as HTMLInputElement).value;
-    } else if (userInput instanceof MdCheckboxChange) {
+    } else if (userInput instanceof MatCheckboxChange) {
       userInput = userInput.checked;
     }
 

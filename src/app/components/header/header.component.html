@@ -1,12 +1,12 @@
-<md-toolbar class="mat-elevation-z6" color="primary">
+<mat-toolbar class="mat-elevation-z6" color="primary">
   <header class="header">
     <div>
-      <a md-raised-button color="primary" routerLink="/">
-        <md-icon>home</md-icon>
+      <a mat-raised-button color="primary" routerLink="/">
+        <mat-icon>home</mat-icon>
         Home
       </a>
-      <a md-raised-button color="primary" *ngIf="currentUserId" routerLink="/user">
-        <md-icon>account_circle</md-icon>
+      <a mat-raised-button color="primary" *ngIf="currentUserId" routerLink="/user">
+        <mat-icon>account_circle</mat-icon>
         User
       </a>
     </div>
@@ -18,14 +18,14 @@
     <h1 [attr.data-automation-locator]="headerTittleLocator">ucTalks (alpha)</h1>
 
     <div>
-      <a md-raised-button color="accent" *ngIf="!currentUserId" (click)="auth.login()">
-        <md-icon>vpn_key</md-icon>
+      <a mat-raised-button color="accent" *ngIf="!currentUserId" (click)="auth.login()">
+        <mat-icon>vpn_key</mat-icon>
         Login via GL account
       </a>
-      <a md-raised-button color="primary" *ngIf="currentUserId" (click)="logout()">
-        <md-icon>directions_run</md-icon>
+      <a mat-raised-button color="primary" *ngIf="currentUserId" (click)="logout()">
+        <mat-icon>directions_run</mat-icon>
         Logout
       </a>
     </div>
   </header>
-</md-toolbar>
+</mat-toolbar>

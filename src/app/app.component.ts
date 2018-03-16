@@ -5,13 +5,13 @@ import * as fromRoot from './reducers/';
 import { CheckUserLoginAction } from './actions/currentUserId';
 
 @Component({
-  selector: 'app-root',
+  selector: 'uct-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="wrapper mat-app-background">
       <app-header [currentUserId]="currentUserId$ | async"></app-header>
 
-      <md-progress-bar *ngIf="spinnerIsVisible$ | async" class="spinner" mode="indeterminate" color="accent"></md-progress-bar>
+      <mat-progress-bar *ngIf="spinnerIsVisible$ | async" class="spinner" mode="indeterminate" color="accent"></mat-progress-bar>
 
       <router-outlet></router-outlet>
     </div>

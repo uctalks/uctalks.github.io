@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MdCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers/';
 import Topic from '../../models/topic';
@@ -35,14 +35,14 @@ export class TopicsComponent {
   }
 
   public handleInputChange(
-    userInput: MdCheckboxChange | FocusEvent | Date | boolean | string, property: keyof TopicProps,
+    userInput: MatCheckboxChange | FocusEvent | Date | boolean | string, property: keyof TopicProps,
     id: string,
   ) {
     const previousValue = this.topics.find(topic => topic._id === id)[property];
 
     if (userInput instanceof FocusEvent) {
       userInput = (userInput.target as HTMLInputElement).value;
-    } else if (userInput instanceof MdCheckboxChange) {
+    } else if (userInput instanceof MatCheckboxChange) {
       userInput = userInput.checked;
     }
 

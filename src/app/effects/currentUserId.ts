@@ -3,10 +3,8 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
-import { MdSnackBar } from '@angular/material';
 import {Action, Store} from '@ngrx/store';
 import {Router} from '@angular/router';
-import { State } from 'app/reducers';
 import * as users from '../actions/currentUserId';
 import { UserService } from '../services/user-service/user.service';
 import { AuthService } from '../services/auth-service/auth.service';
@@ -14,9 +12,11 @@ import {PostUserAction, PostUserSuccessAction, UserIsLoggedInAction} from '../ac
 import { AddOrUpdateUserAction } from '../actions/users';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
+import {State} from '../reducers/topics';
+import {MatSnackBar} from '@angular/material';
 
 @Injectable()
-export class CurrenUserIdEffects {
+export class CurrentUserIdEffects {
   @Effect() checkUserLogin$: Observable<Action> = this.actions$
     .ofType(users.CHECK_USER_LOGIN)
     .switchMap(() => this.auth.handleAuthentication()
@@ -62,14 +62,14 @@ export class CurrenUserIdEffects {
     .do((action: PostUserSuccessAction) => {
       const userId = action.payload.user._id;
       const { expiresIn, accessToken, idToken } = action.payload.session;
-      this.snackBar.open(`You are loggen in`, 'close', { duration: 2000 });
+      this.snackBar.open(`You are logged in`, 'close', { duration: 2000 });
       this.auth.setSession({ expiresIn, accessToken, idToken, userId });
     });
 
   @Effect({ dispatch: false }) userLogout$ = this.actions$
     .ofType(users.USER_LOGOUT)
     .do(() => {
-      this.snackBar.open(`You are loggen out`, 'close', { duration: 2000 });
+      this.snackBar.open(`You are logged out`, 'close', { duration: 2000 });
       this.auth.logout();
     });
 
@@ -78,7 +78,7 @@ export class CurrenUserIdEffects {
     private actions$: Actions,
     private auth: AuthService,
     private router: Router,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private store: Store<State>,
     private userService: UserService,
   ) {

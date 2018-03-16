@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-import { MdSnackBar } from '@angular/material';
-import { Store } from '@ngrx/store';
-import { State } from 'app/reducers';
+import { MatSnackBar } from '@angular/material';
 import * as users from '../actions/users';
 import { UserService } from '../services/user-service/user.service';
 import { AuthService } from '../services/auth-service/auth.service';
@@ -25,9 +23,8 @@ export class UsersEffects {
   constructor(
     private actions$: Actions,
     private auth: AuthService,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private userService: UserService,
-    private store: Store<State>,
   ) {
   }
 }

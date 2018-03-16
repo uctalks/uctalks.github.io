@@ -3,20 +3,20 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 @Component({
   selector: 'app-datepicker',
   template: `
-    <md-input-container>
+    <mat-input-container>
       <input
         title="Date-picker"
-        mdInput
-        [mdDatepicker]="picker"
+        matInput
+        [matDatepicker]="picker"
         [min]="minDate"
         [placeholder]="(alwaysShowPlaceholder || !selectedDate) && 'Choose a date'"
         [disabled]="disabled"
         [value]="date"
         [required]="required"
         (blur)="emitChangeEvent($event)">
-      <button mdSuffix [mdDatepickerToggle]="picker" [disabled]="disabled"></button>
-    </md-input-container>
-    <md-datepicker #picker (selectedChanged)="emitChangeEvent($event)"></md-datepicker>
+      <mat-datepicker-toggle [for]="picker" [disabled]="disabled"></mat-datepicker-toggle>
+    </mat-input-container>
+    <mat-datepicker #picker (selectedChanged)="emitChangeEvent($event)"></mat-datepicker>
   `,
 })
 export class DatepickerComponent implements OnInit {

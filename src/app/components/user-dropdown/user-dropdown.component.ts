@@ -1,29 +1,27 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MdSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material';
 import User from '../../models/user';
 
 @Component({
   selector: 'app-user-dropdown',
   template: `
-    <md-select
+    <mat-select
       name="user"
       placeholder="Speaker"
-      [floatPlaceholder]="floatPlaceholder || 'never'"
       [disabled]="disabled"
       [(ngModel)]="selectedSpeakerId"
       [required]="required"
       (change)="emitSpeakerSelectEvent($event)">
-      <md-option *ngFor="let user of users" [value]="user._id">
+      <mat-option *ngFor="let user of users" [value]="user._id">
         {{user.name}}
-      </md-option>
-    </md-select>
+      </mat-option>
+    </mat-select>
   `,
 })
 export class UserDropdownComponent {
   @Input() users: User[];
   @Input() selectedSpeakerId: string;
   @Input() disabled: boolean;
-  @Input() floatPlaceholder: 'always' | 'auto' | 'never';
   @Input() required: true | undefined;
   @Output() speakerSelected: EventEmitter<string>;
 
@@ -31,7 +29,7 @@ export class UserDropdownComponent {
     this.speakerSelected = new EventEmitter();
   }
 
-  public emitSpeakerSelectEvent(event: MdSelectChange): void {
+  public emitSpeakerSelectEvent(event: MatSelectChange): void {
     this.speakerSelected.emit(event.value);
   }
 }

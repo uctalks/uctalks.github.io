@@ -1,53 +1,37 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {Http, HttpModule, RequestOptions} from '@angular/http';
-import {RouterModule} from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Http, HttpModule, RequestOptions } from '@angular/http';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AppRoutingModule } from './app-routing.module';
+
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { environment } from '../environments/environment';
-
 import { TopicsEffects } from './effects/topics';
 import { UsersEffects } from './effects/users';
 
 import { reducers } from './reducers';
 
-import {ROUTES} from './app.routes';
+import { AuthConfig, AuthHttp } from 'angular2-jwt';
 
-import {AuthConfig, AuthHttp} from 'angular2-jwt';
+import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/header/header.component';
+import { TopicsComponent } from './components/topics/topics.component';
 
-import {AppComponent} from './app.component';
-import {HeaderComponent} from './components/header/header.component';
-import {TopicsComponent} from './components/topics/topics.component';
+import { AuthService } from './services/auth-service/auth.service';
+import { AuthGuardService } from './services/auth-service/auth-guard.service';
+import { TopicsService } from './services/topics-service/topics.service';
 
-import {AuthService} from './services/auth-service/auth.service';
-import {AuthGuardService} from './services/auth-service/auth-guard.service';
-import {TopicsService} from './services/topics-service/topics.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {
-  MdInputModule,
-  MdCheckboxModule,
-  MdButtonModule,
-  MdToolbarModule,
-  MdTooltipModule,
-  MdProgressBarModule,
-  MdSnackBarModule,
-  MdDialogModule,
-  MdDatepickerModule,
-  MdNativeDateModule,
-  MdIconModule,
-  MdSelectModule,
-  MdMenuModule,
-} from '@angular/material';
 import 'hammerjs';
 
-import { MdDataTableModule } from 'ng2-md-datatable';
 import { UserComponent } from './components/user/user.component';
 import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
@@ -55,12 +39,28 @@ import { DatepickerComponent } from './components/datepicker/datepicker.componen
 import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import { TopicsPageComponent } from './containers/topics-page';
-import { CurrenUserIdEffects } from 'app/effects/currentUserId';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatProgressBarModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatToolbarModule,
+  MatTooltipModule
+} from '@angular/material';
+import { MatDataTableModule } from 'ng2-md-datatable';
+import { CurrentUserIdEffects } from './effects/currentUserId';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
     tokenGetter: (() => localStorage.getItem('access_token')),
-    globalHeaders: [{'Content-Type': 'application/json'}],
+    globalHeaders: [{ 'Content-Type': 'application/json' }],
   }), http, options);
 }
 
@@ -81,10 +81,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TopicAddOrEditPopupComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true }),
     BrowserAnimationsModule,
     StoreModule.forRoot(reducers),
     StoreRouterConnectingModule,
@@ -92,22 +92,23 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     EffectsModule.forRoot([
       TopicsEffects,
       UsersEffects,
-      CurrenUserIdEffects,
+      CurrentUserIdEffects,
     ]),
-    MdIconModule,
-    MdButtonModule,
-    MdCheckboxModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdDataTableModule,
-    MdProgressBarModule,
-    MdSnackBarModule,
-    MdDatepickerModule,
-    MdNativeDateModule,
-    MdInputModule,
-    MdDialogModule,
-    MdSelectModule,
-    MdMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatDataTableModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatMenuModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     AuthService,

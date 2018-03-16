@@ -1,16 +1,16 @@
 <main class="container">
   <button
-		*ngIf="currentUserId"
-		class="topic-add-button"
-		(click)="openAddTopicDialog()"
-		md-fab
-		mdTooltip="Add new topic"
-		mdTooltipPosition="above">
-    <md-icon>add</md-icon>
+    *ngIf="currentUserId"
+    class="topic-add-button"
+    (click)="openAddTopicDialog()"
+    mat-fab
+    matTooltip="Add new topic"
+    matTooltipPosition="above">
+    <mat-icon>add</mat-icon>
   </button>
 
-	<ng2-md-datatable (sortChange)="onSortChange($event)">
-		<ng2-md-datatable-header>
+  <ng2-md-datatable (sortChange)="onSortChange($event)">
+    <ng2-md-datatable-header>
       <ng2-md-datatable-column sortableValue="name">Topic</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="speakerId">Speaker</ng2-md-datatable-column>
       <ng2-md-datatable-column sortableValue="presentationDate">Date</ng2-md-datatable-column>
@@ -20,116 +20,120 @@
       <ng2-md-datatable-column sortableValue="likes" numeric>Likes</ng2-md-datatable-column>
       <ng2-md-datatable-column *ngIf="currentUserId">Like</ng2-md-datatable-column>
       <ng2-md-datatable-column *ngIf="currentUserId">Edit</ng2-md-datatable-column>
-			<ng2-md-datatable-column *ngIf="currentUserId">Delete topic</ng2-md-datatable-column>
-		</ng2-md-datatable-header>
+      <ng2-md-datatable-column *ngIf="currentUserId">Delete topic</ng2-md-datatable-column>
+    </ng2-md-datatable-header>
 
-		<tbody>
-			<ng2-md-datatable-row class="topic__table-row" *ngFor="let topic of topics" [selectableValue]="topic.name">
-        <!-- Topic -->
-        <td>{{topic.name}}</td>
+    <tbody>
+    <ng2-md-datatable-row class="topic__table-row" *ngFor="let topic of topics" [selectableValue]="topic.name">
+      <!-- Topic -->
+      <td>{{topic.name}}</td>
 
-        <!-- Speaker -->
-        <td>
-          <app-user-dropdown
-            *ngIf="users"
-            [users]="users"
-            [selectedSpeakerId]="topic.speakerId"
-            [disabled]="!currentUserId"
-            (speakerSelected)="handleInputChange($event, 'speakerId', topic._id)">
-          </app-user-dropdown>
-        </td>
+      <!-- Speaker -->
+      <td>
+        <app-user-dropdown
+          *ngIf="users"
+          [users]="users"
+          [selectedSpeakerId]="topic.speakerId"
+          [disabled]="!currentUserId"
+          (speakerSelected)="handleInputChange($event, 'speakerId', topic._id)">
+        </app-user-dropdown>
+      </td>
 
-        <!-- Date -->
-        <td>
-          <app-datepicker
-            [minDate]="!topic.presented && minDate"
-            [selectedDate]="topic.presentationDate"
-            [disabled]="!currentUserId"
-            (dateChanged)="handleInputChange($event, 'presentationDate', topic._id)">
-          </app-datepicker>
-        </td>
+      <!-- Date -->
+      <td>
+        <app-datepicker
+          [minDate]="!topic.presented && minDate"
+          [selectedDate]="topic.presentationDate"
+          [disabled]="!currentUserId"
+          (dateChanged)="handleInputChange($event, 'presentationDate', topic._id)">
+        </app-datepicker>
+      </td>
 
-        <!-- Presented -->
-        <td class="topic__presented-cell">
-          <md-checkbox
-            [checked]="topic.presented"
-            [indeterminate]="!topic.presented && topic.speakerId"
-            [align]="'start'"
-            [disabled]="!currentUserId || !topic.speakerId || !topic.presentationDate"
-            (change)="handleInputChange($event, 'presented', topic._id)">
-          </md-checkbox>
-        </td>
+      <!-- Presented -->
+      <td class="topic__presented-cell">
+        <mat-checkbox
+          [checked]="topic.presented"
+          [indeterminate]="!topic.presented && topic.speakerId"
+          [align]="'start'"
+          [disabled]="!currentUserId || !topic.speakerId || !topic.presentationDate"
+          (change)="handleInputChange($event, 'presented', topic._id)">
+        </mat-checkbox>
+      </td>
 
-        <!-- Slides -->
-        <td>
-          <a
-            class="topic__link-to-slides"
-            *ngIf="topic.linkToSlides; else notProvided"
-            [attr.href]="topic.linkToSlides"
-            target="_blank">
-            <md-icon mdTooltip="Link to the slides" mdTooltipPosition="above">open_in_new</md-icon>
-          </a>
-          <ng-template #notProvided>
-            <md-icon mdTooltip="Link not provided" mdTooltipPosition="above">remove</md-icon>
-          </ng-template>
-        </td>
+      <!-- Slides -->
+      <td>
+        <a
+          class="topic__link-to-slides"
+          *ngIf="topic.linkToSlides; else notProvided"
+          [attr.href]="topic.linkToSlides"
+          target="_blank">
+          <mat-icon matTooltip="Link to the slides" matTooltipPosition="above">open_in_new</mat-icon>
+        </a>
+        <ng-template #notProvided>
+          <mat-icon matTooltip="Link not provided" matTooltipPosition="above">remove</mat-icon>
+        </ng-template>
+      </td>
 
-        <!-- Useful links -->
-        <td>
-          <div *ngIf="topic.usefulLinks.length; else noUsefulLinks">
-            <button md-icon-button [mdMenuTriggerFor]="menu">
-              <md-icon class="topic__useful-links" mdTooltip="Useful links" mdTooltipPosition="above">more_vert</md-icon>
-            </button>
-            <md-menu #menu="mdMenu">
-              <a
-                *ngFor="let usefulLink of topic.usefulLinks"
-                md-menu-item
-                [attr.href]="usefulLink.link"
-                target="_blank">
-                {{ usefulLink.description }}
-              </a>
-            </md-menu>
-          </div>
-          <ng-template #noUsefulLinks>
-            <md-icon class="topic__no-useful-links" mdTooltip="No useful links" mdTooltipPosition="above">remove</md-icon>
-          </ng-template>
-        </td>
+      <!-- Useful links -->
+      <td>
+        <div *ngIf="topic.usefulLinks.length; else noUsefulLinks">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon class="topic__useful-links" matTooltip="Useful links" matTooltipPosition="above">more_vert
+            </mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <a
+              *ngFor="let usefulLink of topic.usefulLinks"
+              mat-menu-item
+              [attr.href]="usefulLink.link"
+              target="_blank">
+              {{ usefulLink.description }}
+            </a>
+          </mat-menu>
+        </div>
+        <ng-template #noUsefulLinks>
+          <mat-icon class="topic__no-useful-links" matTooltip="No useful links" matTooltipPosition="above">remove
+          </mat-icon>
+        </ng-template>
+      </td>
 
-        <!-- Likes -->
-        <td class="numeric">{{topic.likes}}</td>
+      <!-- Likes -->
+      <td class="numeric">{{topic.likes}}</td>
 
-        <!-- Like -->
-        <td *ngIf="currentUserId">
-          <md-icon
-            class="topic__like"
-            [ngClass]="{ 'active': topic.likedByUser }"
-            [mdTooltip]="(topic.likedByUser ? 'Remove your like from' : 'Like') + ' this topic'"
-            mdTooltipPosition="above"
-            (click)="like(!topic.likedByUser, topic._id)">
-            thumb_up
-          </md-icon>
-        </td>
+      <!-- Like -->
+      <td *ngIf="currentUserId">
+        <mat-icon
+          class="topic__like"
+          [ngClass]="{ 'active': topic.likedByUser }"
+          [matTooltip]="(topic.likedByUser ? 'Remove your like from' : 'Like') + ' this topic'"
+          matTooltipPosition="above"
+          (click)="like(!topic.likedByUser, topic._id)">
+          thumb_up
+        </mat-icon>
+      </td>
 
-        <!-- Edit -->
-        <td *ngIf="currentUserId">
-          <md-icon
-            class="topic__edit"
-            (click)="openEditTopicDialog(topic)">
-            mode_edit
-          </md-icon>
-        </td>
+      <!-- Edit -->
+      <td *ngIf="currentUserId">
+        <mat-icon
+          class="topic__edit"
+          (click)="openEditTopicDialog(topic)">
+          mode_edit
+        </mat-icon>
+      </td>
 
-        <!-- Delete -->
-        <td *ngIf="currentUserId">
-          <md-icon
-            class="topic__delete"
-            mdTooltip="Completely delete the topic"
-            mdTooltipPosition="above"
-            (click)="openDeleteTopicDialog(topic._id)">
-            delete_forever
-          </md-icon>
-        </td>
-			</ng2-md-datatable-row>
-		</tbody>
-	</ng2-md-datatable>
+      <!-- Delete -->
+      <td *ngIf="currentUserId">
+        <mat-icon
+          class="topic__delete"
+          matTooltip="Completely delete the topic"
+          matTooltipPosition="above"
+          (click)="openDeleteTopicDialog(topic._id)">
+          delete_forever
+        </mat-icon>
+      </td>
+
+    </ng2-md-datatable-row>
+
+    </tbody>
+  </ng2-md-datatable>
 </main>

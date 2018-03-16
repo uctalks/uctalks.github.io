@@ -1,27 +1,27 @@
-<span md-dialog-title *ngIf="data?.topic; then editMode else addMode"></span>
-<ng-template #addMode><h1 md-dialog-title>Add new topic</h1></ng-template>
-<ng-template #editMode><h1 md-dialog-title>Edit {{data.topic.name}}</h1></ng-template>
+<span mat-dialog-title *ngIf="data?.topic; then editMode else addMode"></span>
+<ng-template #addMode><h1 mat-dialog-title>Add new topic</h1></ng-template>
+<ng-template #editMode><h1 mat-dialog-title>Edit {{data.topic.name}}</h1></ng-template>
 
 <form>
   <div class="edit-form-inputs">
-    <md-input-container class="edit-form-input">
+    <mat-input-container class="edit-form-input">
       <input
-        mdInput
+        matInput
         placeholder="Name"
         name="topic.name"
         [value]="topicProps?.name"
         (blur)="handleChange($event, 'name')" />
-    </md-input-container>
+    </mat-input-container>
 
-    <md-checkbox
+    <mat-checkbox
       class="edit-form-input"
       [checked]="topicProps?.presented"
       [indeterminate]="!topicProps?.presented && topicProps?.speakerId"
       [align]="'start'"
-      [mdTooltip]="'Mark as ' + (topicProps?.presented ? 'not' : '') + ' presented'"
-      mdTooltipPosition="above"
+      [matTooltip]="'Mark as ' + (topicProps?.presented ? 'not' : '') + ' presented'"
+      matTooltipPosition="above"
       (change)="handleChange($event, 'presented')">
-    </md-checkbox>
+    </mat-checkbox>
 
     <app-datepicker
       class="edit-form-input"
@@ -32,76 +32,75 @@
       (dateChanged)="handleChange($event, 'presentationDate')">
     </app-datepicker>
 
-    <md-icon
+    <mat-icon
       *ngIf="topicProps?.presentationDate"
       class="reset-button"
-      mdTooltip="Reset date"
-      mdTooltipPosition="above"
+      matTooltip="Reset date"
+      matTooltipPosition="above"
       (click)="resetProperty('presentationDate')">
       clear
-    </md-icon>
+    </mat-icon>
 
     <app-user-dropdown
       class="edit-form-input edit-form-input_speaker"
       [users]="users$ | async"
-      floatPlaceholder="auto"
       [selectedSpeakerId]="topicProps?.speakerId"
       [required]="topicProps?.presented"
       (speakerSelected)="handleChange($event, 'speakerId')">
     </app-user-dropdown>
 
-    <md-icon
+    <mat-icon
       *ngIf="topicProps?.speakerId"
       class="reset-button"
-      mdTooltip="Reset speaker"
-      mdTooltipPosition="above"
+      matTooltip="Reset speaker"
+      matTooltipPosition="above"
       (click)="resetProperty('speakerId')">
       clear
-    </md-icon>
+    </mat-icon>
   </div>
 
   <div *ngIf="topicProps?.presented" class="edit-form-inputs">
-    <md-input-container class="edit-form-input">
+    <mat-input-container class="edit-form-input">
       <input
-        mdInput
+        matInput
         placeholder="Link to slides"
         name="topic.linkToSlides"
         [value]="topicProps?.linkToSlides || ''"
         (blur)="handleChange($event, 'linkToSlides')"/>
-    </md-input-container>
+    </mat-input-container>
 
-    <md-icon
+    <mat-icon
       *ngIf="topicProps?.linkToSlides"
       class="reset-button"
-      mdTooltip="Reset the slides link"
-      mdTooltipPosition="above"
+      matTooltip="Reset the slides link"
+      matTooltipPosition="above"
       (click)="resetProperty('linkToSlides')">
       clear
-    </md-icon>
+    </mat-icon>
   </div>
 
   <div *ngIf="topicProps?.presented" class="edit-form-inputs">
     <i class="useful-links__header">Add new useful link =></i>
 
-    <md-input-container class="edit-f<mm-input">
+    <mat-input-container class="edit-f<mm-input">
       <input
-        mdInput
+        matInput
         placeholder="Description"
         name="topic.usefulLink.description"
         [(ngModel)]="newUsefulLink.description"/>
-    </md-input-container>
+    </mat-input-container>
 
-    <md-input-container class="edit-form-input">
+    <mat-input-container class="edit-form-input">
       <input
         type="url"
-        mdInput
+        matInput
         placeholder="Link"
         name="topic.usefulLink.link"
         [(ngModel)]="newUsefulLink.link"/>
-    </md-input-container>
+    </mat-input-container>
 
     <button
-      md-button
+      mat-button
       (click)="addUsefulLink()">
       Add
     </button>
@@ -112,37 +111,37 @@
     <i class="useful-links__header useful-links__header_update">Update useful links:</i>
 
     <div *ngFor="let usefulLink of topicProps?.usefulLinks">
-      <md-input-container class="edit-form-input">
+      <mat-input-container class="edit-form-input">
         <input
-          mdInput
+          matInput
           placeholder="Description"
           name="topic.usefulLink.description"
           [value]="usefulLink?.description"
           (blur)="updateUsefulLinks($event, 'description', usefulLink.link)"/>
-      </md-input-container>
+      </mat-input-container>
 
-      <md-input-container class="edit-form-input">
+      <mat-input-container class="edit-form-input">
         <input
           type="url"
-          mdInput
+          matInput
           placeholder="Link"
           name="topic.usefulLink.link"
           [value]="usefulLink?.link"
           (blur)="updateUsefulLinks($event, 'link', usefulLink.link)"/>
-      </md-input-container>
+      </mat-input-container>
 
-      <md-icon
+      <mat-icon
         class="reset-button"
-        mdTooltip="Delete link"
-        mdTooltipPosition="above"
+        matTooltip="Delete link"
+        matTooltipPosition="above"
         (click)="deleteUsefulLink(usefulLink.link)">
         clear
-      </md-icon>
+      </mat-icon>
     </div>
   </div>
 
-  <md-dialog-actions class="edit-form-input">
-    <button md-button [disabled]="!edited || invalid" (click)="closeDialog()">Save</button>
-    <button md-button (click)="closeDialog(true)">Cancel</button>
-  </md-dialog-actions>
+  <mat-dialog-actions class="edit-form-input">
+    <button mat-button [disabled]="!edited || invalid" (click)="closeDialog()">Save</button>
+    <button mat-button (click)="closeDialog(true)">Cancel</button>
+  </mat-dialog-actions>
 </form>
