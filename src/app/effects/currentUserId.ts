@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/switchMap';
-import {Action, Store} from '@ngrx/store';
-import {Router} from '@angular/router';
 import * as users from '../actions/currentUserId';
-import { UserService } from '../services/user-service/user.service';
+import { PostUserAction, PostUserSuccessAction, UserIsLoggedInAction } from '../actions/currentUserId';
 import { AuthService } from '../services/auth-service/auth.service';
-import {PostUserAction, PostUserSuccessAction, UserIsLoggedInAction} from '../actions/currentUserId';
 import { AddOrUpdateUserAction } from '../actions/users';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import {State} from '../reducers/topics';
-import {MatSnackBar} from '@angular/material';
+import { State } from '../reducers/topics';
+import { IUserService, USER_SERVICE } from '../users/user-service/types';
 
 @Injectable()
 export class CurrentUserIdEffects {
@@ -41,21 +41,21 @@ export class CurrentUserIdEffects {
         console.error(error);
         return Observable.of(new users.CheckUserLoginFailAction(error));
       }),
-  );
+    );
 
   @Effect() postUsers$ = this.actions$
     .ofType(users.POST_USER)
-    .switchMap((action: PostUserAction) => this.userService.addOrUpdateUser(action.payload.user)
+    .switchMap((action: PostUserAction) => this.userService.setUser(action.payload.user)
       .map(user => {
         this.store.dispatch(new AddOrUpdateUserAction(user));
         this.store.dispatch(new UserIsLoggedInAction({ id: user._id }));
-        return new users.PostUserSuccessAction({ user, session: action.payload.session })
+        return new users.PostUserSuccessAction({ user, session: action.payload.session });
       })
       .catch(error => {
         this.snackBar.open('Cannot post user', 'close', { duration: 3000 });
-        return Observable.of(new users.PostUserFailAction(error))
+        return Observable.of(new users.PostUserFailAction(error));
       }),
-  );
+    );
 
   @Effect({ dispatch: false }) postUsersSuccess$ = this.actions$
     .ofType(users.POST_USER_SUCCESS)
@@ -80,7 +80,6 @@ export class CurrentUserIdEffects {
     private router: Router,
     private snackBar: MatSnackBar,
     private store: Store<State>,
-    private userService: UserService,
-  ) {
-  }
+    @Inject(USER_SERVICE) private userService: IUserService,
+  ) {}
 }

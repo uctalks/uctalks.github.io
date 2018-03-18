@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { MatSnackBar } from '@angular/material';
 import * as users from '../actions/users';
-import { UserService } from '../services/user-service/user.service';
 import { AuthService } from '../services/auth-service/auth.service';
+import { IUserService, USER_SERVICE } from '../users/user-service/types';
 
 @Injectable()
 export class UsersEffects {
@@ -24,7 +24,7 @@ export class UsersEffects {
     private actions$: Actions,
     private auth: AuthService,
     private snackBar: MatSnackBar,
-    private userService: UserService,
+    @Inject(USER_SERVICE) private userService: IUserService,
   ) {
   }
 }

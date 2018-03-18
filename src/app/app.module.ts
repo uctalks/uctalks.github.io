@@ -17,7 +17,6 @@ import { TopicsEffects } from './effects/topics';
 import { UsersEffects } from './effects/users';
 
 import { reducers } from './reducers';
-
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
 
 import { AppComponent } from './app.component';
@@ -33,7 +32,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 
 import { UserComponent } from './components/user/user.component';
-import { UserService } from './services/user-service/user.service';
 import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
 import { DatepickerComponent } from './components/datepicker/datepicker.component';
 import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
@@ -56,6 +54,7 @@ import {
 } from '@angular/material';
 import { MatDataTableModule } from 'ng2-md-datatable';
 import { CurrentUserIdEffects } from './effects/currentUserId';
+import { UsersModule } from './users/users.module';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -108,7 +107,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatDialogModule,
     MatSelectModule,
     MatMenuModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    UsersModule
   ],
   providers: [
     AuthService,
@@ -119,7 +119,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       deps: [Http, RequestOptions],
     },
     TopicsService,
-    UserService,
   ],
   bootstrap: [AppComponent],
 })

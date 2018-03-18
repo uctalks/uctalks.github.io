@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import User from '../models/user';
+import { IUser } from '../models/user';
 
 export const CHECK_USER_LOGIN = '[Users] Check User Login';
 export const CHECK_USER_LOGIN_FAIL = '[Users] Check User Login Fail';
@@ -47,7 +47,7 @@ export class PostUserAction implements Action {
   readonly type = POST_USER;
 
   constructor(public payload: {
-    user: { name: string, sub: string, picture: string },
+    user: IUser,
     session: { expiresIn: string, accessToken: string, idToken: string },
    }) {
   }
@@ -56,7 +56,7 @@ export class PostUserAction implements Action {
 export class PostUserSuccessAction implements Action {
   readonly type = POST_USER_SUCCESS;
 
-  constructor(public payload: { user: User, session: { expiresIn: string, accessToken: string, idToken: string } }) {
+  constructor(public payload: { user: IUser, session: { expiresIn: string, accessToken: string, idToken: string } }) {
   }
 }
 
