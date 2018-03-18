@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-import { TopicsService } from '../services/topics-service/topics.service';
 import * as topics from '../actions/topics';
 import {
   AddTopicAction,
@@ -19,6 +18,7 @@ import { TopicDeletePopupComponent } from '../components/topic-delete-popup/topi
 import { TopicAddOrEditPopupComponent } from '../components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
+import { ITopicsService, TOPICS_SERVICE } from '../topics/topics-service/types';
 
 @Injectable()
 export class TopicsEffects {
@@ -128,9 +128,10 @@ export class TopicsEffects {
     .do(() => this.dialog.closeAll());
 
 
-  constructor(private actions$: Actions,
-              private snackBar: MatSnackBar,
-              private dialog: MatDialog,
-              private topicsService: TopicsService,) {
-  }
+  constructor(
+    private actions$: Actions,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    @Inject(TOPICS_SERVICE) private topicsService: ITopicsService,
+  ) {}
 }

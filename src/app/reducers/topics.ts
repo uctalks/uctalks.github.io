@@ -1,7 +1,7 @@
 import Topic from '../models/topic';
 import * as topics from '../actions/topics';
 import {DeleteTopicSuccessAction, SortTopicsAction} from '../actions/topics';
-import {TopicsSortTypes, TopicsSortBy} from '../services/topics-service/topics.service';
+import { TopicsSortBy, TopicsSortTypes } from '../topics/types';
 
 export interface State {
   entities: { [id: string]: Topic };

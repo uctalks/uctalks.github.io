@@ -1,6 +1,6 @@
 import { UsefulLink } from './useful-link.interface';
 
-interface TopicProps {
+export interface ITopicProps {
   linkToSlides?: string | null;
   name?: string | null;
   presentationDate?: Date | null;
@@ -9,4 +9,4 @@ interface TopicProps {
   usefulLinks?: Array<UsefulLink>;
 }
 
-export default TopicProps;
+export default ITopicProps;

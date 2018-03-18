@@ -1,5 +1,5 @@
-interface NewTopicProps {
+export interface INewTopicProps {
   name: string;
 }
 
-export default NewTopicProps;
+export default INewTopicProps;

@@ -25,7 +25,6 @@ import { TopicsComponent } from './components/topics/topics.component';
 
 import { AuthService } from './services/auth-service/auth.service';
 import { AuthGuardService } from './services/auth-service/auth-guard.service';
-import { TopicsService } from './services/topics-service/topics.service';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -55,6 +54,7 @@ import {
 import { MatDataTableModule } from 'ng2-md-datatable';
 import { CurrentUserIdEffects } from './effects/currentUserId';
 import { UsersModule } from './users/users.module';
+import { TopicsModule } from './topics/topics.module';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -108,6 +108,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatSelectModule,
     MatMenuModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    TopicsModule,
     UsersModule
   ],
   providers: [
@@ -118,7 +119,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions],
     },
-    TopicsService,
   ],
   bootstrap: [AppComponent],
 })

@@ -1,6 +1,6 @@
 import { UsefulLink } from '../components/topics/useful-link.interface';
 
-interface Topic {
+export interface ITopic {
   _id: string; // database id
   likes: number; // likes count
   likedByUser?: boolean, // liked by current user (if any)
@@ -13,4 +13,4 @@ interface Topic {
   usersLikedIds: string[], // ids of users, who liked this topic or empty array
 }
 
-export default Topic;
+export default ITopic;

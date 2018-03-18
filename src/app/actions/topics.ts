@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import NewTopicProps from '../components/topics/new-topic-props.interface';
 import TopicProps from '../components/topics/topic-props.interface';
 import Topic from '../models/topic';
-import {TopicsSortBy, TopicsSortTypes} from '../services/topics-service/topics.service';
+import { TopicsSortBy, TopicsSortTypes } from '../topics/types';
 
 export const ADD_TOPIC = '[Topics] Add Topic';
 export const ADD_TOPIC_SUCCESS = '[Topics] Add Topic Success';

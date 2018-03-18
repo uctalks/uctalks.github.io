@@ -6,7 +6,7 @@ import Topic from '../../models/topic';
 import User from '../../models/user';
 import TopicProps from './topic-props.interface';
 import * as topicsActions from '../../actions/topics';
-import {TopicsSortTypes, TopicsSortBy} from '../../services/topics-service/topics.service';
+import { TopicsSortBy, TopicsSortTypes } from '../../topics/types';
 
 @Component({
   selector: 'app-topics',
