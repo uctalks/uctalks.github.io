@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
-import { AuthorizeOptions } from 'auth0-js';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/observable/bindNodeCallback';
+import { Auth0DecodedHash, AuthorizeOptions } from 'auth0-js';
 import { Observable } from 'rxjs/Observable';
+import { bindNodeCallback } from 'rxjs/observable/bindNodeCallback';
+
 import { AUTH_CONFIG } from './auth-config';
+import { IAuthenticatedUser, IAuthService } from './types';
 
 @Injectable()
-export class AuthService {
-  // Configure Auth0
-  public auth0 = new auth0.WebAuth(AUTH_CONFIG);
+export class AuthService implements IAuthService {
+  private readonly auth0 = new auth0.WebAuth(AUTH_CONFIG);
 
-  constructor(private router: Router,) {
+  constructor(private readonly router: Router) {
   }
 
   public get isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
   }
@@ -36,6 +34,7 @@ export class AuthService {
 
   public login(): void {
     /**
+     * // TODO remove if possible
      * Cast options to AuthorizeOptions since prompt property is needed for
      * the google account selection but it is not present in AuthorizeOptions interface
      */
@@ -43,11 +42,11 @@ export class AuthService {
     this.auth0.authorize(options);
   }
 
-  public handleAuthentication(): Observable<any> {
-    return Observable.bindNodeCallback(this.auth0.parseHash.bind(this.auth0))();
+  public handleAuthentication(): Observable<Auth0DecodedHash> {
+    return bindNodeCallback(this.auth0.parseHash.bind(this.auth0))();
   }
 
-  public setSession({ expiresIn, accessToken, idToken, userId }): void {
+  public setSession({ expiresIn, accessToken, idToken, userId }: IAuthenticatedUser): void {
     const expiresAt = JSON.stringify((expiresIn * 10000) + new Date().getTime());
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('access_token', accessToken);
@@ -56,13 +55,10 @@ export class AuthService {
   }
 
   public logout(): void {
-    // Remove tokens,expiry time and userId from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('userId');
-
-    // Go back to the home route
     this.router.navigate(['/home']);
   }
 }
