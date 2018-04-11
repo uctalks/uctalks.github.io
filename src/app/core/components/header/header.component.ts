@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../../reducers/';
-import { LogoutAction } from '../../actions/currentUserId';
-import { AuthService } from '../../services/auth-service/auth.service';
-import { AutomationLocator } from '../../../../automation-locators.enum';
+import { LogoutAction } from '../../../auth/actions/auth';
+import { AuthService } from '../../../auth/services/auth.service';
+import { AutomationLocator } from '../../../../../automation-locators.enum';
+import { IAuthState } from '../../../auth/reducers';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ export class HeaderComponent {
 
   public headerTittleLocator: AutomationLocator = AutomationLocator.HeaderTitle;
 
-  constructor(public auth: AuthService, private store: Store<State>) {}
+  constructor(public auth: AuthService, private store: Store<IAuthState>) {}
 
   logout() {
     this.store.dispatch(new LogoutAction());

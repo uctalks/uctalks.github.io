@@ -1,126 +1,49 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Http, HttpModule, RequestOptions } from '@angular/http';
+import { HttpModule } from '@angular/http'; // TODO remove?
+import { FormsModule } from '@angular/forms'; // TODO remove?
+import { RouterModule } from '@angular/router';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AppRoutingModule } from './app-routing.module';
-
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { environment } from '../environments/environment';
-import { TopicsEffects } from './effects/topics';
-import { UsersEffects } from './effects/users';
 
-import { reducers } from './reducers';
-import { AuthConfig, AuthHttp } from 'angular2-jwt';
-
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
-import { TopicsComponent } from './components/topics/topics.component';
-
-import { AuthService } from './services/auth-service/auth.service';
-import { AuthGuardService } from './services/auth-service/auth-guard.service';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import 'hammerjs';
-
-import { UserComponent } from './components/user/user.component';
-import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
-import { DatepickerComponent } from './components/datepicker/datepicker.component';
-import { TopicDeletePopupComponent } from './components/topic-delete-popup/topic-delete-popup.component';
-import { TopicAddOrEditPopupComponent } from './components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
-import { TopicsPageComponent } from './containers/topics-page';
-import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatIconModule,
-  MatInputModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatProgressBarModule,
-  MatSelectModule,
-  MatSnackBarModule,
-  MatToolbarModule,
-  MatTooltipModule
-} from '@angular/material';
-import { MatDataTableModule } from 'ng2-md-datatable';
-import { CurrentUserIdEffects } from './effects/currentUserId';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core/core.module';
+import { MaterialModule } from 'app/material/material.module';
 import { TopicsModule } from './topics/topics.module';
-
-export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp(new AuthConfig({
-    tokenGetter: (() => localStorage.getItem('access_token')),
-    globalHeaders: [{ 'Content-Type': 'application/json' }],
-  }), http, options);
-}
+import { ROUTES } from './app.routes';
+import { metaReducers, reducers } from './reducers';
+import { CustomRouterStateSerializer } from './utils';
+import { RootComponent } from './root-component/root.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    TopicsComponent,
-    TopicDeletePopupComponent,
-    TopicAddOrEditPopupComponent,
-    UserComponent,
-    UserDropdownComponent,
-    DatepickerComponent,
-    TopicsPageComponent,
-  ],
-  entryComponents: [
-    TopicDeletePopupComponent,
-    TopicAddOrEditPopupComponent,
-  ],
   imports: [
-    AppRoutingModule,
+    AuthModule.forRoot(),
     BrowserModule,
+    CoreModule.forRoot(),
+    EffectsModule.forRoot([]),
     FormsModule,
-    HttpModule,
-    BrowserAnimationsModule,
-    StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule,
-    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
-    EffectsModule.forRoot([
-      TopicsEffects,
-      UsersEffects,
-      CurrentUserIdEffects,
-    ]),
-    MatIconModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatDataTableModule,
-    MatProgressBarModule,
-    MatSnackBarModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatMenuModule,
+    HttpModule, // TODO replace with HttpClientModule
+    MaterialModule,
+    RouterModule.forRoot(ROUTES),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
+    StoreDevtoolsModule.instrument({
+      name: 'UC Talks store',
+      logOnly: environment.production,
+    }),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     TopicsModule,
-    UsersModule
   ],
   providers: [
-    AuthService,
-    AuthGuardService,
-    {
-      provide: AuthHttp,
-      useFactory: authHttpServiceFactory,
-      deps: [Http, RequestOptions],
-    },
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [RootComponent],
 })
 export class AppModule {
 }
