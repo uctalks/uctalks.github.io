@@ -1,3 +1,9 @@
-export type TopicsSortBy = 'name' | 'likes' | 'presentationDate' | 'speakerId' | 'presented';
+export const enum TopicsSortBy {
+  Name = 'name',
+  Likes = 'likes',
+  PresentationDate = 'presentationDate',
+  SpeakerId = 'speakerId',
+  Presented = 'presented',
+}
 
-export enum TopicsSortTypes { Descending = 1, Ascending }
+export const enum TopicsSortTypes { Descending = 1, Ascending }

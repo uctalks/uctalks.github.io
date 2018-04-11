@@ -1,0 +1,61 @@
+@import '../../../../styles';
+
+.container {
+  width: 1160px;
+  padding-top: 50px;
+  margin: 0 auto;
+}
+
+.topic-add-button {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+
+@mixin topic-control-button($active-color) {
+  cursor: pointer;
+  transition: color .5s;
+
+  &:hover {
+    color: $active-color;
+  }
+}
+
+.topic__like {
+  @include topic-control-button(lighten(mat-color($uc-talks-accent), 30%));
+  color: lightgrey;
+
+  &.active {
+    color: mat-color($uc-talks-accent);
+  }
+}
+
+.topic__edit,
+.topic__link-to-slides,
+.topic__useful-links {
+  @include topic-control-button(mat-color($uc-talks-accent));
+}
+
+.topic__delete {
+  @include topic-control-button(mat-color($uc-talks-warn));
+}
+
+.topic__presented-cell {
+  text-align: center;
+}
+
+.topic__table-row {
+  height: 3.5rem;
+}
+
+.topic__no-useful-links {
+  padding-left: 8px;
+}
+
+[sortableValue=presentationDate] {
+  width: 125px;
+}
+
+[sortableValue=likes] {
+  padding-left: 0;
+}
