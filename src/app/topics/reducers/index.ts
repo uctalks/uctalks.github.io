@@ -4,6 +4,7 @@ import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../reducers';
 import * as fromTopics from './topics';
 import * as fromUsers from './users';
+import * as fromAuth from '../../auth/reducers';
 import { ITopic } from '../models';
 import { TopicsSortBy, TopicsSortTypes } from '../types';
 
@@ -100,7 +101,11 @@ export const getTopicsSort = createSelector(getTopicsEntitiesState, fromTopics.g
 export const getTopics = createSelector(
   getUnsortedTopics,
   getTopicsSort,
-  (unsortedTopics, sort) => sortTopics(unsortedTopics, sort),
+  fromAuth.getCurrentUserId,
+  (unsortedTopics, sort, currentUserId) => sortTopics(unsortedTopics, sort).map(topic => ({
+    ...topic,
+    likedByUser: topic.usersLikedIds.includes(currentUserId),
+  })),
 );
 
 export const { selectAll: getUsers } = fromUsers.adapter.getSelectors(getUserEntitiesState);
