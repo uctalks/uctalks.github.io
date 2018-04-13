@@ -1,6 +1,5 @@
-/**
- * TODO consider injection
- * Uncomment respective line
- */
-export default 'https://uctalks.herokuapp.com';
-// export default 'http://localhost:5000';
+import { environment } from '../../environments/environment';
+
+export default environment.production
+  ? 'https://uctalks.herokuapp.com'
+  : 'https://uct-dev.herokuapp.com';
