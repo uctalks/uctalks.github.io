@@ -8,5 +8,3 @@ export interface ITopicProps {
   speakerId?: string | null;
   usefulLinks?: Array<UsefulLink>;
 }
-
-export default ITopicProps;

@@ -28,7 +28,6 @@ import { RootComponent } from './root-component/root.component';
     CoreModule.forRoot(),
     EffectsModule.forRoot([]),
     FormsModule,
-    HttpModule, // TODO replace with HttpClientModule
     MaterialModule,
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot(reducers, { metaReducers }),

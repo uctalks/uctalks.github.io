@@ -1,31 +1,34 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-import NewTopicProps from '../../components/topics/new-topic-props.interface';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import Topic from '../../models/topic';
-import restPrefix from '../../../core/rest-prefix';
-import TopicProps from '../../components/topics/topic-props.interface';
-import { BaseTopicsService } from './topics-service.base';
+import { restPrefix } from '../../../core/rest-prefix';
+import { ITopic } from '../../models';
+import { INewTopicProps } from '../../components/topics/new-topic-props.interface';
+import { ITopicProps } from '../../components/topics/topic-props.interface';
+import { ITopicsService } from './types';
 
 @Injectable()
-export class TopicsService extends BaseTopicsService {
-  public addTopic(newTopicProps: NewTopicProps): Observable<Topic> {
-    return this.http.post(`${restPrefix}/topics`, { newTopicProps })
-      .map(res => res.json());
+export class TopicsService implements ITopicsService {
+  constructor(private readonly http: HttpClient) {
   }
 
-  public deleteTopic(id): Observable<Topic> {
-    return this.http.delete(`${restPrefix}/topics/${id}`)
-      .map(res => res.json());
+  public addTopic(newTopicProps: INewTopicProps): Observable<ITopic> {
+    return this.http.post<ITopic>(`${restPrefix}/topics`, { newTopicProps });
   }
 
-  public updateTopicById(id: string, updatedTopicProps: TopicProps): Observable<Topic> {
-    return this.http.put(`${restPrefix}/topics/${id}`, { updatedTopicProps })
-      .map(res => res.json());
+  public deleteTopic(id): Observable<ITopic> {
+    return this.http.delete<ITopic>(`${restPrefix}/topics/${id}`);
   }
 
-  public updateTopicLikesById(id: string, liked: boolean, userId: string | null): Observable<Topic> {
-    return this.http.put(`${restPrefix}/topics/${id}/likes`, { liked, userId })
-      .map(res => res.json());
+  public getTopics(): Observable<ReadonlyArray<ITopic>> {
+    return this.http.get<ReadonlyArray<ITopic>>(`${restPrefix}/topics`);
+  }
+
+  public updateTopicById(id: string, updatedTopicProps: ITopicProps): Observable<ITopic> {
+    return this.http.put<ITopic>(`${restPrefix}/topics/${id}`, { updatedTopicProps });
+  }
+
+  public updateTopicLikesById(id: string, liked: boolean, userId: string | null): Observable<ITopic> {
+    return this.http.put<ITopic>(`${restPrefix}/topics/${id}/likes`, { liked, userId });
   }
 }

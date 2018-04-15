@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { StoreModule } from '@ngrx/store';
@@ -27,6 +28,7 @@ import { UserComponent } from './components/user/user.component';
     CommonModule,
     EffectsModule.forFeature([TopicsEffects, UsersEffects]),
     FormsModule,
+    HttpClientModule,
     MaterialModule,
     StoreModule.forFeature('topics', reducers),
   ],
