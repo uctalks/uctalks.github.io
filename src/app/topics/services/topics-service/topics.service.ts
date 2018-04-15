@@ -20,8 +20,8 @@ export class TopicsService implements ITopicsService {
     return this.http.delete<ITopic>(`${restPrefix}/topics/${id}`);
   }
 
-  public getTopics(): Observable<ReadonlyArray<ITopic>> {
-    return this.http.get<ReadonlyArray<ITopic>>(`${restPrefix}/topics`);
+  public getTopics(): Observable<Array<ITopic>> {
+    return this.http.get<Array<ITopic>>(`${restPrefix}/topics`);
   }
 
   public updateTopicById(id: string, updatedTopicProps: ITopicProps): Observable<ITopic> {

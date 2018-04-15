@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import { Store } from '@ngrx/store';
+
 import * as fromTopics from '../../reducers';
-import Topic from '../../models/topic';
-import { IUser } from '../../models/user';
-import TopicProps from './topic-props.interface';
+import { ITopic, IUser } from '../../models';
 import * as topicsActions from '../../actions/topics';
 import { TopicsSortBy, TopicsSortTypes } from '../../types';
+import { ITopicProps } from './topic-props.interface';
 
 @Component({
   selector: 'app-topics',
@@ -14,13 +14,14 @@ import { TopicsSortBy, TopicsSortTypes } from '../../types';
   styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent {
-  @Input() public topics: Topic[];
-  @Input() public users: IUser[];
+  @Input() public topics: Array<ITopic>;
+  @Input() public users: Array<IUser>;
   @Input() public currentUserId: string;
 
   public minDate: Date = new Date();
 
-  constructor(private store: Store<fromTopics.IState>) {}
+  constructor(private store: Store<fromTopics.IState>) {
+  }
 
   public like(liked: boolean, topicId: string) {
     this.store.dispatch(new topicsActions.LikeAction({ topicId, liked, userId: this.currentUserId }));
@@ -35,7 +36,7 @@ export class TopicsComponent {
   }
 
   public handleInputChange(
-    userInput: MatCheckboxChange | FocusEvent | Date | boolean | string, property: keyof TopicProps,
+    userInput: MatCheckboxChange | FocusEvent | Date | boolean | string, property: keyof ITopicProps,
     id: string,
   ) {
     const previousValue = this.topics.find(topic => topic._id === id)[property];
@@ -55,7 +56,7 @@ export class TopicsComponent {
     }
   }
 
-  public openEditTopicDialog(topic: Topic) {
+  public openEditTopicDialog(topic: ITopic) {
     this.store.dispatch(new topicsActions.OpenEditTopicModalAction({ topic }));
   }
 
@@ -63,7 +64,7 @@ export class TopicsComponent {
     this.store.dispatch(new topicsActions.OpenDeleteTopicModalAction({ id }));
   }
 
-  private updateTopicProps(id: string, updatedTopicProps: TopicProps ): void {
+  private updateTopicProps(id: string, updatedTopicProps: ITopicProps): void {
     this.store.dispatch(new topicsActions.UpdateTopicAction({ id, updatedTopicProps }));
   }
 }

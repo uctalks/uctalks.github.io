@@ -5,29 +5,17 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
 import * as topics from '../actions/topics';
-import {
-  AddTopicAction,
-  CloseAddTopicModalAction,
-  CloseDeleteTopicModalActionAndDelete,
-  CloseEditTopicModalAction,
-  DeleteTopicAction,
-  LikeAction,
-  OpenDeleteTopicModalAction,
-  OpenEditTopicModalAction,
-  TopicsActions,
-  UpdateTopicAction
-} from '../actions/topics';
 import { TopicDeletePopupComponent } from '../components/topic-delete-popup/topic-delete-popup.component';
 import { TopicAddOrEditPopupComponent } from '../components/topic-add-or-edit-popup/topic-add-or-edit-popup.component';
-import NewTopicProps from '../components/topics/new-topic-props.interface';
-import TopicProps from '../components/topics/topic-props.interface';
+import { INewTopicProps } from '../components/topics/new-topic-props.interface';
+import { ITopicProps } from '../components/topics/topic-props.interface';
 import { ITopicsService, TOPICS_SERVICE } from '../services/topics-service/types';
 
 @Injectable()
 export class TopicsEffects {
   @Effect()
   public readonly loadTopics$ = this.actions$.pipe(
-    ofType(TopicsActions.Load),
+    ofType(topics.ActionsNames.Load),
     switchMap(() => this.topicsService.getTopics().pipe(
       map(payload => new topics.LoadTopicsSuccessAction(payload)),
       catchError(error => {
@@ -39,8 +27,8 @@ export class TopicsEffects {
 
   @Effect()
   public readonly addTopic$ = this.actions$.pipe(
-    ofType(TopicsActions.Add),
-    switchMap((action: AddTopicAction) => this.topicsService.addTopic(action.payload.newTopicProps).pipe(
+    ofType(topics.ActionsNames.Add),
+    switchMap((action: topics.AddTopicAction) => this.topicsService.addTopic(action.payload.newTopicProps).pipe(
       map(addedTopic => {
         this.snackBar.open('New topic has been added', 'close', { duration: 3000 });
         return new topics.AddTopicSuccessAction({ addedTopic });
@@ -54,8 +42,8 @@ export class TopicsEffects {
 
   @Effect()
   public readonly updateTopic$ = this.actions$.pipe(
-    ofType(TopicsActions.Update),
-    switchMap((action: UpdateTopicAction) => this.topicsService.updateTopicById(action.payload.id, action.payload.updatedTopicProps)
+    ofType(topics.ActionsNames.Update),
+    switchMap((action: topics.UpdateTopicAction) => this.topicsService.updateTopicById(action.payload.id, action.payload.updatedTopicProps)
       .pipe(
         map(updatedTopic => {
           this.snackBar.open('Topic has been updated', 'close', { duration: 3000 });
@@ -68,11 +56,11 @@ export class TopicsEffects {
     ),
   );
 
-  // @TODO think how we can combine with updateTopic$
+  // TODO think how we can combine with updateTopic$
   @Effect()
   public readonly likeTopic$ = this.actions$.pipe(
-    ofType(TopicsActions.Like),
-    switchMap((action: LikeAction) => {
+    ofType(topics.ActionsNames.Like),
+    switchMap((action: topics.LikeAction) => {
       const { topicId, userId, liked } = action.payload;
       return this.topicsService.updateTopicLikesById(topicId, liked, userId).pipe(
         map(updatedTopic => {
@@ -89,8 +77,8 @@ export class TopicsEffects {
 
   @Effect()
   public readonly removeTopic$ = this.actions$.pipe(
-    ofType(TopicsActions.Delete),
-    switchMap((action: DeleteTopicAction) => this.topicsService.deleteTopic(action.payload.id).pipe(
+    ofType(topics.ActionsNames.Delete),
+    switchMap((action: topics.DeleteTopicAction) => this.topicsService.deleteTopic(action.payload.id).pipe(
       map(deletedTopic => {
         this.snackBar.open('Topic has been deleted', 'close', { duration: 3000 });
         return new topics.DeleteTopicSuccessAction({ id: deletedTopic._id });
@@ -104,15 +92,15 @@ export class TopicsEffects {
 
   @Effect({ dispatch: false })
   public readonly openAddTopicModal$ = this.actions$.pipe(
-    ofType(TopicsActions.OpenAddModal),
+    ofType(topics.ActionsNames.OpenAddModal),
     tap(() => this.dialog.open(TopicAddOrEditPopupComponent)),
   );
 
   @Effect()
   public readonly closeAddTopicModalAndAdd$ = this.actions$.pipe(
-    ofType(TopicsActions.CloseAddModal),
-    switchMap((action: CloseAddTopicModalAction) => {
-      const { newTopicProps }: { newTopicProps: NewTopicProps } = action.payload;
+    ofType(topics.ActionsNames.CloseAddModal),
+    switchMap((action: topics.CloseAddTopicModalAction) => {
+      const { newTopicProps }: { newTopicProps: INewTopicProps } = action.payload;
       this.dialog.closeAll();
       return of(new topics.AddTopicAction({ newTopicProps }));
     }),
@@ -120,8 +108,8 @@ export class TopicsEffects {
 
   @Effect({ dispatch: false })
   public readonly openEditTopicModal$ = this.actions$.pipe(
-    ofType(TopicsActions.OpenEditModal),
-    tap((action: OpenEditTopicModalAction) => this.dialog.open(
+    ofType(topics.ActionsNames.OpenEditModal),
+    tap((action: topics.OpenEditTopicModalAction) => this.dialog.open(
       TopicAddOrEditPopupComponent,
       { data: { topic: action.payload.topic } })
     ),
@@ -129,9 +117,9 @@ export class TopicsEffects {
 
   @Effect()
   public readonly closeEditTopicModalAndUpdate$ = this.actions$.pipe(
-    ofType(TopicsActions.CloseEditModal),
-    switchMap((action: CloseEditTopicModalAction) => {
-      const { updatedTopicProps, id }: { updatedTopicProps: TopicProps, id: string } = action.payload;
+    ofType(topics.ActionsNames.CloseEditModal),
+    switchMap((action: topics.CloseEditTopicModalAction) => {
+      const { updatedTopicProps, id }: { updatedTopicProps: ITopicProps, id: string } = action.payload;
       this.dialog.closeAll();
       return of(new topics.UpdateTopicAction({ updatedTopicProps, id }));
     }),
@@ -139,14 +127,14 @@ export class TopicsEffects {
 
   @Effect({ dispatch: false })
   public readonly openDeleteTopicModal$ = this.actions$.pipe(
-    ofType(TopicsActions.OpenDeleteModal),
-    tap((action: OpenDeleteTopicModalAction) => this.dialog.open(TopicDeletePopupComponent, { data: { id: action.payload.id } })),
+    ofType(topics.ActionsNames.OpenDeleteModal),
+    tap((action: topics.OpenDeleteTopicModalAction) => this.dialog.open(TopicDeletePopupComponent, { data: { id: action.payload.id } })),
   );
 
   @Effect()
   public readonly closeDeleteTopicModalAndDelete$ = this.actions$.pipe(
-    ofType(TopicsActions.CloseDeleteModal),
-    switchMap((action: CloseDeleteTopicModalActionAndDelete) => {
+    ofType(topics.ActionsNames.CloseDeleteModal),
+    switchMap((action: topics.CloseDeleteTopicModalActionAndDelete) => {
       const { id } = action.payload;
       this.dialog.closeAll();
       return of(new topics.DeleteTopicAction({ id }));
@@ -155,7 +143,7 @@ export class TopicsEffects {
 
   @Effect({ dispatch: false })
   public readonly closeAllModals$ = this.actions$.pipe(
-    ofType(TopicsActions.CloseAllModals),
+    ofType(topics.ActionsNames.CloseAllModals),
     tap(() => this.dialog.closeAll()),
   );
 

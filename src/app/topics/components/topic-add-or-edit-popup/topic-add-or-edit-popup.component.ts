@@ -1,14 +1,14 @@
 import { Component, Inject } from '@angular/core';
-import Topic from '../../models/topic';
-import TopicProps from '../topics/topic-props.interface';
-import NewTopicProps from '../topics/new-topic-props.interface';
-import { UsefulLink } from '../topics/useful-link.interface';
-import { Store } from '@ngrx/store';
-import * as fromTopics from '../../reducers';
-import { CloseAddTopicModalAction, CloseAllModals, CloseEditTopicModalAction } from '../../actions';
-import { Observable } from 'rxjs/Observable';
-import { IUser } from '../../models';
 import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
+import { CloseAddTopicModalAction, CloseAllModals, CloseEditTopicModalAction } from '../../actions';
+import { ITopic, IUser } from '../../models';
+import * as fromTopics from '../../reducers';
+import { ITopicProps } from '../topics/topic-props.interface';
+import { INewTopicProps } from '../topics/new-topic-props.interface';
+import { UsefulLink } from '../topics/useful-link.interface';
 
 @Component({
   selector: 'app-topic-add-or-edit-popup',
@@ -16,7 +16,7 @@ import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef } from '@angular/mater
   styleUrls: ['./topic-add-or-edit-popup.component.scss'],
 })
 export class TopicAddOrEditPopupComponent {
-  public topicProps: TopicProps;
+  public topicProps: ITopicProps;
   public edited = false;
   public invalid = true;
   public minDate: Date | undefined;
@@ -25,7 +25,7 @@ export class TopicAddOrEditPopupComponent {
 
   constructor(public dialogRef: MatDialogRef<TopicAddOrEditPopupComponent>,
               private store: Store<fromTopics.IState>,
-              @Inject(MAT_DIALOG_DATA) public data: { topic?: Topic },) {
+              @Inject(MAT_DIALOG_DATA) public data: { topic?: ITopic },) {
     if (this.data && this.data.topic) {
       // set initial properties in 'edit' mode
       const { linkToSlides, name, presentationDate, presented, speakerId, usefulLinks } = this.data.topic;
@@ -50,11 +50,11 @@ export class TopicAddOrEditPopupComponent {
     this.edited && !isCanceled
       ? this.data && this.data.topic
       ? this.store.dispatch(new CloseEditTopicModalAction({ updatedTopicProps: this.topicProps, id: this.data.topic._id }))
-      : this.store.dispatch(new CloseAddTopicModalAction({ newTopicProps: (this.topicProps as NewTopicProps) }))
+      : this.store.dispatch(new CloseAddTopicModalAction({ newTopicProps: (this.topicProps as INewTopicProps) }))
       : this.store.dispatch(new CloseAllModals());
   }
 
-  public handleChange(userInput: FocusEvent | MatCheckboxChange | Date | string | boolean, property: keyof TopicProps): void {
+  public handleChange(userInput: FocusEvent | MatCheckboxChange | Date | string | boolean, property: keyof ITopicProps): void {
     const previousValue = this.topicProps && this.topicProps[property];
 
     if (userInput instanceof FocusEvent) {

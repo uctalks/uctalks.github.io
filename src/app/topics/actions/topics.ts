@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import NewTopicProps from '../components/topics/new-topic-props.interface';
-import TopicProps from '../components/topics/topic-props.interface';
-import Topic from '../models/topic';
+import { INewTopicProps } from '../components/topics/new-topic-props.interface';
+import { ITopicProps } from '../components/topics/topic-props.interface';
+import { ITopic } from '../models';
 import { TopicsSortBy, TopicsSortTypes } from '../types';
 
-export const enum TopicsActions {
+export const enum ActionsNames {
   Add = '[Topics] Add Topic',
   AddSuccess = '[Topics] Add Topic Success',
   AddFail = '[Topics] Add Topic Fail',
@@ -36,21 +36,21 @@ export const enum TopicsActions {
  * Add Topic Actions
  */
 export class AddTopicAction implements Action {
-  readonly type = TopicsActions.Add;
+  readonly type = ActionsNames.Add;
 
-  constructor(public payload: { newTopicProps: NewTopicProps }) {
+  constructor(public payload: { newTopicProps: INewTopicProps }) {
   }
 }
 
 export class AddTopicSuccessAction implements Action {
-  readonly type = TopicsActions.AddSuccess;
+  readonly type = ActionsNames.AddSuccess;
 
-  constructor(public payload: { addedTopic: Topic }) {
+  constructor(public payload: { addedTopic: ITopic }) {
   }
 }
 
 export class AddTopicFailAction implements Action {
-  readonly type = TopicsActions.AddFail;
+  readonly type = ActionsNames.AddFail;
 
   constructor(public payload: any) {
   }
@@ -61,18 +61,18 @@ export class AddTopicFailAction implements Action {
  * Load Topics Actions
  */
 export class LoadTopicsAction implements Action {
-  readonly type = TopicsActions.Load;
+  readonly type = ActionsNames.Load;
 }
 
 export class LoadTopicsSuccessAction implements Action {
-  readonly type = TopicsActions.LoadSuccess;
+  readonly type = ActionsNames.LoadSuccess;
 
-  constructor(public payload: Topic[]) {
+  constructor(public payload: Array<ITopic>) {
   }
 }
 
 export class LoadTopicsFailAction implements Action {
-  readonly type = TopicsActions.LoadFail;
+  readonly type = ActionsNames.LoadFail;
 
   constructor(public payload: any) {
   }
@@ -83,21 +83,21 @@ export class LoadTopicsFailAction implements Action {
  * Update Topic Actions
  */
 export class UpdateTopicAction implements Action {
-  readonly type = TopicsActions.Update;
+  readonly type = ActionsNames.Update;
 
-  constructor(public payload: { id: string, updatedTopicProps: TopicProps }) {
+  constructor(public payload: { id: string, updatedTopicProps: ITopicProps }) {
   }
 }
 
 export class UpdateTopicSuccessAction implements Action {
-  readonly type = TopicsActions.UpdateSuccess;
+  readonly type = ActionsNames.UpdateSuccess;
 
-  constructor(public payload: Update<Topic>) {
+  constructor(public payload: Update<ITopic>) {
   }
 }
 
 export class UpdateTopicFailAction implements Action {
-  readonly type = TopicsActions.UpdateFail;
+  readonly type = ActionsNames.UpdateFail;
 
   constructor(public payload: any) {
   }
@@ -108,21 +108,21 @@ export class UpdateTopicFailAction implements Action {
  * Like Topic Actions
  */
 export class LikeAction implements Action {
-  readonly type = TopicsActions.Like;
+  readonly type = ActionsNames.Like;
 
   constructor(public payload: { topicId: string, userId: string, liked: boolean }) {
   }
 }
 
 export class LikeSuccessAction implements Action {
-  readonly type = TopicsActions.LikeSuccess;
+  readonly type = ActionsNames.LikeSuccess;
 
-  constructor(public payload: Update<Topic>) {
+  constructor(public payload: Update<ITopic>) {
   }
 }
 
 export class LikeFailAction implements Action {
-  readonly type = TopicsActions.LikeFail;
+  readonly type = ActionsNames.LikeFail;
 
   constructor(public payload: any) {
   }
@@ -133,21 +133,21 @@ export class LikeFailAction implements Action {
  * Delete Topic Actions
  */
 export class DeleteTopicAction implements Action {
-  readonly type = TopicsActions.Delete;
+  readonly type = ActionsNames.Delete;
 
   constructor(public payload: { id: string }) {
   }
 }
 
 export class DeleteTopicSuccessAction implements Action {
-  readonly type = TopicsActions.DeleteSuccess;
+  readonly type = ActionsNames.DeleteSuccess;
 
   constructor(public payload: { id: string }) {
   }
 }
 
 export class DeleteTopicFailAction implements Action {
-  readonly type = TopicsActions.DeleteFail;
+  readonly type = ActionsNames.DeleteFail;
 
   constructor(public payload: { id: string }) {
   }
@@ -158,7 +158,7 @@ export class DeleteTopicFailAction implements Action {
  * Sort Topics Action
  */
 export class SortTopicsAction implements Action {
-  readonly type = TopicsActions.Sort;
+  readonly type = ActionsNames.Sort;
 
   constructor(public payload: { sortBy: TopicsSortBy, sortType: TopicsSortTypes }) {
   }
@@ -169,13 +169,13 @@ export class SortTopicsAction implements Action {
  * Add Topic Modal Actions
  */
 export class OpenAddTopicModalAction implements Action {
-  readonly type = TopicsActions.OpenAddModal;
+  readonly type = ActionsNames.OpenAddModal;
 }
 
 export class CloseAddTopicModalAction implements Action {
-  readonly type = TopicsActions.CloseAddModal;
+  readonly type = ActionsNames.CloseAddModal;
 
-  constructor(public payload: { newTopicProps: NewTopicProps }) {
+  constructor(public payload: { newTopicProps: INewTopicProps }) {
   }
 }
 
@@ -184,16 +184,16 @@ export class CloseAddTopicModalAction implements Action {
  * Edit Topic Modal Actions
  */
 export class OpenEditTopicModalAction implements Action {
-  readonly type = TopicsActions.OpenEditModal;
+  readonly type = ActionsNames.OpenEditModal;
 
-  constructor(public payload: { topic: Topic }) {
+  constructor(public payload: { topic: ITopic }) {
   }
 }
 
 export class CloseEditTopicModalAction implements Action {
-  readonly type = TopicsActions.CloseEditModal;
+  readonly type = ActionsNames.CloseEditModal;
 
-  constructor(public payload: { updatedTopicProps: TopicProps, id: string }) {
+  constructor(public payload: { updatedTopicProps: ITopicProps, id: string }) {
   }
 }
 
@@ -202,21 +202,21 @@ export class CloseEditTopicModalAction implements Action {
  * Delete Topic Modal Actions
  */
 export class OpenDeleteTopicModalAction implements Action {
-  readonly type = TopicsActions.OpenDeleteModal;
+  readonly type = ActionsNames.OpenDeleteModal;
 
   constructor(public payload: { id: string }) {
   }
 }
 
 export class CloseDeleteTopicModalActionAndDelete implements Action {
-  readonly type = TopicsActions.CloseDeleteModal;
+  readonly type = ActionsNames.CloseDeleteModal;
 
   constructor(public payload: { id: string }) {
   }
 }
 
 export class CloseAllModals implements Action {
-  readonly type = TopicsActions.CloseAllModals;
+  readonly type = ActionsNames.CloseAllModals;
 }
 
 

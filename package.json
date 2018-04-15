@@ -5,7 +5,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-with-mocks": "ng serve -e=with-mocks",
     "build": "ng build --prod",
     "build-aot": "ng build --prod --aot",
     "build-aot-and-deploy": "npm run build-aot && npm run deploy",

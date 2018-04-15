@@ -1,7 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { ITopic } from '../models/topic';
-import * as topics from '../actions/topics';
-import { TopicsActions } from '../actions/topics';
+import { ITopic } from '../models';
+import { Actions, ActionsNames } from '../actions';
 import { TopicsSortBy, TopicsSortTypes } from '../types';
 
 export interface IState extends EntityState<ITopic> {
@@ -19,37 +18,37 @@ export const initialState = adapter.getInitialState({
   sort: { sortBy: TopicsSortBy.PresentationDate, sortType: TopicsSortTypes.Descending },
 });
 
-export function reducer(state = initialState, action: topics.Actions): IState {
+export function reducer(state = initialState, action: Actions): IState {
   switch (action.type) {
-    case TopicsActions.Add:
-    case TopicsActions.Update:
-    case TopicsActions.Like:
-    case TopicsActions.Load:
-    case TopicsActions.Delete:
+    case ActionsNames.Add:
+    case ActionsNames.Update:
+    case ActionsNames.Like:
+    case ActionsNames.Load:
+    case ActionsNames.Delete:
       return { ...state, loading: true };
 
 
-    case TopicsActions.AddSuccess:
+    case ActionsNames.AddSuccess:
       return adapter.addOne(action.payload.addedTopic, { ...state, loading: false });
 
-    case TopicsActions.UpdateSuccess:
-    case TopicsActions.LikeSuccess:
+    case ActionsNames.UpdateSuccess:
+    case ActionsNames.LikeSuccess:
       return adapter.updateOne(action.payload, { ...state, loading: false });
 
-    case TopicsActions.LoadSuccess:
+    case ActionsNames.LoadSuccess:
       return adapter.addAll(action.payload, { ...state, loading: false });
 
-    case TopicsActions.DeleteSuccess:
+    case ActionsNames.DeleteSuccess:
       return adapter.removeOne(action.payload.id, { ...state, loading: false });
 
-    case TopicsActions.Sort:
+    case ActionsNames.Sort:
       return { ...state, sort: action.payload };
 
-    case TopicsActions.AddFail:
-    case TopicsActions.UpdateFail:
-    case TopicsActions.LikeFail:
-    case TopicsActions.LoadFail:
-    case TopicsActions.DeleteFail:
+    case ActionsNames.AddFail:
+    case ActionsNames.UpdateFail:
+    case ActionsNames.LikeFail:
+    case ActionsNames.LoadFail:
+    case ActionsNames.DeleteFail:
       return { ...state, loading: false };
 
     default:

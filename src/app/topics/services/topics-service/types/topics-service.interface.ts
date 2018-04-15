@@ -10,7 +10,7 @@ export interface ITopicsService {
 
   updateTopicById(id: string, updatedTopicProps: ITopicProps): Observable<ITopic>;
 
-  getTopics(): Observable<ReadonlyArray<ITopic>>;
+  getTopics(): Observable<Array<ITopic>>;
 
   updateTopicLikesById(id: string, liked: boolean, userId: string | null): Observable<ITopic>;
 }
