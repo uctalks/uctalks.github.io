@@ -20,6 +20,10 @@ export class AuthService implements IAuthService {
     return new Date().getTime() < expiresAt;
   }
 
+  public get token(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
   public get userProfileId(): string | null {
     return localStorage.getItem('userId');
   }

@@ -4,6 +4,7 @@ import { IAuthenticatedUser } from './authenticated-user.interface';
 
 export interface IAuthService {
   readonly isAuthenticated: boolean;
+  readonly token: string | null;
   readonly userProfileId: string | null;
   readonly userProfileName: string | null;
   readonly userProfilePicture: string | null;
