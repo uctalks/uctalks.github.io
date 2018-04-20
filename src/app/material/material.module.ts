@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -15,7 +14,7 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
-import { MatDataTableModule } from 'ng2-md-datatable';
+import { CommonModule } from '@angular/common';
 
 const publicModules = [
   MatIconModule,
@@ -23,7 +22,6 @@ const publicModules = [
   MatCheckboxModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatDataTableModule,
   MatProgressBarModule,
   MatSnackBarModule,
   MatDatepickerModule,
@@ -36,8 +34,8 @@ const publicModules = [
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
-    ...publicModules
+    ...publicModules,
+    CommonModule,
   ],
   exports: publicModules,
 })

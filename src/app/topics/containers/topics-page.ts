@@ -11,6 +11,14 @@ import { ITopic, IUser } from '../models';
   selector: 'app-topics-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <mat-progress-bar
+      *ngIf="spinnerIsVisible$ | async"
+      class="spinner"
+      mode="indeterminate"
+      color="accent"
+    >
+    </mat-progress-bar>
+    
     <app-topics
       [topics]="topics$ | async"
       [users]="users$ | async"
@@ -18,16 +26,19 @@ import { ITopic, IUser } from '../models';
     >
     </app-topics>
   `,
+  styles: ['.spinner { position: absolute; }']
 })
 export class TopicsPageComponent implements OnInit {
-  topics$: Observable<ITopic[]>;
-  users$: Observable<ReadonlyArray<IUser>>;
-  currentUserId$: Observable<string>;
+  readonly spinnerIsVisible$: Observable<boolean>;
+  readonly topics$: Observable<ITopic[]>;
+  readonly users$: Observable<ReadonlyArray<IUser>>;
+  readonly currentUserId$: Observable<string>;
 
   constructor(private readonly store: Store<fromTopics.IState>) {
     this.topics$ = store.pipe(select(fromTopics.getTopics));
     this.users$ = store.pipe(select(fromTopics.getUsers));
     this.currentUserId$ = store.pipe(select(fromAuth.getCurrentUserId));
+    this.spinnerIsVisible$ = store.pipe(select(fromTopics.getSpinnerIsVisible));
   }
 
   ngOnInit() {

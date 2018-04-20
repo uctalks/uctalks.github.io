@@ -1,31 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { Auth0DecodedHash, AuthorizeOptions } from 'auth0-js';
 import { Observable } from 'rxjs/Observable';
 import { bindNodeCallback } from 'rxjs/observable/bindNodeCallback';
+import { map } from 'rxjs/operators';
 
-import { AUTH_CONFIG } from './auth-config';
-import { IAuthenticatedUser, IAuthService } from './types';
+import { AUTH_CONFIG } from './auth.config';
+import { IAuthService } from './types';
 
 @Injectable()
 export class AuthService implements IAuthService {
   private readonly auth0 = new auth0.WebAuth(AUTH_CONFIG);
 
-  constructor(private readonly router: Router) {
-  }
-
-  public get isAuthenticated(): boolean {
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
-  }
-
   public get token(): string | null {
     return localStorage.getItem('access_token');
   }
 
-  public get userProfileId(): string | null {
-    return localStorage.getItem('userId');
+  public get userId(): string | null {
+    return this.isAuthenticated ? localStorage.getItem('userId') : null;
   }
 
   public get userProfileName(): string | null {
@@ -34,6 +26,11 @@ export class AuthService implements IAuthService {
 
   public get userProfilePicture(): string | null {
     return localStorage.getItem('userPicture');
+  }
+
+  private get isAuthenticated(): boolean {
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    return new Date().getTime() < expiresAt;
   }
 
   public login(): void {
@@ -46,23 +43,32 @@ export class AuthService implements IAuthService {
     this.auth0.authorize(options);
   }
 
-  public handleAuthentication(): Observable<Auth0DecodedHash> {
-    return bindNodeCallback(this.auth0.parseHash.bind(this.auth0))();
-  }
+  public handleAuthentication(): Observable<string | null> {
+    return bindNodeCallback<Auth0DecodedHash>(this.auth0.parseHash.bind(this.auth0))().pipe(
+      map(authResult => {
+        // parse url, if authResult is present
+        if (authResult) {
+          const { expiresIn, accessToken, idTokenPayload: { sub: userId } } = authResult;
+          const expiresAt = JSON.stringify((expiresIn * 10000) + new Date().getTime());
 
-  public setSession({ expiresIn, accessToken, idToken, userId }: IAuthenticatedUser): void {
-    const expiresAt = JSON.stringify((expiresIn * 10000) + new Date().getTime());
-    localStorage.setItem('expires_at', expiresAt);
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('id_token', idToken);
-    localStorage.setItem('userId', userId);
+          localStorage.setItem('expires_at', expiresAt);
+          localStorage.setItem('access_token', accessToken);
+          localStorage.setItem('userId', userId);
+
+          window.location.hash = '';
+
+          return userId;
+        }
+
+        // check if user is already logged in
+        return this.userId;
+      }),
+    );
   }
 
   public logout(): void {
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('userId');
-    this.router.navigate(['/home']);
   }
 }

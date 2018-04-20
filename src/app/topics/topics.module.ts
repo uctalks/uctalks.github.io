@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
+import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { MatDataTableModule } from 'ng2-md-datatable';
 
 import { CoreModule } from '../core/core.module';
-import { MaterialModule } from '../material/material.module';
 
 import { TopicsPageComponent } from './containers/topics-page';
 import { TOPICS_SERVICE } from './services/topics-service/types';
@@ -21,6 +21,7 @@ import { USER_SERVICE } from './services/users-service/types';
 import { UserService } from './services/users-service/user.service';
 import { UserDropdownComponent } from './components/user-dropdown/user-dropdown.component';
 import { UserComponent } from './components/user/user.component';
+import { MaterialModule } from '../material/material.module';
 
 @NgModule({
   imports: [
@@ -29,7 +30,10 @@ import { UserComponent } from './components/user/user.component';
     EffectsModule.forFeature([TopicsEffects, UsersEffects]),
     FormsModule,
     HttpClientModule,
+    MatDataTableModule,
     MaterialModule,
+    // TODO add router when get rid of ng2-mat-datatable
+    // RouterModule.forChild([{ path: '', component: TopicsPageComponent, canActivate: [AuthGuard] }]),
     StoreModule.forFeature('topics', reducers),
   ],
   declarations: [

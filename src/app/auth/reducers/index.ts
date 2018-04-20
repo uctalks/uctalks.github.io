@@ -2,15 +2,15 @@ import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/s
 
 import * as fromCurrentUser from './current-user';
 
-export interface IAuthState {
+export interface IState {
   currentUser: fromCurrentUser.IState;
 }
 
-export const reducers: ActionReducerMap<IAuthState> = {
+export const reducers: ActionReducerMap<IState> = {
   currentUser: fromCurrentUser.reducer,
 };
 
-export const getAuthState = createFeatureSelector<IAuthState>('auth');
+export const getAuthState = createFeatureSelector<IState>('auth');
 
 export const getCurrentUserState = createSelector(
   getAuthState,
@@ -20,4 +20,9 @@ export const getCurrentUserState = createSelector(
 export const getCurrentUserId = createSelector(
   getCurrentUserState,
   fromCurrentUser.getCurrentUserId
+);
+
+export const getLoggedIn = createSelector(
+  getCurrentUserState,
+  fromCurrentUser.getLoggedIn
 );

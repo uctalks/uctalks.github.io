@@ -1,10 +1,18 @@
 import { Routes } from '@angular/router';
+
 import { TopicsPageComponent } from './topics/containers/topics-page';
-import { UserComponent } from './topics/components/user/user.component';
+import { AuthGuard } from './auth/services/auth-guard.service';
+import { LoginPageComponent } from './auth/containers/login-page.component';
 
 export const ROUTES: Routes = [
-  { path: 'topics',	component: TopicsPageComponent },
-  { path: 'user',	component: UserComponent },
+  { path: '', redirectTo: '/topics', pathMatch: 'full' },
+  { path: 'login', component: LoginPageComponent },
+  {
+    path: 'topics',
+    component: TopicsPageComponent,
+    canActivate: [AuthGuard],
 
-  { path: '', redirectTo: '/topics', pathMatch: 'prefix' },
+    // TODO add lazyLoading once ng2-md-datatable is dropped:
+    // loadChildren: './topics/topics.module#TopicsModule',
+  },
 ];
