@@ -7,9 +7,9 @@ describe('a2 App', () => {
     page = new HomePage();
   });
 
-  it('should display message saying ucTalks (alpha)', async () => {
+  it('should display message saying ucTalks (beta)', async () => {
     page.navigateTo();
     const text = await page.getTitleText();
-    expect(text).toEqual('ucTalks (alpha)');
+    expect(text).toEqual('ucTalks (beta)');
   });
 });
