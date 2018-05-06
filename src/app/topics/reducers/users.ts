@@ -1,13 +1,13 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { IUser } from '../models/user';
-import { UserActions, UsersActionTypes } from '../actions/users';
+import { IUser } from '../models';
+import { UserActions, UsersActionTypes } from '../actions';
 
 export interface IState extends EntityState<IUser> {
-  loading: boolean;
+  readonly loading: boolean;
 }
 
 export const adapter: EntityAdapter<IUser> = createEntityAdapter<IUser>({
-  selectId: (user: IUser) => user._id,
+  selectId: (user: IUser) => user.user_id,
   sortComparer: false,
 });
 
@@ -31,14 +31,6 @@ export function reducer(state = initialState, action: UserActions): IState {
     case UsersActionTypes.LoadUsersFail: {
       return { ...state, loading: false };
     }
-
-    // TODO fix it:
-    // case UsersActionTypes.UpsertUser: {
-    //  return adapter.upsertOne(action.payload, {
-    //    ...state,
-    //    loading: false
-    //  })
-    // }
 
     default: {
       return state;

@@ -1,11 +1,10 @@
 import { Action } from '@ngrx/store';
-import { IUser } from '../models/user';
+import { IUser } from '../models';
 
 export const enum UsersActionTypes {
   LoadUsers = '[Users] Load',
   LoadUsersSuccess = '[Users] Load Success',
   LoadUsersFail = '[Users] Load Fail',
-  UpsertUser = '[Users] Upsert User',
 }
 
 /**
@@ -18,7 +17,7 @@ export class LoadUsers implements Action {
 export class LoadUsersSuccess implements Action {
   readonly type = UsersActionTypes.LoadUsersSuccess;
 
-  constructor(public payload: IUser[]) {
+  constructor(public payload: Array<IUser>) {
   }
 }
 
@@ -29,16 +28,8 @@ export class LoadUsersFail implements Action {
   }
 }
 
-export class UpsertUser implements Action {
-  readonly type = UsersActionTypes.UpsertUser;
-
-  constructor(public payload: IUser) {
-  }
-}
-
 
 export type UserActions
   = LoadUsers
   | LoadUsersSuccess
-  | LoadUsersFail
-  | UpsertUser;
+  | LoadUsersFail;

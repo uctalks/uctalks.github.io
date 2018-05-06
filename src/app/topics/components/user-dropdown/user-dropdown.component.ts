@@ -12,7 +12,7 @@ import { IUser } from '../../models/user';
       [(ngModel)]="selectedSpeakerId"
       [required]="required"
       (change)="emitSpeakerSelectEvent($event)">
-      <mat-option *ngFor="let user of users" [value]="user._id">
+      <mat-option *ngFor="let user of users" [value]="user.user_id">
         {{user.name}}
       </mat-option>
     </mat-select>

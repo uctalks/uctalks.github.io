@@ -1,6 +1,7 @@
 export interface IUser {
-  name: string; // full name
-  sub?: string; // google auth's id
-  _id?: string, // database id
-  picture: string; // link to google's avatar image
+  readonly email: string,
+  readonly given_name: string,
+  readonly name: string,
+  readonly picture: string,
+  readonly user_id: string,
 }

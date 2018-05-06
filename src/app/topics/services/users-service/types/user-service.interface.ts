@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
+import { IUser } from '../../../models';
 
 export interface IUserService {
-  setUser(userProps: any): Observable<any>
-
-  getAllUsers(): Observable<any>
+  getAllUsers(): Observable<Array<IUser>>
 }
