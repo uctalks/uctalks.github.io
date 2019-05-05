@@ -9,6 +9,7 @@
     "build-aot": "ng build --prod --aot",
     "build-aot-and-deploy": "npm run build-aot && npm run deploy",
     "deploy": "gh-pages -d dist -b master",
+    "now-build": "npm run build-aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
